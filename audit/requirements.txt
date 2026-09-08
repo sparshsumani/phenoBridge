@@ -1,0 +1,12 @@
+# Versions used for the audit reproduction run (2026-09-08, Python 3.11.15).
+# Every notebook figure listed in AUDIT.md reproduced exactly under these.
+numpy==2.4.6
+pandas==3.0.5
+networkx==3.6.1
+scipy==1.17.1
+biopython==1.88
+statsmodels==0.15.0
+scikit-learn==1.9.0
+matplotlib==3.11.1
+# mechanistic_mvp.py additionally imports gradio for its UI.
+# It is not required to refit the models; audit/diagnose_divergence.py stubs it.

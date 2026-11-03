@@ -1,0 +1,24 @@
+hypothesis     contrast  n_genes  median_diff  mean_diff     ci_lo   ci_hi  n_better  n_worse  n_tie  p_wilcoxon   p_holm
+        H1     3d - seq       71          0.0   0.030956  0.000000 0.03125        34       26     11    0.168623 0.466302
+        H2  rwr0.3 - 3d       71          0.0  -0.009580 -0.012821 0.00000        21       29     21    0.170433 0.466302
+       H2b rwr0.3 - hop       71          0.0   0.012293  0.000000 0.00000        25       23     23    0.155434 0.466302
+{
+ "residues_labelled": 3403,
+ "residues_conflict": 168,
+ "eligible_genes": 71,
+ "eligible_residues": 2625,
+ "calibration": {
+  "H1": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.055
+  },
+  "H2": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.07
+  },
+  "H2b": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.035
+  }
+ }
+}

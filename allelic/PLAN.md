@@ -103,3 +103,31 @@ or label comparison was made. Anything not listed here is reported as explorator
 H1 or H2 significant after Holm correction, with the median per-gene improvement in BA
 ≥ 0.03, and consistent direction in ≥ 60% of genes. Otherwise it is reported as a null,
 with the CI on the median difference.
+
+## Amendment 1 (after the literature review, before any data were seen)
+Prompted by `allelic/notes/literature.md`.
+- **Positioning.** Q1 (structural context by disease) and Q3 (AD vs AR) overlap published work
+  (Wang 2012; Badonyi & Marsh 2025; Gerasimavicius 2022; Turner 2015), so they stay
+  secondary. The primary contribution is H1/H2: calibrated, within-gene, variant-level tests
+  of whether 3D or network proximity predicts *which disease*, beyond sequence proximity.
+- **Extra baseline distance for H2:**
+  - D_hop: shortest-path hop count between i and j on the same 8 Å contact graph.
+  - H2 is now tested against both D_3D and D_hop, and we report the smaller improvement.
+  - H2b, "RWR beats hop distance", is also tested with the same Wilcoxon test; Holm
+    correction now covers H1, H2 and H2b.
+- **Positive controls (fixed now):** LMNA, PTPN11, FGFR3, RET, KCNQ1, SCN4A, GJB2, GCK,
+  CASR, TP63. Runners-up, reported if eligible: SMCHD1, STAT1, FLNA, SCN9A, PIEZO1, AARS1,
+  CLCN7, TRPV4. TGFBI is a stress test.
+- **Null controls (fixed now):**
+  - LMNA restricted to EDMD2 vs DCM1A;
+  - FGFR2 Crouzon vs Pfeiffer;
+  - PRNP FFI vs CJD;
+  - VCP and ABCA4, if eligible.
+- **Label-leakage guards:**
+  - Sensitivity 1: drop disease units supported by a single residue cluster, i.e. with all
+    labelled residues within 5 aa of each other.
+  - Sensitivity 2: count each ClinVar submitter–disease combination once.
+  - The analysis reports, per gene, how many disease units are "single-site" diseases.
+- **Interfaces.** Monomer AlphaFold models miss inter-chain interfaces. We report whether
+  results differ between genes annotated as homo-oligomers in UniProt (subunit field) and
+  other genes (exploratory).

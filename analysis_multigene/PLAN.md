@@ -87,3 +87,15 @@ Prompted by the literature review (`paper/notes/literature.md`).
   SETD2 (R1740W), IKZF1 (N159). NF1, FBN1 and ITPR1 have no single-fragment
   AlphaFold model and are excluded from the structural analysis.
 - **Null controls.** STXBP1 (no position signal expected), POGZ, EHMT1.
+
+## Amendment 2 (post-hoc; added after a 20-permutation smoke test, before the final run)
+The smoke test showed excess small p-values for several features. Many patients share a
+recurrent variant, and carriers of the same variant often come from the same family or
+publication, which also shapes how their phenotypes were recorded. Individual-level
+permutation ignores this clustering and can overstate significance. We therefore add,
+and treat as the **decisive** global test, a **variant-level permutation**: within each
+gene, feature vectors are shuffled among *distinct variants* (all carriers of a variant
+move together), with 1,000 permutations. We also add a sensitivity analysis in which
+features are residualised on a natural cubic spline of position (4 df) instead of a
+linear term, to test whether any structural signal is more than non-linear position.
+These choices were made before the final results were seen; they are labelled post-hoc.

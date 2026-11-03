@@ -7,7 +7,10 @@ Exactly the allelic/a09 per-protein computation (a09.one -> multigene/structfeat
 masses at alpha 0.3 (no suffix), 0.15 (_a15), 0.5 (_a5) by exact sparse solve, SASA/RSA, rel_pos, region,
 neighbourhood pLDDT, C-alpha count burial n_ca_10A, half-sphere exposure), a09.uniprot_features + s07.annotate
 domains (UniProt REST / InterPro Pfam, cached in cache/) and per-residue AlphaMissense summary
-(s07.am_mapping AF->AM numbering; am_mean / am_max / am_n_subst).
+(v06 am_residue_summary; s07.am_mapping AF->AM numbering; am_mean / am_max / am_n_subst).
+Half-sphere exposure uses hse_fast.hse (vectorised, value-identical re-implementation of Bio.PDB
+HSExposureCA/CB, which is ~75 % of a09's run time; verified 0 mismatches on 64,184 stored a09 values);
+everything else is a09.one unchanged (worker `one` below = a09.one with that substitution).
 Proteins already computed by allelic/a09 (same AF model and code) are symlinked from derived_allelic/.
 Resumable: proteins whose two output files exist are skipped (per-protein metadata in intermediate/structure_meta/).
 Outputs residue_features/<UNIPROT>.parquet, contact_graphs/<UNIPROT>.parquet (i<j residue numbers, dist_A),
@@ -25,6 +28,43 @@ from common import INTER, OUT, RFDIR, GRAPHDIR, ALLELIC_RFDIR, ALLELIC_GRAPHDIR,
 a09 = al_import("a09_residue_features")
 s07 = mg_import("s07_residue_features")
 METADIR = INTER / "structure_meta"; METADIR.mkdir(exist_ok=True)
+import hse_fast
+
+
+def one(args):
+    """allelic/a09.one with Bio.PDB HSExposureCA/CB replaced by hse_fast.hse (identical values)."""
+    import scipy.sparse as sp
+    from scipy.spatial import cKDTree
+    SF = a09.SF
+    gene, acc, path = args
+    t0 = time.time()
+    feats, meta, (G_all, nodes, W, core, semi, dis, bb) = SF.compute_residue_features(path)
+    st = SF.read_structure(path)
+    pos, xyz, pl, seq = SF.load_ca(st)
+    assert np.array_equal(pos, feats["pos"]) and np.allclose(pl, feats["plddt"])
+    df = pd.DataFrame(feats)
+    df.insert(0, "uniprot", acc); df.insert(0, "gene", gene)
+    df["ca_x"], df["ca_y"], df["ca_z"] = xyz[:, 0], xyz[:, 1], xyz[:, 2]
+    idx = {p: i for i, p in enumerate(pos)}
+    n = len(pos)
+    e = pd.DataFrame([(min(u, v_), max(u, v_), a["dist"]) for u, v_, a in G_all.edges(data=True)], columns=["i", "j", "dist_A"])
+    e = e.sort_values(["i", "j"]).reset_index(drop=True)
+    r_, c_ = e.i.map(idx).to_numpy(), e.j.map(idx).to_numpy()
+    A = sp.csr_matrix((np.ones(2 * len(e)), (np.r_[r_, c_], np.r_[c_, r_])), shape=(n, n))
+    A1 = (A > 0).astype(float)
+    A2 = ((A1 + A1 @ A1) > 0).astype(float).tolil(); A2.setdiag(0); A2 = A2.tocsr()
+    n1 = np.asarray(A1.sum(1)).ravel(); n2 = np.asarray(A2.sum(1)).ravel()
+    with np.errstate(invalid="ignore", divide="ignore"):
+        df["nbr1_mean_plddt"] = np.where(n1 > 0, (A1 @ pl) / n1, np.nan)
+        df["nbr2_mean_plddt"] = np.where(n2 > 0, (A2 @ pl) / n2, np.nan)
+    df["nbr1_n"], df["nbr2_n"] = n1.astype(int), n2.astype(int)
+    tr = cKDTree(xyz)
+    df["n_ca_10A"] = np.array([len(x) - 1 for x in tr.query_ball_point(xyz, r=10.0)])
+    h = hse_fast.hse(next(st.get_models()), radius=13.0)
+    for k, col in enumerate(("hse_ca_up", "hse_ca_down", "hse_cb_up", "hse_cb_down")):
+        df[col] = df.pos.map(lambda p_: h.get(int(p_), (np.nan,) * 4)[k]).astype(float)
+    meta.update(gene=gene, uniprot=acc, af_pdb=path, seconds=time.time() - t0, n_edges=len(e))
+    return df, e, meta
 
 
 def add_annotations(df, acc, hgnc, amsub):
@@ -36,10 +76,11 @@ def add_annotations(df, acc, hgnc, amsub):
     fmeta["am_accession"] = am_acc
     fmeta["am_mapping"] = None if am_acc is None else ("identity" if posmap is None else "alignment")
     if am_acc is not None:
-        s = amsub.groupby("pos").am_pathogenicity.agg(["mean", "max", "count"])
+        s = amsub.set_index("pos")
         ap = df.pos if posmap is None else df.pos.map(posmap)
         df["am_pos"] = pd.array(ap, dtype="Int64")
-        df["am_mean"] = ap.map(s["mean"]).astype(float); df["am_max"] = ap.map(s["max"]).astype(float); df["am_n_subst"] = ap.map(s["count"])
+        df["am_mean"] = ap.map(s["am_mean"]).astype(float); df["am_max"] = ap.map(s["am_max"]).astype(float)
+        df["am_n_subst"] = ap.map(s["am_n_subst"])
     else:
         for c in ("am_pos", "am_mean", "am_max", "am_n_subst"):
             df[c] = np.nan
@@ -49,10 +90,8 @@ def add_annotations(df, acc, hgnc, amsub):
 def main():
     g = pd.read_parquet(INTER / "genes.parquet")
     sel = g[g.feature_protein & g.af_pdb.notna()].sort_values("uniprot_length", ascending=False)
-    am = pd.read_parquet(OUT / "alphamissense_feature_proteins.parquet")
-    am = am.rename(columns={"uniprot": "uniprot_id"})
-    am["uniprot_id"] = am.uniprot_id.astype(str)
-    amg = {a: d.reset_index(drop=True) for a, d in am.groupby("uniprot_id", observed=True)}
+    am = pd.read_parquet(INTER / "am_residue_summary.parquet")   # v06 per-residue AlphaMissense summary
+    amg = {a: d.reset_index(drop=True) for a, d in am.groupby("uniprot_id")}
     hg = dict(zip(sel.uniprot, sel.hgnc_id))
     # reuse allelic outputs (identical model + code)
     alle_meta = pd.read_parquet(ALLELIC_OUT / "intermediate/structure_meta.parquet") if (ALLELIC_OUT / "intermediate/structure_meta.parquet").exists() else None
@@ -74,11 +113,11 @@ def main():
             if not ((RFDIR / f"{r.uniprot}.parquet").exists() and (GRAPHDIR / f"{r.uniprot}.parquet").exists() and (METADIR / f"{r.uniprot}.json").exists())]
     print(len(jobs), "to compute", flush=True)
     # prefetch domain annotations (REST, cached) in threads while the structure jobs run
-    th = ThreadPoolExecutor(3)
+    th = ThreadPoolExecutor(8)
     futs = {acc: th.submit(a09.uniprot_features, acc, hg[acc]) for _, acc, _ in jobs}
     t0 = time.time()
     with ProcessPoolExecutor(4, mp_context=mp.get_context("fork")) as ex:
-        for k, (df, e, meta) in enumerate(ex.map(a09.one, jobs, chunksize=1)):
+        for k, (df, e, meta) in enumerate(ex.map(one, jobs, chunksize=1)):
             acc = meta["uniprot"]
             futs[acc].result()
             df, ft, fmeta = add_annotations(df, acc, hg[acc], amg.get(acc))

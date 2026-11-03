@@ -199,8 +199,9 @@ def main():
     mp["protein_length_af"] = mp.gene.map(lambda g: len(afs[g]) if isinstance(afs.get(g), str) else np.nan)
     mp["usable"] = ((mp.map_status == "ok") & mp.af_single_fragment & mp.af_pos.notna() & (mp.ref_matches_af == True)).astype(bool)
     # exclusion reason (first failing step)
-    reason = np.select([mp.map_status != "ok", mp.uniprot.isna(), mp.af_n_fragments.fillna(0) == 0, mp.af_n_fragments.fillna(0) > 1,
-                        mp.af_pos.isna(), mp.ref_matches_af != True],
+    nf = pd.to_numeric(mp.af_n_fragments, errors="coerce").fillna(0)
+    conds = [mp.map_status != "ok", mp.uniprot.isna(), nf == 0, nf > 1, mp.af_pos.isna(), ~mp.ref_matches_af.fillna(False).astype(bool)]
+    reason = np.select([np.asarray(c, dtype=bool) for c in conds],
                        ["map:" + mp.map_status.astype(str), "no_uniprot", "no_af_model", "af_fragmented", "af_pos_unaligned", "ref_mismatch_af"], "usable")
     mp["map_exclusion"] = reason
     mp.drop(columns=["vep_input"]).to_parquet(INTER / "variants_mapped.parquet", index=False)

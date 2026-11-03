@@ -32,9 +32,11 @@ def main():
     out["chrom"], out["pos_vcf"], out["ref_vcf"], out["alt_vcf"] = u.chrom, u.pos_vcf.astype(int), u.ref_vcf, u.alt_vcf
     out["rsid"] = u.rsid.replace({"-1": None})
     out["set"], out["label"] = u.set, u.label
-    out["prior_status_2023"] = u.prior_status_2023
-    for c in ["status_2023", "category_2023", "stars_2023", "review_status_2023", "last_evaluated_2023", "n_submitters_2023", "status_2023_lookup",
-              "status_2026", "category_2026", "stars_2026", "review_status_2026", "last_evaluated_2026", "n_submitters_2026", "status_2026_lookup"]:
+    # status_YYYY = category (PLP / BLB / VUS / CONFLICT / OTHER / ABSENT); status_YYYY_raw = ClinVar germline string
+    out["status_2023"] = u.category_2023.to_numpy(); out["status_2023_raw"] = u.status_2023.to_numpy()
+    out["status_2026"] = u.category_2026.to_numpy(); out["status_2026_raw"] = u.status_2026.to_numpy()
+    for c in ["stars_2023", "review_status_2023", "last_evaluated_2023", "n_submitters_2023", "status_2023_lookup",
+              "stars_2026", "review_status_2026", "last_evaluated_2026", "n_submitters_2026", "status_2026_lookup"]:
         out[c] = u[c].to_numpy()
     out["stars_2023"] = pd.array(out.stars_2023, dtype="Int64"); out["stars_2026"] = pd.array(out.stars_2026, dtype="Int64")
     out["n_submitters_2023"] = pd.array(out.n_submitters_2023, dtype="Int64"); out["n_submitters_2026"] = pd.array(out.n_submitters_2026, dtype="Int64")
@@ -84,14 +86,11 @@ def main():
         p = INTER / f
         if p.exists():
             counts[k] = load_json(p)
-    for k in ("clinvar_2023", "clinvar_2026"):
-        counts["downloads"].get(k, {}).pop("sha256_note", None)
-    # strip bulky header list
     tr, te = out[out.set == "train"], out[out.set == "test"]
     counts["final"] = dict(
         variants=len(out), by_set_label={f"{a}|{b}": int(n) for (a, b), n in out.groupby(["set", "label"]).size().items()},
-        test_by_label_prior={f"{a}|{b}": int(n) for (a, b), n in te.groupby(["label", "prior_status_2023"]).size().items()},
-        train_by_label_2026_category={f"{a}|{b}": int(n) for (a, b), n in tr.groupby(["label", "category_2026"]).size().items()},
+        test_by_label_status_2023={f"{a}|{b}": int(n) for (a, b), n in te.groupby(["label", "status_2023"]).size().items()},
+        train_by_label_status_2026={f"{a}|{b}": int(n) for (a, b), n in tr.groupby(["label", "status_2026"]).size().items()},
         test_stars_2026={f"{a}|{b}": int(n) for (a, b), n in te.groupby(["label", "stars_2026"]).size().items()},
         genes=int(out.gene.nunique()), proteins_with_residue_features=int(len(feat)),
         variants_with_residue_features={f"{a}|{b}": int(n) for (a, b), n in out[out.has_residue_features].groupby(["set", "label"]).size().items()},
@@ -100,7 +99,7 @@ def main():
         test_last_evaluated_2026_after_cutoff=dict(n=len(te), with_date=int(te.last_evaluated_2026.notna().sum()),
                                                   after=int((te.last_evaluated_2026_after_cutoff == True).sum()),
                                                   by_prior={p: dict(n=len(d), after=int((d.last_evaluated_2026_after_cutoff == True).sum()),
-                                                                    no_date=int(d.last_evaluated_2026.isna().sum())) for p, d in te.groupby("prior_status_2023")}),
+                                                                    no_date=int(d.last_evaluated_2026.isna().sum())) for p, d in te.groupby("status_2023")}),
         res_aa_matches_ref=f"{int((out.res_aa_matches_ref == True).sum())}/{int(out.res_aa_matches_ref.notna().sum())}")
     save_json(counts, OUT / "counts.json")
     print(json.dumps(counts["final"], indent=1, default=str))

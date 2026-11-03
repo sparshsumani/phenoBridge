@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 cache/
 */cache/
+vus3d/out/features.parquet

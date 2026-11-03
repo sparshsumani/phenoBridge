@@ -189,55 +189,65 @@ def tune(tr):
 
 
 # ------------------------------------------------------------------ evaluation
+def gene_u(y, s, g):
+    """Per-gene Mann-Whitney U (P ranked above B, ties = 1/2) and number of P-B pairs.
+    Returns arrays indexed by np.unique(g)."""
+    y = np.asarray(y, float); s = np.asarray(s, float)
+    codes, gi = np.unique(g, return_inverse=True)
+    G = len(codes)
+    order = np.lexsort((s, gi))
+    gs, ss, ys = gi[order], s[order], y[order]
+    n = len(gs)
+    newg = np.r_[True, gs[1:] != gs[:-1]]
+    gstart = np.maximum.accumulate(np.where(newg, np.arange(n), 0))
+    pos = np.arange(n) - gstart + 1.0
+    newt = np.r_[True, (gs[1:] != gs[:-1]) | (ss[1:] != ss[:-1])]
+    tid = np.cumsum(newt) - 1
+    r = (np.bincount(tid, pos) / np.bincount(tid))[tid]
+    nP = np.bincount(gs, ys, G); nB = np.bincount(gs, minlength=G) - nP
+    U = np.bincount(gs, r * ys, G) - nP * (nP + 1) / 2
+    return U, nP * nB
+
+
 def strat_auc(y, s, g):
     """Gene-stratified AUROC: concordance over P-B pairs within the same gene."""
-    num = den = 0.0
-    for gg in np.unique(g):
-        m = g == gg
-        yy, ss = y[m], s[m]
-        if yy.min() == yy.max():
-            continue
-        p, b = ss[yy == 1], ss[yy == 0]
-        r = stats_rank(np.r_[p, b])
-        nP, nB = len(p), len(b)
-        u = r[:nP].sum() - nP * (nP + 1) / 2
-        num += u; den += nP * nB
-    return num / den if den else np.nan
-
-
-def stats_rank(x):
-    from scipy.stats import rankdata
-    return rankdata(x)
+    U, den = gene_u(y, s, g)
+    return U.sum() / den.sum() if den.sum() else np.nan
 
 
 def boot_gene(te, preds, pairs, nboot, rng, metric="strat"):
-    genes = te.gene.unique()
-    gidx = {g: np.where(te.gene.values == g)[0] for g in genes}
-    out = {p: [] for p in pairs}
-    y = te.y.values
-    gl = te.gene.values
+    """Paired gene-cluster bootstrap. Resampled genes stay distinct copies, so a resample's
+    stratified AUROC is sum_g c_g U_g / sum_g c_g D_g with c_g the gene's resample count;
+    pooled AUROC uses c_g as sample weights (identical to concatenating copies)."""
+    y = te.y.values.astype(float)
+    codes, gi = np.unique(te.gene.values, return_inverse=True)
+    G = len(codes)
+    models = sorted({m for p in pairs for m in p})
+    UD = {m: gene_u(y, preds[m], te.gene.values) for m in models}
+    nPg = np.bincount(gi, y, G); nBg = np.bincount(gi, minlength=G) - nPg
 
-    def met(ii, s, gg):
+    def met(c, m):
         if metric == "strat":
-            return strat_auc(y[ii], s[ii], gg)
-        return roc_auc_score(y[ii], s[ii])
+            U, D = UD[m]
+            return (c @ U) / (c @ D)
+        return roc_auc_score(y, preds[m], sample_weight=c[gi])
+    out = {p: [] for p in pairs}
     for _ in range(nboot):
-        pick = rng.choice(genes, len(genes))
-        ii = np.concatenate([gidx[g] for g in pick])
-        gg = np.concatenate([np.full(len(gidx[g]), k) for k, g in enumerate(pick)])  # resampled genes stay distinct
-        if y[ii].min() == y[ii].max():
+        c = np.bincount(rng.integers(0, G, G), minlength=G).astype(float)
+        if c @ nPg == 0 or c @ nBg == 0:
             continue
+        vals = {m: met(c, m) for m in models}
         for a, b in pairs:
-            out[(a, b)].append(met(ii, preds[a], gg) - met(ii, preds[b], gg))
+            out[(a, b)].append(vals[a] - vals[b])
     res = []
-    allii = np.arange(len(y))
+    ones = np.ones(G)
     for (a, b), d in out.items():
         d = np.array(d)
-        obs = met(allii, preds[a], gl) - met(allii, preds[b], gl)
+        obs = met(ones, a) - met(ones, b)
         p = 2 * min((d <= 0).mean(), (d >= 0).mean())
         res.append(dict(metric=metric, contrast=f"{a} - {b}", delta_auc=obs, ci_lo=np.percentile(d, 2.5),
                         ci_hi=np.percentile(d, 97.5), ci90_lo=np.percentile(d, 5), ci90_hi=np.percentile(d, 95),
-                        p_boot=max(p, 1 / len(d))))
+                        p_boot=max(p, 1 / len(d)), n_boot=len(d)))
     return pd.DataFrame(res)
 
 
@@ -320,18 +330,23 @@ def calibration_bins(F, best, te, preds):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--boot", type=int, default=2000)
+    ap.add_argument("--reuse", action="store_true", help="reuse features.parquet and tuned_params.json")
     args = ap.parse_args()
     OUT.mkdir(exist_ok=True)
     rng = np.random.default_rng(SEED)
     v = load()
-    F = build_features(v)
-    F.to_parquet(OUT / "features.parquet")
-    tr = F[F.set == "train"]
-    best, cv = tune(tr[tr.n_lab_res >= 5])
-    cv.to_csv(OUT / "train_cv.csv", index=False)
-    best["_cv_rwr"] = cv[(cv.model == "M2-RWR") & (cv.param == best["rwr"])].cv_auc.iloc[0]
-    best["_cv_r3d"] = cv[(cv.model == "M2-3D") & (cv.param == best["r3d"])].cv_auc.iloc[0]
-    json.dump(best, open(OUT / "tuned_params.json", "w"), indent=1)
+    if args.reuse:
+        F = pd.read_parquet(OUT / "features.parquet")
+        best = json.load(open(OUT / "tuned_params.json"))
+    else:
+        F = build_features(v)
+        F.to_parquet(OUT / "features.parquet")
+        tr = F[F.set == "train"]
+        best, cv = tune(tr[tr.n_lab_res >= 5])
+        cv.to_csv(OUT / "train_cv.csv", index=False)
+        best["_cv_rwr"] = cv[(cv.model == "M2-RWR") & (cv.param == best["rwr"])].cv_auc.iloc[0]
+        best["_cv_r3d"] = cv[(cv.model == "M2-3D") & (cv.param == best["r3d"])].cv_auc.iloc[0]
+        json.dump(best, open(OUT / "tuned_params.json", "w"), indent=1)
 
     allm, allb = [], []
     M, B, te, preds = evaluate(v, F, best, args.boot, rng, "primary")

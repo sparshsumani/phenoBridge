@@ -11,3 +11,4 @@ python3 04_analysis.py            # pre-specified analyses (ANALYSIS_PLAN.md), ~
 python3 04b_exploratory_disorder_ID.py   # EXPLORATORY follow-up of the one secondary hit
 python3 05_power.py               # simulation power analysis
 python3 06_figures.py             # figures -> fig/
+python3 07_tables.py             # markdown tables for RESULTS.md

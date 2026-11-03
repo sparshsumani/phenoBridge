@@ -1,0 +1,144 @@
+### T1 regex flag vs VEP
+| VEP class (MANE) | regex: not truncating | regex: truncating |
+|---|---|---|
+| frameshift | 0 | 174 |
+| inframe | 0 | 2 |
+| missense | 7 | 0 |
+| nonsense | 65 | 1 |
+| splice | 6 | 1 |
+
+### T2 primary (top 10 of 34 by p)
+| label | n | n_obs | n_exc | OR (95% CI) per SD | p | q | firth_p | used |
+|---|---|---|---|---|---|---|---|---|
+| Attention deficit hyperactivity disorder | 68 | 53 | 15 | 0.59 (0.31–1.14) | 0.080 | 0.789 | 0.123 | ml |
+| Microretrognathia | 52 | 16 | 36 | 1.84 (0.85–4.00) | 0.091 | 0.789 | 0.134 | ml |
+| Delayed skeletal maturation | 113 | 54 | 59 | 0.70 (0.45–1.09) | 0.110 | 0.789 | 0.118 | ml |
+| Intrauterine growth retardation | 62 | 13 | 49 | 1.84 (0.78–4.33) | 0.124 | 0.789 | 0.186 | ml |
+| Short stature | 191 | 115 | 76 | 0.79 (0.57–1.09) | 0.138 | 0.789 | 0.153 | ml |
+| Bulbous nose | 110 | 74 | 36 | 0.69 (0.41–1.17) | 0.152 | 0.789 | 0.180 | ml |
+| Hypotonia | 53 | 21 | 32 | 1.49 (0.83–2.67) | 0.165 | 0.789 | 0.208 | ml |
+| Feeding difficulties | 134 | 59 | 75 | 0.80 (0.55–1.16) | 0.230 | 0.789 | 0.244 | ml |
+| Abnormality of the hand | 214 | 155 | 59 | 0.83 (0.60–1.14) | 0.236 | 0.789 | 0.236 | firth |
+| Intellectual disability | 183 | 158 | 25 | 1.26 (0.86–1.85) | 0.242 | 0.789 | 0.214 | ml |
+
+### T3 sensitivity
+| analysis | n_terms | min_p | min_q | n_p05 | n_q05 | top_term | top_OR |
+|---|---|---|---|---|---|---|---|
+| primary | 34 | 0.080 | 0.789 | 0 | 0 | Attention deficit hyperactivity disorder | 0.59 |
+| S1_firth | 34 | 0.118 | 0.831 | 0 | 0 | Delayed skeletal maturation | 0.72 |
+| S2_spline_position | 34 | 0.051 | 0.734 | 0 | 0 | Short stature | 0.72 |
+| S3_log10_core | 34 | 0.006 | 0.200 | 3 | 0 | Bulbous nose | 1.95 |
+| S3_backbone | 34 | 0.008 | 0.279 | 3 | 0 | Delayed skeletal maturation | 0.00 |
+| S3_disorder | 34 | 2.5e-04 | 0.009 | 1 | 1 | Intellectual disability | 0.36 |
+| S3_seed_plddt | 34 | 0.046 | 0.575 | 1 | 0 | Intellectual disability | 2.00 |
+| S4_keep_one_per_family | 34 | 0.004 | 0.124 | 1 | 0 | Short stature | 0.58 |
+| S4_keep_one_per_family_or_dup | 34 | 0.003 | 0.098 | 1 | 0 | Short stature | 0.57 |
+| S5_truncating_only | 34 | 0.101 | 0.765 | 0 | 0 | Bulbous nose | 0.64 |
+
+### omnibus
+{"T_obs": 30.798007222976977, "B": 5000, "p": 0.7016596680663867, "perm_mean": 36.468372728876616, "perm_q95": 53.96127726835939, "n_terms": 34, "chi2_df_naive_p": 0.6253639270945824}
+
+### T4 baseline (terms with p<0.1)
+| family | term | n | OR_CI | p | q | prevalence exposed vs unexposed |
+|---|---|---|---|---|---|---|
+| B1_SV_vs_point | Intrauterine growth retardation | 79 | 3.28 (1.08–10.05) | 0.036 | 0.464 | 8/17 (47%) vs 13/62 (21%) |
+| B1_SV_vs_point | Microretrognathia | 63 | 3.69 (1.03–14.70) | 0.046 | 0.464 | 7/11 (64%) vs 16/52 (31%) |
+| B1_SV_vs_point | Synophrys | 115 | 2.80 (0.97–9.66) | 0.056 | 0.464 | 15/19 (79%) vs 53/96 (55%) |
+| B1_SV_vs_point | Abnormality of the hand | 271 | 0.56 (0.31–1.03) | 0.064 | 0.464 | 34/57 (60%) vs 155/214 (72%) |
+| B1_SV_vs_point | Ventricular septal defect | 173 | 2.66 (0.89–7.35) | 0.077 | 0.464 | 6/31 (19%) vs 12/142 (8%) |
+| B1_SV_vs_point | Triangular face | 128 | 0.49 (0.21–1.13) | 0.095 | 0.464 | 15/29 (52%) vs 68/99 (69%) |
+| B1_SV_vs_point | Hypotonia | 65 | 2.86 (0.83–11.01) | 0.096 | 0.464 | 8/12 (67%) vs 21/53 (40%) |
+| B1s_SVdeletion_vs_point | Abnormality of the hand | 266 | 0.48 (0.26–0.90) | 0.022 | 0.334 | 29/52 (56%) vs 155/214 (72%) |
+| B1s_SVdeletion_vs_point | Triangular face | 124 | 0.36 (0.15–0.88) | 0.024 | 0.334 | 11/25 (44%) vs 68/99 (69%) |
+| B1s_SVdeletion_vs_point | Microretrognathia | 63 | 3.69 (1.03–14.70) | 0.046 | 0.334 | 7/11 (64%) vs 16/52 (31%) |
+| B1s_SVdeletion_vs_point | Intrauterine growth retardation | 77 | 3.24 (1.01–10.39) | 0.048 | 0.334 | 7/15 (47%) vs 13/62 (21%) |
+| B1s_SVdeletion_vs_point | Ventricular septal defect | 170 | 3.02 (1.00–8.43) | 0.049 | 0.334 | 6/28 (21%) vs 12/142 (8%) |
+| B1s_SVdeletion_vs_point | Attention deficit hyperactivity disorder | 81 | 0.33 (0.10–1.13) | 0.076 | 0.379 | 7/13 (54%) vs 53/68 (78%) |
+| B1s_SVdeletion_vs_point | Synophrys | 114 | 2.62 (0.90–9.09) | 0.078 | 0.379 | 14/18 (78%) vs 53/96 (55%) |
+| B2_nontrunc_vs_trunc | Low anterior hairline | 88 | 0.18 (0.02–1.03) | 0.055 | 0.975 | 1/5 (20%) vs 54/83 (65%) |
+| B3i_PTC_position_per10pct | Cryptorchidism | 73 | 1.25 (1.04–1.52) | 0.016 | 0.557 |  |
+| B3ii_PTC_loses_Cterm_region | Cryptorchidism | 73 | 0.24 (0.04–1.03) | 0.056 | 0.714 | 25/65 (38%) vs 6/8 (75%) |
+| B3ii_PTC_loses_Cterm_region | Delayed speech and language development | 133 | 3.54 (0.78–13.89) | 0.096 | 0.714 | 108/124 (87%) vs 6/9 (67%) |
+
+### T5 MC2023
+| claim | reported | this cohort | n | OR (95% CI) | p | fisher_p |
+|---|---|---|---|---|---|---|
+| a. Triangular face: sequence variant vs CNV | 71.1% vs 42.5% | 68.7% vs 51.7% (n=99/29) | 128 | 2.03 (0.88–4.70) | 0.095 | 0.122 |
+| b. Short stature: exon 9 vs outside exon 9 (point variants) | 62.5% vs 27.8% | 61.7% vs 50.0% (n=167/24) | 191 | 1.60 (0.69–3.76) | 0.273 | 0.373 |
+| c. ID/ADHD/ASD: c.1903_1907del vs other point variants | 70.4% vs 89.4% | 85.7% vs 90.9% (n=21/176) | 197 | 0.54 (0.17–2.22) | 0.363 | 0.434 |
+| c'. ID alone: c.1903_1907del vs other point variants | (not reported) | 73.7% vs 87.8% (n=19/164) | 183 | 0.37 (0.13–1.19) | 0.093 | 0.147 |
+| d. Macrodontia increases with deletion size (OR per doubling) | associated |  | 45 | 1.22 (0.92–1.67) | 0.152 |  |
+| d. Comorbidities increase with deletion size (OR per doubling) | associated |  | 43 | 1.31 (1.02–1.79) | 0.037 |  |
+| d. Hand anomalies increase with SMALLER deletions (OR per doubling) | associated |  | 52 | 0.76 (0.51–1.03) | 0.080 |  |
+
+### T6 power
+| label | n | n_obs | MDE_OR_perSD_0.05 | MDE_OR_perSD_0.005 | MDE_OR_per10fold_0.05 |
+|---|---|---|---|---|---|
+| Abnormality of the hand | 214 | 155 | 1.53 | 1.74 | 2.27 |
+| Macrodontia | 212 | 170 | 1.59 | 1.83 | 2.44 |
+| Short stature | 191 | 115 | 1.53 | 1.79 | 2.28 |
+| Intellectual disability | 183 | 158 | 1.70 | 1.95 | 2.79 |
+| Ventricular septal defect | 142 | 12 | 3.20 | >4 per SD | 9.40 |
+| Delayed speech and language development | 141 | 121 | 1.98 | 2.29 | 3.74 |
+| Feeding difficulties | 134 | 59 | 1.76 | 2.09 | 2.96 |
+| Thick eyebrow | 131 | 106 | 1.75 | 2.05 | 2.93 |
+| Long philtrum | 130 | 104 | 1.72 | 1.99 | 2.86 |
+| Delayed skeletal maturation | 113 | 54 | 1.92 | 2.41 | 3.51 |
+| Microcephaly | 113 | 30 | 2.12 | 2.87 | 4.25 |
+| Bulbous nose | 110 | 74 | 1.95 | 2.41 | 3.64 |
+| Hypertelorism | 101 | 59 | 1.73 | 2.09 | 2.89 |
+| Triangular face | 99 | 68 | 1.65 | 1.96 | 2.63 |
+| Synophrys | 96 | 53 | 1.88 | 2.30 | 3.39 |
+| Conductive hearing impairment | 92 | 23 | 2.87 | >4 per SD | 7.64 |
+| Anteverted nares | 88 | 63 | 1.91 | 2.28 | 3.48 |
+| Low anterior hairline | 88 | 55 | 1.85 | 2.20 | 3.27 |
+| Cryptorchidism | 82 | 35 | 1.95 | 2.42 | 3.61 |
+| Motor delay | 77 | 55 | 2.16 | 2.81 | 4.42 |
+| Autistic behavior | 72 | 40 | 1.95 | 2.42 | 3.62 |
+| Strabismus | 70 | 16 | 2.86 | >4 per SD | 7.59 |
+| Attention deficit hyperactivity disorder | 68 | 53 | 1.95 | 2.35 | 3.62 |
+| Protruding ear | 67 | 48 | 1.96 | 2.45 | 3.65 |
+| Intrauterine growth retardation | 62 | 13 | 2.89 | >4 per SD | 7.76 |
+| Sleep disturbance | 57 | 19 | 2.54 | 3.70 | 6.03 |
+| Recurrent otitis media | 53 | 24 | 2.25 | 3.20 | 4.77 |
+| Hypotonia | 53 | 21 | 2.23 | 3.13 | 4.69 |
+| Microretrognathia | 52 | 16 | 2.63 | >4 per SD | 6.47 |
+| EEG abnormality | 49 | 16 | 3.95 | >4 per SD | 14.12 |
+| Exaggerated cupid's bow | 47 | 13 | 2.84 | >4 per SD | 7.47 |
+| Mandibular prognathia | 47 | 13 | 2.67 | >4 per SD | 6.65 |
+| Prominent nose | 41 | 17 | 3.28 | >4 per SD | 9.85 |
+| Low-set ears | 41 | 21 | 3.32 | >4 per SD | 10.13 |
+
+### T7 exploratory disorder-ID
+| analysis | n | n_exc | OR_perSD | p_ml | p_firth |
+|---|---|---|---|---|---|
+| as S3 (all point variants) | 183 | 25 | 0.36 | 2.5e-04 | 4.1e-04 |
+| one per family | 161 | 25 | 0.38 | 7.1e-04 | 0.001 |
+| one per family or likely dup | 155 | 25 | 0.38 | 6.6e-04 | 0.001 |
+| truncating only | 176 | 24 | 0.36 | 2.6e-04 | 4.2e-04 |
+| adjusted for source (6 indicators) | 183 | 25 | 0.38 | 7.9e-04 | 0.001 |
+| adjusted for log10 SemiCore | 183 | 25 | 0.29 | 3.9e-04 | 0.001 |
+| adjusted for c.1903_1907del hotspot | 183 | 25 | 0.36 | 4.0e-04 | 6.4e-04 |
+| excluding c.1903_1907del carriers | 164 | 20 | 0.36 | 4.0e-04 | 6.4e-04 |
+| position as cubic B-spline df=4 | 183 | 25 | 0.33 | 6.9e-04 | 9.2e-04 |
+| position as cubic B-spline df=6 | 183 | 25 | 0.38 | 0.003 | 6.7e-04 |
+| position as cubic B-spline df=8 | 183 | 25 | 0.32 | 0.001 | 0.002 |
+| leave out MC2023 | 135 | 16 | 0.42 | 0.010 | 0.014 |
+| leave out Gnazzo2020 | 156 | 23 | 0.36 | 4.6e-04 | 7.9e-04 |
+| leave out Parenti2021 | 163 | 22 | 0.26 | 3.2e-05 | 6.6e-05 |
+| leave out Ockeloen2015 | 166 | 23 | 0.40 | 0.001 | 0.002 |
+| leave out Murray2017 | 169 | 25 | 0.37 | 3.2e-04 | 5.1e-04 |
+| leave out Kutkowska-Kazmierczak2021 | 172 | 20 | 0.38 | 9.5e-04 | 0.001 |
+| cluster-robust SE by family cluster (Wald) | 183 |  | 0.36 | 4.3e-04 |  |
+| Mann-Whitney DisorderImpact by ID status (unadjusted) | 183 | 25 |  | 8.7e-04 |  |
+
+### T8 missense
+| individualId | hgvs_p | aa_pos | vep_exon | seed_pLDDT | SemiCoreImpact | CoreImpact | am_score | am_class | n_annotated |
+|---|---|---|---|---|---|---|---|---|---|
+| KBG47 | NP_037407.4:p.(Arg2512Trp) | 2.51e+03 | 10/13 | 88.4 | 0.05 | 0.95 | 0.982 | pathogenic | 37 |
+| KBG8B | NP_037407.4:p.(Arg2585Cys) | 2.58e+03 | 12/13 | 91.6 | 0.08 | 0.92 | 0.965 | pathogenic | 38 |
+| Kutkowska-Kazmierczak2021_P3 | NP_037407.4:p.(Arg2536Gln) | 2.54e+03 | 11/13 | 91.1 | 0.08 | 0.92 | 0.957 | pathogenic | 5 |
+| Murray, 2017_P10 (7.1.) | NP_037407.4:p.(Ile2491Leu) | 2.49e+03 | 10/13 | 82.6 | 0.18 | 0.82 | 0.795 | pathogenic | 13 |
+| Scarano, 2013_P7 | NP_037407.4:p.(Arg2512Trp) | 2.51e+03 | 10/13 | 88.4 | 0.05 | 0.95 | 0.982 | pathogenic | 17 |
+| VanDongen2019_P13 | NP_037407.4:p.(Thr1721Met) | 1.72e+03 | 9/13 | 32.1 | 0.79 | 0.00 | 0.21 | benign | 3 |
+| Walz2015_Pf | NP_037407.4:p.(Arg2512Gln) | 2.51e+03 | 10/13 | 88.4 | 0.05 | 0.95 | 0.955 | pathogenic | 8 |

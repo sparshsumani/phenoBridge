@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PhenoBridge</title>
+<style>
+  @page { size: Letter; margin: 0.65in 0.62in 0.7in 0.62in;
+    @bottom-center { content: counter(page); font-family: "FreeSerif"; font-size: 9pt; } }
+  html { font-family: "FreeSerif", "Liberation Serif", serif; font-size: 9.5pt; line-height: 1.23; color: #000; }
+  body { margin: 0; }
+  h1.title { text-wrap: balance; font-size: 16.5pt; line-height: 1.18; text-align: center; margin: 0 0 9pt; font-weight: bold; }
+  .authors { text-align: center; font-size: 11pt; margin-bottom: 2pt; }
+  .affil { text-align: center; font-size: 9pt; font-style: italic; margin-bottom: 12pt; }
+  .abstract { margin: 0 0.35in 12pt; font-size: 9pt; text-align: justify; }
+  .abstract b.lead { font-size: 9.5pt; }
+  .kw { margin: 4pt 0.35in 8pt; font-size: 8.7pt; }
+  .cols { column-count: 2; column-gap: 0.25in; text-align: justify; hyphens: auto; }
+  p { margin: 0 0 0; text-indent: 1.2em; }
+  h2 + p, h3 + p, .noind { text-indent: 0; }
+  h2 { font-size: 10.3pt; margin: 7pt 0 2.5pt; font-weight: bold; break-after: avoid; }
+  h3 { font-size: 9.4pt; margin: 5pt 0 1.5pt; font-style: italic; font-weight: bold; break-after: avoid; }
+  .eq { text-align: center; margin: 5pt 0; text-indent: 0; font-style: normal; position: relative; }
+  .eq .num { position: absolute; right: 0; }
+  .v { font-style: italic; }
+  figure { margin: 6pt 0 8pt; break-inside: avoid; }
+  figure img { width: 100%; display: block; }
+  figcaption { font-size: 8.3pt; line-height: 1.2; text-align: justify; margin-top: 3pt; }
+  figcaption b { font-weight: bold; }
+  figure.wide { margin: 0 0 10pt; }
+  table { border-collapse: collapse; width: 100%; font-size: 8.1pt; line-height: 1.18; }
+  table caption { caption-side: top; font-size: 8.3pt; text-align: justify; margin-bottom: 3pt; }
+  th, td { padding: 1.3pt 3pt; text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  thead tr { border-top: 1px solid #000; border-bottom: 0.6px solid #000; }
+  tbody tr:last-child { border-bottom: 1px solid #000; }
+  tr.mid td { border-top: 0.6px solid #000; }
+  .tbl { break-inside: avoid; margin: 6pt 0 8pt; }
+  ol.refs { font-size: 7.5pt; line-height: 1.13; padding-left: 1.6em; margin: 0; text-align: left; }
+  ol.refs li { margin-bottom: 0.8pt; }
+  code, .mono { font-family: "Liberation Mono", monospace; font-size: 8pt; }
+  sup.c { font-size: 70%; }
+  .sc { font-variant: small-caps; }
+</style>
+</head>
+<body>
+
+<h1 class="title">PhenoBridge: Confidence-Aware Random-Walk Fingerprints on AlphaFold Contact Graphs for Genotype&ndash;Phenotype Analysis in KBG Syndrome</h1>
+<div class="authors">Sparsh Sumani &nbsp;&nbsp;&nbsp; Yuzhang Fu</div>
+<div class="affil">&nbsp;</div>
+
+<div class="abstract"><b class="lead">Abstract.</b>
+KBG syndrome is a rare autosomal-dominant neurodevelopmental disorder caused by heterozygous variants in <i>ANKRD11</i>, a 2,663-residue protein that is mostly intrinsically disordered. Missense and truncating variants are spread across the gene, and the clinical picture varies widely between patients. Whether a variant's structural context explains part of that variation is still an open question. We present PhenoBridge, a lightweight and interpretable pipeline that turns each variant position into a <i>structural influence fingerprint</i>. It builds a C&alpha; contact graph from the AlphaFold model of ANKRD11, partitions residues by pLDDT confidence, and runs a random walk with restart (RWR) from the variant residue. The fingerprint records how much of the walk's stationary probability falls in high-confidence core, intermediate-confidence, disordered and inter-domain "backbone" residues. We applied PhenoBridge to a curated cohort of 333 individuals annotated with 48 Human Phenotype Ontology (HPO) terms. Fingerprints change very little when the restart probability or contact cutoff is varied (Spearman &rho; &ge; 0.986). However, 84% of cohort variants sit in low-confidence regions (pLDDT &lt; 50). In per-phenotype logistic models adjusted for variant class, no HPO term was associated with the fingerprint after false-discovery-rate correction. The two nominal signals appeared only when unannotated phenotypes were coded as absent, and they disappeared when the analysis was restricted to explicitly recorded observations. We release the pipeline as an interactive tool and discuss what structure-only features can and cannot offer for genotype&ndash;phenotype work in proteins dominated by disorder.</div>
+<div class="kw"><b>Keywords:</b> KBG syndrome; ANKRD11; AlphaFold; pLDDT; residue contact networks; random walk with restart; Human Phenotype Ontology; genotype&ndash;phenotype correlation.</div>
+
+<figure class="wide">
+<img src="fig/fig1.svg" alt="Figure 1">
+<figcaption><b>Figure 1.</b> Structural landscape of ANKRD11 and the cohort variants. (a) AlphaFold pLDDT along the sequence; the dashed line marks pLDDT = 70. (b) RWR fingerprint components <span class="v">F</span><sub>Semi</sub> (blue) and <span class="v">F</span><sub>Core</sub> (red) computed with every residue in turn as the seed (<span class="v">&alpha;</span> = 0.3, <span class="v">r</span> = 8 &Aring;). (c) Positions of the 256 cohort sequence variants that could be mapped to a residue. Shaded bands mark confident segments (pLDDT &ge; 70, &ge;20 residues): 159&ndash;285, 1579&ndash;1610, 2436&ndash;2455, 2489&ndash;2547 and 2577&ndash;2631.</figcaption>
+</figure>
+
+<div class="cols">
+
+<h2>1&nbsp;&nbsp;Introduction</h2>
+<p>KBG syndrome (OMIM 148050) is characterised by macrodontia of the upper central incisors, distinctive craniofacial features, short stature, skeletal anomalies and developmental delay or intellectual disability. It is caused by heterozygous loss-of-function variants in <i>ANKRD11</i> or by 16q24.3 deletions that include the gene [1,2]. ANKRD11 is a large chromatin regulator. Apart from an N-terminal ankyrin-repeat domain and short C-terminal segments, it has few well-folded regions. Large cohort studies have described broad clinical variability and only modest genotype&ndash;phenotype correlations [3].</p>
+<p>AlphaFold [4] and the AlphaFold Protein Structure Database [5] now provide a predicted structure for essentially every human protein, together with a per-residue confidence score (pLDDT). pLDDT tracks local order closely: residues below about 50 are a strong indicator of intrinsic disorder [6,7]. This makes it possible to place every patient variant in structural context, even for proteins that have no experimental structure. The question we address is practical. Can a simple, transparent structural feature computed from an AlphaFold model separate patients by phenotype within a single-gene cohort?</p>
+<p>We borrow ideas from two areas. Residue contact networks built from C&alpha; coordinates underpin elastic-network models of protein dynamics [8], and random walks with restart (RWR) are a standard way to propagate a local signal through a network [9,10]. PhenoBridge combines the two. We seed a walk at the variant residue on the contact graph and summarise where the probability mass settles, measured against regions defined by pLDDT. Our contributions are: (i) an interpretable four-component fingerprint for any residue; (ii) an open, end-to-end pipeline from a phenopacket-style cohort file to per-HPO association statistics and an interactive prediction interface; and (iii) a candid evaluation on 333 KBG individuals, including how sensitive the result is to the coding of missing phenotype data.</p>
+
+<h2>2&nbsp;&nbsp;Data</h2>
+<p><b>Structure.</b> We used the AlphaFold DB model AF-Q6UB99-F1 (v6) for human ANKRD11 (UniProt Q6UB99, 2,663 residues). AlphaFold stores per-residue pLDDT in the B-factor column. PDB numbering matches UniProt numbering, so cohort positions map directly onto residues.</p>
+<p><b>Cohort.</b> The cohort file (<span class="mono">ANKRD11_KBGS_individuals.json</span>) contains 333 individuals with a KBG syndrome diagnosis, curated from the literature, primarily the 340-patient series of Martinez-Cayuelas <i>et al.</i> [3]. Each individual is annotated against 48 HPO terms [11] as <i>observed</i>, <i>excluded</i> or <i>not available</i>, and carries one <i>ANKRD11</i> allele (transcript NM_013275.6). There are 232 distinct alleles: 77 individuals carry structural variants (16q24.3 deletions), and the remainder carry sequence variants given as cDNA HGVS. Phenotype annotation is sparse: the median HPO term is unrecorded for 70.7% of individuals (maximum 99.1%).</p>
+
+<h2>3&nbsp;&nbsp;Methods</h2>
+<h3>3.1&nbsp;&nbsp;Contact graph and confidence regions</h3>
+<p>Let <span class="v">x<sub>i</sub></span> be the C&alpha; coordinate of residue <span class="v">i</span>. The contact graph <span class="v">G</span> = (<span class="v">V</span>, <span class="v">E</span>) has one node per residue and an undirected edge whenever &#8214;<span class="v">x<sub>i</sub></span> &minus; <span class="v">x<sub>j</sub></span>&#8214; &le; <span class="v">r</span>, with <span class="v">r</span> = 8 &Aring; by default. Edges are found with a k-d tree. Sequence neighbours (&asymp;3.8 &Aring; apart) are always connected, so <span class="v">G</span> contains the chain as a path plus the spatial contacts. Residues are split by the empirical pLDDT quantiles <span class="v">q</span><sub>0.9</sub> and <span class="v">q</span><sub>0.5</sub>: <i>Core</i> (pLDDT &ge; <span class="v">q</span><sub>0.9</sub>), <i>Semi-core</i> (<span class="v">q</span><sub>0.5</sub> &le; pLDDT &lt; <span class="v">q</span><sub>0.9</sub>) and <i>Disorder</i> (pLDDT &le; <span class="v">q</span><sub>0.5</sub>). We use quantiles rather than fixed thresholds because they adapt to proteins of different overall confidence.</p>
+
+<h3>3.2&nbsp;&nbsp;Communication backbone</h3>
+<p>To mark residues that may relay signals between distant domains, we build a second graph <span class="v">G</span><sub>core</sub> restricted to residues with pLDDT &ge; 70. We then sample up to 2,000 source&ndash;target pairs between an N-terminal anchor (residues 1&ndash;200) and a C-terminal anchor (the last 200 residues). For each pair we compute the shortest path and count how often each interior node is visited. The 200 most frequently visited nodes form the <i>communication backbone</i> <span class="v">B</span>.</p>
+
+<h3>3.3&nbsp;&nbsp;RWR fingerprint</h3>
+<p>Let <span class="v">A</span> be the adjacency matrix of <span class="v">G</span> and <span class="v">D</span> its degree matrix. For a variant at residue <span class="v">s</span>, let <b><span class="v">e</span></b><sub><span class="v">s</span></sub> be the indicator vector of <span class="v">s</span>. We iterate</p>
+<div class="eq"><b><span class="v">p</span></b><sup>(<span class="v">t</span>+1)</sup> = (1 &minus; <span class="v">&alpha;</span>)&thinsp;<span class="v">A D</span><sup>&minus;1</sup>&thinsp;<b><span class="v">p</span></b><sup>(<span class="v">t</span>)</sup> + <span class="v">&alpha;</span>&thinsp;<b><span class="v">e</span></b><sub><span class="v">s</span></sub><span class="num">(1)</span></div>
+<p class="noind">until the change in &#8467;<sub>1</sub> norm falls below 10<sup>&minus;10</sup> (or 200 iterations), with restart probability <span class="v">&alpha;</span> = 0.3. The fixed point <b><span class="v">p</span></b><sup>&infin;</sup> is a personalised-PageRank profile centred on <span class="v">s</span> [9]. For each region <span class="v">R</span> &isin; {Core, Semi-core, Disorder, <span class="v">B</span>} the fingerprint component is</p>
+<div class="eq"><span class="v">F<sub>R</sub></span>(<span class="v">s</span>) = &Sigma;<sub><span class="v">i</span>&isin;<span class="v">R</span></sub> <span class="v">p<sub>i</sub></span><sup>&infin;</sup><span class="num">(2)</span></div>
+<p class="noind">The three pLDDT regions partition <span class="v">V</span>, so their components sum to one, and <span class="v">F<sub>B</sub></span> overlaps them. Because the walk restarts at the seed, the fingerprint describes the variant's local neighbourhood within a radius set by <span class="v">&alpha;</span>. <span class="v">F</span><sub>Semi</sub> is high for residues embedded in partially ordered structure and low both for residues in long disordered linkers and for residues deep inside the confident core.</p>
+
+<h3>3.4&nbsp;&nbsp;Variant mapping and association model</h3>
+<p>Protein positions are read from <span class="mono">p.</span> notation when it is present. Otherwise they are computed as &lceil;<span class="v">c</span>/3&rceil; from the first cDNA coordinate. Alleles whose HGVS string contains <span class="mono">del</span>, <span class="mono">dup</span>, <span class="mono">ins</span>, <span class="mono">fs</span>, <span class="mono">ter</span>/<span class="mono">*</span> or <span class="mono">splice</span> are flagged as truncating-like (<span class="v">T</span> &isin; {0,1}). For each individual we take the maximum <span class="v">F</span><sub>Semi</sub> across their alleles. For every HPO term <span class="v">h</span> whose observed and excluded counts were each at least 15, we fit</p>
+<div class="eq">logit Pr(<span class="v">y<sub>h</sub></span> = 1) = <span class="v">&beta;</span><sub>0</sub> + <span class="v">&beta;</span><sub>1</sub> log<sub>10</sub> <span class="v">F</span><sub>Semi</sub> + <span class="v">&beta;</span><sub>2</sub> <span class="v">T</span><span class="num">(3)</span></div>
+<p class="noind">and report the odds ratio exp(<span class="v">&beta;</span><sub>1</sub>) per 10-fold increase in <span class="v">F</span><sub>Semi</sub>, Wald 95% confidence intervals, and Benjamini&ndash;Hochberg <span class="v">q</span>-values [12]. We compare two ways of coding phenotypes. In <b>Encoding A</b>, used by our hackathon prototype, unannotated terms are treated as absent. In <b>Encoding B</b>, each model uses only individuals for whom the term was explicitly recorded as observed or excluded. Structural variants have no single residue position and are excluded from the association analysis.</p>
+
+<h3>3.5&nbsp;&nbsp;Implementation</h3>
+<p>PhenoBridge is a single Python module built on Biopython [13], NetworkX [14], SciPy and statsmodels [15]. A Gradio interface exposes three functions: computing the fingerprint for a residue, comparing two residues side by side, and producing a top-10 table of predicted phenotype probabilities for user-entered variants, with a badge on terms whose cohort-level <span class="v">p</span> &lt; 0.05. A fingerprint takes about 0.06 s per residue on one CPU core, or about 2.5 min for the whole protein.</p>
+
+
+
+<h2>4&nbsp;&nbsp;Results</h2>
+<h3>4.1&nbsp;&nbsp;ANKRD11 is predicted to be mostly disordered</h3>
+<p>pLDDT has a median of 31.2 and a mean of 39.2. 83.8% of residues fall below 50, and only 12.3% reach 70 or above (Fig. 1a). The confident residues cluster in an N-terminal segment (159&ndash;285), consistent with the annotated ankyrin-repeat domain, and in a short internal segment and three C-terminal segments. With the quantile thresholds (<span class="v">q</span><sub>0.9</sub> = 81.2, <span class="v">q</span><sub>0.5</sub> = 31.2), there are 268 Core, 1,066 Semi-core and 1,332 Disorder residues. The full contact graph has 2,663 nodes and 6,911 edges. The high-confidence graph <span class="v">G</span><sub>core</sub> (327 nodes, 1,354 edges) splits into 10 connected components, so the backbone <span class="v">B</span> (200 nodes, spanning residues 112&ndash;2442) runs through the largest connected confident regions rather than forming one continuous path from N- to C-terminus.</p>
+
+<div class="tbl">
+<table>
+<caption><b>Table 1.</b> Summary of structure, cohort and fingerprint statistics.</caption>
+<thead><tr><th>Quantity</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>Residues / contact edges (<span class="v">r</span> = 8 &Aring;)</td><td>2,663 / 6,911</td></tr>
+<tr><td>Residues with pLDDT &ge; 70 / &lt; 50</td><td>12.3% / 83.8%</td></tr>
+<tr><td>Core / Semi-core / Disorder residues</td><td>268 / 1,066 / 1,332</td></tr>
+<tr class="mid"><td>Individuals / HPO terms / distinct alleles</td><td>333 / 48 / 232</td></tr>
+<tr><td>Structural variants (no residue position)</td><td>77</td></tr>
+<tr><td>Individuals mapped / distinct positions</td><td>256 / 153</td></tr>
+<tr><td>Truncating-like among mapped</td><td>69.5%</td></tr>
+<tr><td>Median HPO missingness</td><td>70.7%</td></tr>
+<tr class="mid"><td>Seeds with pLDDT &lt; 50 / &ge; 70</td><td>84.0% / 31 indiv.</td></tr>
+<tr><td><span class="v">F</span><sub>Semi</sub> median (IQR), cohort</td><td>0.29 (0.16&ndash;0.57)</td></tr>
+<tr><td>Spearman &rho; vs. default: <span class="v">&alpha;</span> = 0.15 / 0.5</td><td>0.988 / 0.998</td></tr>
+<tr><td>Spearman &rho; vs. default: <span class="v">r</span> = 6 / 10 &Aring;</td><td>0.986 / 0.992</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>4.2&nbsp;&nbsp;Fingerprints are stable and interpretable</h3>
+<p>Fig. 1b shows that <span class="v">F</span><sub>Semi</sub> varies sharply along the sequence. It is close to zero in long disordered stretches and close to one in the C-terminal third, where moderate-confidence regions are dense. <span class="v">F</span><sub>Core</sub> is concentrated almost entirely in the confident segments. Fig. 2a compares the two default residues of the interactive tool. Residue 600 (pLDDT 27.5) keeps 94.7% of its walk mass in disorder (<span class="v">F</span><sub>Semi</sub> = 0.053). Residue 2400 (pLDDT 49.4) sends 97.2% to the semi-core and 7.7% to the backbone. Across the 153 cohort positions, the ranking of <span class="v">F</span><sub>Semi</sub> barely changes when <span class="v">&alpha;</span> is halved or raised to 0.5, or when the contact cutoff is set to 6 or 10 &Aring; (&rho; &ge; 0.986; Table 1). The fingerprint is therefore a stable property of the structure, not an artefact of the parameter choices.</p>
+
+<figure>
+<img style="width:92%;margin:0 auto" src="fig/fig2.svg" alt="Figure 2">
+<figcaption><b>Figure 2.</b> (a) Fingerprints for residue 600 (disordered linker) and residue 2400 (C-terminal semi-ordered region). Bb. = backbone. (b) log<sub>10</sub> <span class="v">F</span><sub>Semi</sub> against seed pLDDT for the cohort variants. Seeds inside confident domains (right) lose mass to the Core, so <span class="v">F</span><sub>Semi</sub> is not a monotone function of pLDDT.</figcaption>
+</figure>
+
+<p>Most cohort variants are poorly resolved structurally. 84.0% of mapped individuals carry a variant at a residue with pLDDT &lt; 50, and only 31 carry one in a segment with pLDDT &ge; 70 (Fig. 2b). Variants cluster around residues 530&ndash;670, 800&ndash;930 and 2400&ndash;2530 (Fig. 1c). Only the last of these clusters lies in a region with high <span class="v">F</span><sub>Semi</sub>.</p>
+
+<h3>4.3&nbsp;&nbsp;Phenotype association</h3>
+<p>Under Encoding A, 31 HPO terms met the prevalence filter. Two reached nominal significance: attention-deficit/hyperactivity disorder (OR 0.53, 95% CI 0.31&ndash;0.93, <span class="v">p</span> = 0.026) and triangular face (OR 0.59, 0.35&ndash;0.99, <span class="v">p</span> = 0.048). Neither survived FDR correction (minimum <span class="v">q</span> = 0.60). Under Encoding B, the number of individuals per model fell from 256 to between 41 and 214. None of the 30 tested terms reached nominal significance. The smallest <span class="v">p</span>-value was 0.15 (hypertelorism, OR 1.73, 0.82&ndash;3.65) and the minimum <span class="v">q</span> was 0.83 (Table 2, Fig. 3). For intellectual disability, the core neurodevelopmental feature, the point estimate was above one (OR 1.61, 0.77&ndash;3.35), but the interval was wide and included one.</p>
+
+<figure>
+<img src="fig/fig3.svg" alt="Figure 3">
+<figcaption><b>Figure 3.</b> Odds ratios (95% CI) for <span class="v">F</span><sub>Semi</sub> from Eq. (3) under Encoding B, for the 14 terms with the smallest <span class="v">p</span>-values. <span class="v">n</span> = number of individuals with an explicit annotation. Every interval includes OR = 1.</figcaption>
+</figure>
+
+<div class="tbl">
+<table>
+<caption><b>Table 2.</b> Effect of phenotype coding on the strongest associations (OR per 10-fold increase in <span class="v">F</span><sub>Semi</sub>, adjusted for <span class="v">T</span>).</caption>
+<thead><tr><th>HPO term</th><th colspan="2">Enc. A (<span class="v">n</span>=256)</th><th colspan="3">Enc. B (explicit only)</th></tr>
+<tr><th></th><th>OR</th><th><span class="v">p</span></th><th><span class="v">n</span></th><th>OR</th><th><span class="v">p</span></th></tr></thead>
+<tbody>
+<tr><td>ADHD</td><td>0.53</td><td>0.026</td><td>68</td><td>0.49</td><td>0.19</td></tr>
+<tr><td>Triangular face</td><td>0.59</td><td>0.048</td><td>99</td><td>0.58</td><td>0.18</td></tr>
+<tr><td>Intellectual disability</td><td>0.96</td><td>0.86</td><td>183</td><td>1.61</td><td>0.20</td></tr>
+<tr><td>Hypertelorism</td><td>1.31</td><td>0.36</td><td>101</td><td>1.73</td><td>0.15</td></tr>
+<tr class="mid"><td>Terms tested / <span class="v">p</span> &lt; 0.05 / min <span class="v">q</span></td><td colspan="2">31 / 2 / 0.60</td><td colspan="3">30 / 0 / 0.83</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>5&nbsp;&nbsp;Discussion</h2>
+<p>PhenoBridge yields a structural descriptor that is reproducible, cheap to compute and easy to read. In this cohort, however, that descriptor does not explain phenotypic variability among KBG patients. We see three reasons, and each points to a direction for future work.</p>
+<p><i>Structural signal is limited.</i> Most pathogenic <i>ANKRD11</i> variants are truncating and lie in disordered regions. For these variants, haploinsufficiency through nonsense-mediated decay probably matters more than local 3D context, and a contact graph built from low-confidence coordinates mostly encodes chain connectivity. Fingerprints are likely to be more informative for missense variants in the confident C-terminal segments. Testing that subset needs a larger cohort than the 31 individuals available here.</p>
+<p><i>Missing data shape the conclusions.</i> Treating unrecorded terms as absent (Encoding A) produced nominal hits that disappeared when only explicit annotations were used. Literature-curated cohorts typically report a phenotype only when it was examined, so absence of a record is not evidence of absence. We recommend Encoding B, or an explicit missing-data model, as the default for this kind of analysis.</p>
+<p><i>Model choices.</i> Our variant-class flag is a string heuristic. It labels in-frame indels as truncating and misses single-nucleotide nonsense changes. A proper consequence annotation, for example from VEP, would remove this confound. Taking the maximum over alleles per individual is trivial here because each individual has one allele, but it would need revisiting for compound or mosaic cases. Finally, the per-term models are small and the 30 tests are correlated. Multivariate approaches such as phenotype-similarity scores or penalised multi-label models may recover a weak shared signal that individual tests cannot.</p>
+<p><i>Outlook.</i> The fingerprint does not depend on the gene. Applying it to rare-disease genes whose structures are better resolved, combining it with conservation and missense-pathogenicity scores, and weighting edges by predicted aligned error (PAE) instead of thresholded C&alpha; distances are natural next steps.</p>
+
+<h2>6&nbsp;&nbsp;Conclusion</h2>
+<p>We introduced PhenoBridge, an interpretable pipeline that links AlphaFold-derived structural context to patient phenotypes through confidence-aware random-walk fingerprints. The fingerprints are robust to parameter choices. In a 333-patient KBG syndrome cohort they show no phenotype association that survives multiple-testing correction. This negative result is informative: it shows that most <i>ANKRD11</i> variants fall in disorder, and that phenotype missingness can create spurious associations. Code, data and an interactive interface are available in the project repository.</p>
+
+<p class="noind" style="margin-top:6pt;font-size:8.6pt;"><b>Acknowledgements.</b> This work began as a hackathon project. We thank the curators of the KBG syndrome cohort and the AlphaFold DB team for making their data openly available.</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Sirmaci A, Spiliopoulos M, Brancati F, <i>et al.</i> Mutations in <i>ANKRD11</i> cause KBG syndrome, characterized by intellectual disability, skeletal malformations, and macrodontia. <i>Am J Hum Genet</i> 89:289&ndash;294, 2011.</li>
+<li>Low K, Ashraf T, Canham N, <i>et al.</i> Clinical and genetic aspects of KBG syndrome. <i>Am J Med Genet A</i> 170:2835&ndash;2846, 2016.</li>
+<li>Martinez-Cayuelas E, Blanco-Kelly F, Lopez-Grondona F, <i>et al.</i> Clinical description, molecular delineation and genotype&ndash;phenotype correlation in 340 patients with KBG syndrome: addition of 67 new patients. <i>J Med Genet</i> 60:644&ndash;654, 2023. PMID 36446582.</li>
+<li>Jumper J, Evans R, Pritzel A, <i>et al.</i> Highly accurate protein structure prediction with AlphaFold. <i>Nature</i> 596:583&ndash;589, 2021.</li>
+<li>Varadi M, Anyango S, Deshpande M, <i>et al.</i> AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models. <i>Nucleic Acids Res</i> 50:D439&ndash;D444, 2022.</li>
+<li>Tunyasuvunakool K, Adler J, Wu Z, <i>et al.</i> Highly accurate protein structure prediction for the human proteome. <i>Nature</i> 596:590&ndash;596, 2021.</li>
+<li>Akdel M, Pires DEV, Pardo EP, <i>et al.</i> A structural biology community assessment of AlphaFold2 applications. <i>Nat Struct Mol Biol</i> 29:1056&ndash;1067, 2022.</li>
+<li>Atilgan AR, Durell SR, Jernigan RL, <i>et al.</i> Anisotropy of fluctuation dynamics of proteins with an elastic network model. <i>Biophys J</i> 80:505&ndash;515, 2001.</li>
+<li>Tong H, Faloutsos C, Pan J-Y. Fast random walk with restart and its applications. In <i>Proc. IEEE ICDM</i>, 613&ndash;622, 2006.</li>
+<li>K&ouml;hler S, Bauer S, Horn D, Robinson PN. Walking the interactome for prioritization of candidate disease genes. <i>Am J Hum Genet</i> 82:949&ndash;958, 2008.</li>
+<li>K&ouml;hler S, Gargano M, Matentzoglu N, <i>et al.</i> The Human Phenotype Ontology in 2021. <i>Nucleic Acids Res</i> 49:D1207&ndash;D1217, 2021.</li>
+<li>Benjamini Y, Hochberg Y. Controlling the false discovery rate: a practical and powerful approach to multiple testing. <i>J R Stat Soc B</i> 57:289&ndash;300, 1995.</li>
+<li>Cock PJA, Antao T, Chang JT, <i>et al.</i> Biopython: freely available Python tools for computational molecular biology and bioinformatics. <i>Bioinformatics</i> 25:1422&ndash;1423, 2009.</li>
+<li>Hagberg AA, Schult DA, Swart PJ. Exploring network structure, dynamics, and function using NetworkX. In <i>Proc. 7th Python in Science Conf.</i>, 11&ndash;15, 2008.</li>
+<li>Seabold S, Perktold J. Statsmodels: econometric and statistical modeling with Python. In <i>Proc. 9th Python in Science Conf.</i>, 92&ndash;96, 2010.</li>
+</ol>
+
+</div>
+</body>
+</html>

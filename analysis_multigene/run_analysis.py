@@ -160,6 +160,7 @@ def feature_table(v, a=""):
     f = pd.DataFrame({
         "phenopacket_id": v.phenopacket_id.values,
         "gene": v.gene.values,
+        "vkey": (v.gene.astype(str) + ":" + v.vep_p_norm.fillna(v.hgvs_g).fillna(v.variant_id).astype(str)).values,
         "variant_class": v.variant_class.values,
         "rel_pos": v.rel_protein_pos.astype(float).values,
         "S1_logSemi": np.log10(v[f"res_SemiCoreImpact{a}"].astype(float).values + eps),
@@ -179,8 +180,16 @@ CONT = ["S1_logSemi", "S2_pLDDT", "S3_logCore", "S4_degree", "S5_AlphaMissense",
         "S6a_nbr1_pLDDT", "S6b_nbr2_pLDDT", "S8_logDisorder"]
 
 
-def residualise(f, cols):
-    """Within gene, regress each feature on rel_pos (linear OLS); keep residuals."""
+def _design(x, spline):
+    if spline and len(x) >= 12 and len(np.unique(x)) >= 8:
+        from patsy import dmatrix
+        return np.asarray(dmatrix("cr(x, df=4)", {"x": x}, return_type="matrix"))
+    return np.c_[np.ones(len(x)), x]
+
+
+def residualise(f, cols, spline=False):
+    """Within gene, regress each feature on rel_pos (linear OLS, or a 4-df natural
+    cubic spline); keep residuals."""
     f = f.copy()
     for c in cols:
         r = np.full(len(f), np.nan)
@@ -188,7 +197,7 @@ def residualise(f, cols):
             sub = f.loc[idx, [c, "rel_pos"]].dropna()
             if len(sub) < 3:
                 continue
-            X = np.c_[np.ones(len(sub)), sub.rel_pos.values]
+            X = _design(sub.rel_pos.values, spline)
             beta, *_ = np.linalg.lstsq(X, sub[c].values, rcond=None)
             r[f.index.get_indexer(sub.index)] = sub[c].values - X @ beta
         f[c + "_res"] = r
@@ -201,7 +210,23 @@ def pheno_matrix(pheno, ids):
 
 
 # ---------------------------------------------------------------- tests
-def run_tests(f, P, feats, perms, rng, label_map):
+def make_perms(fg, perms, rng, level):
+    """Row-index permutations within a gene. level='individual' shuffles carriers;
+    level='variant' shuffles features among distinct variants (carriers of the same
+    variant move together): carrier i receives the features of variant sigma(v_i)."""
+    N = len(fg)
+    if level == "individual":
+        return np.array([rng.permutation(N) for _ in range(perms)])
+    codes, uniq = pd.factorize(fg.vkey.values)
+    rep_row = np.array([np.where(codes == k)[0][0] for k in range(len(uniq))])
+    out = np.empty((perms, N), int)
+    for b in range(perms):
+        sigma = rng.permutation(len(uniq))
+        out[b] = rep_row[sigma[codes]]
+    return out
+
+
+def run_tests(f, P, feats, perms, rng, label_map, level="variant"):
     """Analysis A: per (gene, term) MWU (continuous) or Fisher (binary) on the
     position-residualised feature, plus a joint within-gene permutation null."""
     rows = []
@@ -211,7 +236,7 @@ def run_tests(f, P, feats, perms, rng, label_map):
         ids = fg.phenopacket_id.values
         Pg = P.reindex(ids)
         N = len(fg)
-        perm_idx = np.array([rng.permutation(N) for _ in range(perms)]) if perms else None
+        perm_idx = make_perms(fg, perms, rng, level) if perms else None
         for h in Pg.columns:
             y_all = Pg[h].values
             m_ann = ~np.isnan(y_all)
@@ -250,6 +275,7 @@ def run_tests(f, P, feats, perms, rng, label_map):
                             ab = int(((xp[b] == 1) & (y == 1)).sum())
                             pp[b] = lut_cache[kb][ab]
                         perm_counts[ft] += (pp < 0.05)
+                        pperm = (1 + (pp <= p * (1 + 1e-9)).sum()) / (1 + perms)
                 else:
                     p, r = mwu_p_matrix(x[None, :], y)
                     p, eff = float(p[0]), float(r[0])
@@ -261,9 +287,10 @@ def run_tests(f, P, feats, perms, rng, label_map):
                             xp = np.where(np.isnan(xp), np.nanmedian(x), xp)
                         pp, _ = mwu_p_matrix(xp, y)
                         perm_counts[ft] += (pp < 0.05)
+                        pperm = (1 + (pp <= p * (1 + 1e-9)).sum()) / (1 + perms)
                 rows.append(dict(gene=g, hpo_id=h, hpo_label=label_map.get(h, ""), feature=ft,
                                  n=len(y), n_obs=int(y.sum()), n_exc=int(len(y) - y.sum()),
-                                 effect=eff, p=p))
+                                 effect=eff, p=p, p_perm=pperm if perms else np.nan))
     res = pd.DataFrame(rows)
     summ = []
     for ft in feats:
@@ -279,11 +306,13 @@ def run_tests(f, P, feats, perms, rng, label_map):
                          perm_mean_p05=float(pc.mean()) if perms else np.nan,
                          perm_p=float((1 + (pc >= obs).sum()) / (1 + perms)) if perms else np.nan,
                          n_q10=int((q < 0.1).sum()), n_genes_q10=int(r.loc[q < 0.1, "gene"].nunique()),
-                         pi1=storey_pi1(r.p.values)))
-    return res, pd.DataFrame(summ)
+                         pi1=storey_pi1(r.p.values),
+                         n_permtest_p05=int((r.p_perm < 0.05).sum()),
+                         n_permtest_q10=int((bh(r.p_perm.values) < 0.1).sum())))
+    return res, pd.DataFrame(summ), perm_counts
 
 
-def run_class_tests(f, P, perms, rng, label_map):
+def run_class_tests(f, P, perms, rng, label_map, level="variant"):
     """Analysis B: missense vs PTC Fisher per (gene, term), joint within-gene permutation."""
     rows = []
     perm_count = np.zeros(perms, int)
@@ -295,7 +324,7 @@ def run_class_tests(f, P, perms, rng, label_map):
             continue
         Pg = P.reindex(fg.phenopacket_id.values)
         N = len(fg)
-        perm_idx = np.array([rng.permutation(N) for _ in range(perms)]) if perms else None
+        perm_idx = make_perms(fg, perms, rng, level) if perms else None
         xa = fg.is_mis.values
         for h in Pg.columns:
             ya = Pg[h].values
@@ -323,6 +352,7 @@ def run_class_tests(f, P, perms, rng, label_map):
                     sel = kb == kk
                     pp[sel] = lut[ab[sel]]
                 perm_count += (pp < 0.05)
+                rows[-1]["p_perm"] = (1 + (pp <= p * (1 + 1e-9)).sum()) / (1 + perms)
     res = pd.DataFrame(rows)
     res["q"] = bh(res.p.values)
     obs = int((res.p < 0.05).sum())
@@ -330,8 +360,10 @@ def run_class_tests(f, P, perms, rng, label_map):
                 expected_p05=0.05 * len(res), perm_mean_p05=float(perm_count.mean()),
                 perm_p=float((1 + (perm_count >= obs).sum()) / (1 + perms)),
                 n_q10=int((res.q < 0.1).sum()), n_genes_q10=int(res.loc[res.q < 0.1, "gene"].nunique()),
-                pi1=storey_pi1(res.p.values))
-    return res, summ
+                pi1=storey_pi1(res.p.values),
+                n_permtest_p05=int((res.p_perm < 0.05).sum()),
+                n_permtest_q10=int((bh(res.p_perm.values) < 0.1).sum()))
+    return res, summ, perm_count
 
 
 # ---------------------------------------------------------------- main
@@ -356,13 +388,14 @@ def main():
     feats_all = ["S1_logSemi", "S2_pLDDT", "S3_logCore", "S4_degree", "S5_AlphaMissense",
                  "S6a_nbr1_pLDDT", "S6b_nbr2_pLDDT", "S7_in_domain", "S8_logDisorder", "P0_rel_pos"]
 
-    def analysis_A(vv, pheno, tag, perms, suffix=""):
+    def analysis_A(vv, pheno, tag, perms, suffix="", level="variant", spline=False):
         f = feature_table(vv[vv.variant_class == "missense"], suffix)
         f = f[f.S2_pLDDT.notna()]
-        f = residualise(f, CONT)
+        f = residualise(f, CONT, spline=spline)
         P = pheno_matrix(pheno, f.phenopacket_id)
-        res, summ = run_tests(f, P, feats_all, perms, rng, labels)
+        res, summ, pc = run_tests(f, P, feats_all, perms, rng, labels, level=level)
         res.to_csv(OUT / f"A_tests_{tag}.csv.gz", index=False)
+        np.savez(OUT / f"A_permnull_{tag}.npz", **pc)
         summ.insert(0, "analysis", tag)
         return f, res, summ
 
@@ -371,17 +404,26 @@ def main():
     # primary
     fA, resA, sA = analysis_A(v, pheno_prop, "primary", args.perms)
     summaries.append(sA)
+    _, _, s = analysis_A(v, pheno_prop, "primary_individual_perm", args.perms, level="individual")
+    summaries.append(s)
+    _, _, s = analysis_A(v, pheno_prop, "sens_spline_position", max(200, args.perms // 5), spline=True)
+    summaries.append(s)
     counts["primary_missense_individuals"] = int(len(fA))
+    counts["primary_distinct_missense_variants"] = int(fA.vkey.nunique())
     counts["primary_genes_with_tests"] = int(resA.gene.nunique())
     counts["primary_terms_tested_S1"] = int((resA.feature == "S1_logSemi").sum())
     # reference B
     fB = feature_table(v, "")
     P_B = pheno_matrix(pheno_prop, fB.phenopacket_id)
-    resB, sB = run_class_tests(fB, P_B, args.perms, rng, labels)
+    resB, sB, pcB = run_class_tests(fB, P_B, args.perms, rng, labels, level="variant")
     resB.to_csv(OUT / "B_tests_primary.csv.gz", index=False)
-    sBdf = pd.DataFrame([sB])
-    sBdf.insert(0, "analysis", "primary")
+    sBdf = pd.DataFrame([sB]); sBdf.insert(0, "analysis", "primary")
     summaries.append(sBdf)
+    resBi, sBi, pcBi = run_class_tests(fB, P_B, args.perms, rng, labels, level="individual")
+    resBi.to_csv(OUT / "B_tests_individual_perm.csv.gz", index=False)
+    sBdf = pd.DataFrame([sBi]); sBdf.insert(0, "analysis", "primary_individual_perm")
+    summaries.append(sBdf)
+    np.savez(OUT / "B_permnull.npz", variant=pcB, individual=pcBi)
     # sensitivity (fewer permutations)
     sp = max(200, args.perms // 5)
     _, _, s = analysis_A(v, pheno_expl, "sens_explicit", sp); summaries.append(s)
@@ -395,7 +437,9 @@ def main():
            "am_pathogenicity", "rel_protein_pos", "res_in_domain"]
     vb[num] = vb[num].astype(float)
     agg = vb.groupby("phenopacket_id").agg({**{c: "mean" for c in num}, "gene": "first",
-                                            "structure_pos": "first", "variant_class": "first"}).reset_index()
+                                            "structure_pos": "first", "variant_class": "first",
+                                            "vep_p_norm": lambda x: "+".join(sorted(map(str, x))),
+                                            "hgvs_g": "first", "variant_id": "first"}).reset_index()
     agg = agg[vb.groupby("phenopacket_id").size().reindex(agg.phenopacket_id).values == 2]
     agg["res_in_domain"] = (agg.res_in_domain >= 0.5).astype(float)
     agg = add_s6(agg.reset_index(drop=True), genes)

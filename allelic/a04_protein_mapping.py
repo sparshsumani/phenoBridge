@@ -200,7 +200,7 @@ def main():
                           mane_protein_seq=seqs.get(g.mane_np), af_n_fragments=nf))
     gm = pd.DataFrame(grows)
     gm["af_single_fragment"] = gm.af_n_fragments == 1
-    todo = [f"AF-{a}-F1-model_v6.pdb.gz" for a in gm[gm.af_single_fragment].uniprot if not af_model_path(a).exists()]
+    todo = sorted({f"AF-{a}-F1-model_v6.pdb.gz" for a in gm[gm.af_single_fragment].uniprot if not af_model_path(a).exists()})
     log["af_models_to_extract"] = len(todo)
     if todo:
         lst = INTER / "af_extract_list.txt"
@@ -208,7 +208,7 @@ def main():
         print("extracting", len(todo), "AF models", flush=True)
         subprocess.run(["tar", "-xf", str(AF_TAR), "-C", str(AF_DIR), "-T", str(lst)], check=True)
     gm["af_pdb"] = [str(af_model_path(a)) if s and af_model_path(a).exists() else None for a, s in zip(gm.uniprot, gm.af_single_fragment)]
-    gm["af_seq"] = [s06.af_sequence(p) if p else None for p in gm.af_pdb]
+    gm["af_seq"] = [s06.af_sequence(p) if isinstance(p, str) else None for p in gm.af_pdb]
     eq = lambda a, b: (a == b) if isinstance(a, str) and isinstance(b, str) else None
     gm["af_eq_uniprot"] = [eq(a, b) for a, b in zip(gm.af_seq, gm.uniprot_seq)]
     gm["mane_eq_uniprot"] = [eq(a, b) for a, b in zip(gm.mane_protein_seq, gm.uniprot_seq)]
@@ -246,6 +246,7 @@ def main():
 
     ok = mp[mp.map_status == "ok"]
     onaf = ok[ok.af_single_fragment == True]
+    log = dict(log)
     log.update(
         variants=len(mp), mapped_to_mane=len(ok), genes_mapped=int(ok.gene.nunique()),
         genes_with_uniprot=int(gm.uniprot.notna().sum()), uniprot_map_method={k: int(v) for k, v in gm.uniprot_map.value_counts().items()},

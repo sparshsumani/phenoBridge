@@ -16,6 +16,8 @@ Each term is assigned a major class from the HPO is_a hierarchy (hp.json, cached
 inheritance_clean (single label when unambiguous): X-linked classes are first collapsed
   (XL+XLR -> XLR, XL+XLD -> XLD, XLR+XLD(+XL) -> XL); then exactly one class remaining -> that class;
   otherwise None (e.g. AD+AR).  inheritance_ad_only / inheritance_ar_only are convenience flags.
+broad_unit: the unit's MONDO term has >= 1 is_a descendant with an exact OMIM xref (an umbrella entry
+  such as OMIM:268000 'Retinitis pigmentosa'); flagged only, still a unit.
 Output intermediate/diseases.parquet, intermediate/inheritance_log.json
 """
 import sys, json
@@ -90,6 +92,27 @@ def main():
                          clinvar_name=None, mondo=m, mondo_name=mname.get(m), mondo_grouping=mgroup.get(m),
                          mondo_orpha=morpha.get(m), omim_mim_type=mimtype.get(u), cancer_flag=None, in_hpoa=u in hname))
     d = pd.DataFrame(rows)
+    # broad-unit flag: the unit's MONDO term has >=1 is_a descendant with an exact OMIM xref
+    # (e.g. OMIM:268000 'Retinitis pigmentosa' = MONDO:0019200, parent of RP1..RPn)
+    children = defaultdict(set)
+    for m_, p_ in zip(mi.mondo, mi.parents):
+        for x in (p_.split(";") if isinstance(p_, str) else []):
+            children[x].add(m_)
+    has_omim = {m_ for m_, o, obs in zip(mi.mondo, mi.omim_exact, mi.obsolete) if isinstance(o, str) and not obs}
+    memo_d = {}
+    def n_omim_desc(t):
+        if t in memo_d:
+            return memo_d[t]
+        memo_d[t] = set()
+        out = set()
+        for c in children.get(t, ()):
+            if c in has_omim:
+                out.add(c)
+            out |= n_omim_desc(c)
+        memo_d[t] = out
+        return out
+    d["mondo_n_omim_descendants"] = [len(n_omim_desc(m_)) if isinstance(m_, str) else 0 for m_ in d.mondo]
+    d["broad_unit"] = d.mondo_n_omim_descendants > 0
     d["in_clinvar"] = d.disease_unit.isin(cv_units)
     d["in_ppkt"] = d.disease_unit.isin(pp_units)
     d["ppkt_label"] = d.disease_unit.map(pp_label)
@@ -123,6 +146,7 @@ def main():
                inheritance_source={str(k): int(x) for k, x in d.inheritance_source.value_counts(dropna=False).items()},
                inheritance_clean={str(k): int(x) for k, x in d.inheritance_clean.value_counts(dropna=False).items()},
                class_combinations={";".join(k): int(x) for k, x in Counter(tuple(c) for c in d.inheritance_classes).most_common(15)},
+               broad_units=int(d.broad_unit.sum()),
                hpoa_version=open(FILES["hpoa"]).read(400).split("#version: ")[1].split("\n")[0])
     save_json(log, INTER / "inheritance_log.json")
     print(json.dumps(log, indent=1))

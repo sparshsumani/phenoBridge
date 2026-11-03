@@ -31,11 +31,21 @@ def main():
         if acc is None or (isinstance(acc, float)):
             rows.append(dict(gene=g, uniprot=None, af_n_fragments=0, af_fragmented=None, af_pdb=None)); continue
         n = len(frags.get(acc, ()))
+        src = "proteome_tar" if n else None
         member = f"AF-{acc}-F1-model_v6.pdb.gz" if n == 1 else None
         if member:
             want.append(member)
+        elif n == 0:
+            # not in the proteome set (e.g. GNAS P63092): try the Swiss-Prot tar via HTTP range requests
+            try:
+                from fetch_af_from_swissprot_tar import fetch
+                if not (AF_DIR / f"AF-{acc}-F1-model_v6.pdb.gz").exists():
+                    fetch(acc)
+                member, n, src = f"AF-{acc}-F1-model_v6.pdb.gz", 1, "swissprot_tar_range_request"
+            except BaseException as e:  # SystemExit when absent
+                print("no AF model for", g, acc, e)
         rows.append(dict(gene=g, uniprot=acc, af_n_fragments=n, af_fragmented=(n > 1) if n else None,
-                         af_pdb=str(AF_DIR / member) if member else None))
+                         af_source=src, af_pdb=str(AF_DIR / member) if member else None))
     todo = [w for w in want if not (AF_DIR / w).exists()]
     if todo:
         lst = INTER / "af_extract_list.txt"

@@ -15,10 +15,13 @@ OUT = RAW / "alphamissense/am_subset.tsv.gz"
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     gu = pd.read_parquet(INTER / "gene_uniprot.parquet")
-    accs = sorted(set(gu.uniprot.dropna()))
+    # primary accessions + the other reviewed entries of the same gene (e.g. GNAS: AlphaMissense has
+    # no row for P63092 (Gs-alpha) but has the XLas isoform entry Q5JWF2)
+    extra = {x for s in gu.other_hits.dropna() for x in s.split(",") if x}
+    accs = sorted(set(gu.uniprot.dropna()) | extra)
     lst = OUT.parent / "accessions.txt"
     lst.write_text("\n".join(accs) + "\n")
-    if not OUT.exists():
+    if not OUT.exists():  # delete OUT to re-stream (e.g. after the accession list changes)
         cmd = (f"set -o pipefail; curl -sS --retry 5 {URL} | zcat | "
                f"awk -F'\\t' 'NR==FNR{{a[$1];next}} /^#/{{next}} $1==\"uniprot_id\"{{print;next}} ($1 in a)' {lst} - "
                f"| gzip > {OUT}.tmp && mv {OUT}.tmp {OUT}")

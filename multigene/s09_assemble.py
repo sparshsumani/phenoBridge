@@ -20,6 +20,10 @@ RFDIR = DERIVED / "residue_features"
 RF_COLS_DROP = {"gene", "uniprot", "pos"}
 
 
+def vcd(vc):
+    return {str(k): int(x) for k, x in vc.items()}
+
+
 def mean_plddt(path):
     vals = []
     with gzip.open(path, "rt") as fh:
@@ -41,32 +45,69 @@ def main():
     pp = pd.read_parquet(INTER / "phenotypes_propagated.parquet")
 
     # ---- AlphaMissense match for missense variants ----
+    # AlphaMissense (2023) indexes the UniProt canonical sequence it was built on, which for a few
+    # proteins differs from today's UniProt/MANE.  Its reference sequence is reconstructed from the
+    # table (ref aa per position) and the MANE protein is mapped onto it (identity, or trusted blocks
+    # of a global alignment).  If the gene's accession is absent from AlphaMissense, another reviewed
+    # entry of the same gene is used (GNAS: P63092 absent -> Q5JWF2, flagged in am_accession).
+    from s06_select_genes import align_map
     g_acc = dict(zip(g.hgnc_id, g.uniprot))
     v["uniprot"] = v.hgnc_id.map(g_acc)
-    v["am_protein_variant"] = [f"{r}{int(p)}{a}" if (c == "missense" and isinstance(r, str) and isinstance(a, str) and pd.notna(p)) else None
-                               for c, r, p, a in zip(v.variant_class, v.vep_p_ref, v.vep_p_pos, v.vep_p_alt)]
-    amk = am.set_index(["uniprot_id", "protein_variant"])
-    amset = set(amk.index)
-    am_acc = set(am.uniprot_id)
-    am_pos_ref = am.drop_duplicates(["uniprot_id", "pos"]).set_index(["uniprot_id", "pos"]).ref.to_dict()
-    score, klass, status = [], [], []
-    for acc, pv, c, p, r in zip(v.uniprot, v.am_protein_variant, v.variant_class, v.vep_p_pos, v.vep_p_ref):
+    am_seq = {}
+    for acc, sub in am.drop_duplicates(["uniprot_id", "pos"]).groupby("uniprot_id"):
+        sub = sub.sort_values("pos")
+        s_ = ["X"] * int(sub.pos.max())
+        for p_, r_ in zip(sub.pos, sub.ref):
+            s_[p_ - 1] = r_
+        am_seq[acc] = "".join(s_)
+    am_score = dict(zip(zip(am.uniprot_id, am.protein_variant), zip(am.am_pathogenicity, am.am_class)))
+    mane_seq = dict(zip(g.hgnc_id, g.vep_protein_seq))
+    other = dict(zip(g.hgnc_id, g.other_hits))
+    gene_am = {}
+    for h in v[v.variant_class == "missense"].hgnc_id.dropna().unique():
+        acc = g_acc.get(h); ms_ = mane_seq.get(h)
+        cand = [acc] if isinstance(acc, str) and acc in am_seq else \
+            [x for x in (other.get(h) or "").split(",") if x in am_seq]
+        if not cand or not isinstance(ms_, str):
+            gene_am[h] = (None, None, None); continue
+        best = None
+        for c in cand:
+            if am_seq[c] == ms_:
+                best = (c, None, 1.0); break
+            m_, idn = align_map(ms_, am_seq[c])
+            if best is None or idn > best[2]:
+                best = (c, m_, idn)
+        gene_am[h] = best
+    score, klass, status, am_acc_col, am_pos_col, am_pv = [], [], [], [], [], []
+    for h, c, p, r, a in zip(v.hgnc_id, v.variant_class, v.protein_pos, v.vep_p_ref, v.vep_p_alt):
         if c != "missense":
-            score.append(np.nan); klass.append(None); status.append(None); continue
-        if not isinstance(acc, str):
-            st = "no_uniprot"
-        elif acc not in am_acc:
+            for L_ in (score, klass, status, am_acc_col, am_pos_col, am_pv):
+                L_.append(None)
+            continue
+        acc, m_, idn = gene_am.get(h, (None, None, None))
+        st, sc, kl, ap, pv = None, None, None, None, None
+        if acc is None:
             st = "accession_not_in_alphamissense"
-        elif pv is None:
+        elif pd.isna(p) or not isinstance(r, str) or not isinstance(a, str):
             st = "no_protein_change_parsed"
-        elif (acc, pv) in amset:
-            row = amk.loc[(acc, pv)]
-            score.append(float(row.am_pathogenicity)); klass.append(row.am_class); status.append("matched"); continue
         else:
-            rr = am_pos_ref.get((acc, int(p)))
-            st = "ref_aa_mismatch" if rr is not None and rr != r else ("position_out_of_range" if rr is None else "alt_not_found")
-        score.append(np.nan); klass.append(None); status.append(st)
-    v["am_pathogenicity"] = score; v["am_class"] = klass; v["am_match_status"] = status
+            ap = int(p) if m_ is None else m_.get(int(p))
+            if ap is None:
+                st = "position_not_alignable"
+            elif ap > len(am_seq[acc]) or am_seq[acc][ap - 1] != r:
+                st = "ref_aa_mismatch"
+            else:
+                pv = f"{r}{ap}{a}"
+                hit = am_score.get((acc, pv))
+                if hit is None:
+                    st = "alt_not_found"
+                else:
+                    sc, kl = hit; st = "matched" if m_ is None else "matched_via_alignment"
+        score.append(sc); klass.append(kl); status.append(st); am_acc_col.append(acc); am_pos_col.append(ap); am_pv.append(pv)
+    v["am_accession"] = am_acc_col; v["am_pos"] = pd.array(am_pos_col, dtype="Int64"); v["am_protein_variant"] = am_pv
+    v["am_pathogenicity"] = pd.to_numeric(pd.Series(score, index=v.index), errors="coerce")
+    v["am_class"] = klass; v["am_match_status"] = status
+    v["am_accession_is_gene_primary"] = [(x == y) if isinstance(x, str) else None for x, y in zip(v.am_accession, v.uniprot)]
 
     # ---- gene table ----
     sm = smeta.set_index("uniprot")
@@ -80,7 +121,7 @@ def main():
         g["struct_" + c] = g.uniprot.map(sm[c]) if c in sm else None
     g["residue_features_file"] = [str(RFDIR / f"{a}.parquet") if s else None for a, s in zip(g.uniprot, g.selected)]
     g["n_individuals_missense_ge20"] = g.n_individuals_missense >= MIN_INDIVIDUALS
-    mc = v[v.variant_class == "missense"].groupby("hgnc_id").am_match_status.agg(lambda s: (s == "matched").mean())
+    mc = v[v.variant_class == "missense"].groupby("hgnc_id").am_match_status.agg(lambda s: s.str.startswith("matched").mean())
     g["am_missense_match_rate"] = g.hgnc_id.map(mc)
     genes = g.rename(columns={"af_pdb": "structure_file", "sequence": "uniprot_sequence"}).drop(columns=["vep_protein_seq", "af_sequence"])
     genes["af_fragmented"] = genes.af_n_fragments > 1
@@ -95,15 +136,17 @@ def main():
     rfm = rfm.rename(columns={c: ("res_" + c) for c in rfm.columns if c not in ("uniprot", "protein_pos_int")})
     sel_h = set(genes[genes.selected].hgnc_id)
     v["gene_selected"] = v.hgnc_id.isin(sel_h)
-    v["protein_pos_int"] = v.protein_pos.astype("Int64")
-    v["protein_length"] = v.hgnc_id.map(dict(zip(genes.hgnc_id, genes.uniprot_length)))
-    v["rel_protein_pos"] = v.protein_pos / v.protein_length
+    v["protein_pos_int"] = v.structure_pos.astype("Int64")
+    v["protein_length"] = v.mane_protein_seq_len          # MANE protein length (VEP coordinates)
+    v["uniprot_length"] = v.hgnc_id.map(dict(zip(genes.hgnc_id, genes.uniprot_length)))
+    v["rel_protein_pos"] = v.protein_pos / v.protein_length  # relative position on the MANE protein
     v = v.merge(rfm, on=["uniprot", "protein_pos_int"], how="left")
     feat_cols = [c for c in v.columns if c.startswith("res_")]
     # residue features only for mappable variants in selected genes with a matching reference aa
-    usable = v.gene_selected & v.mappable & (v.protein_pos <= v.protein_length)
+    v["af_length"] = v.uniprot.map(sm["L"])
+    usable = v.gene_selected & v.mappable & v.structure_pos.notna() & (v.structure_pos <= v.af_length)
     v.loc[~usable, feat_cols] = np.nan
-    v["has_structure_features"] = usable & v.res_plddt.notna()
+    v["has_structure_features"] = (usable & v.res_plddt.notna()).astype(bool)
     v = v.drop(columns=["protein_pos_int"])
     # ---- individuals ----
     obs = ph.groupby("phenopacket_id").value.agg(n_hpo_explicit_observed="sum", n_hpo_explicit="count")
@@ -134,8 +177,8 @@ def main():
     vs = v[v.gene_selected]
     C["phenopackets"] = len(ind)
     C["genomic_interpretations"] = len(v)
-    C["variant_class_all"] = v.variant_class.value_counts().to_dict()
-    C["variant_class_selected_genes"] = vs.variant_class.value_counts().to_dict()
+    C["variant_class_all"] = v.variant_class.value_counts().pipe(vcd)
+    C["variant_class_selected_genes"] = vs.variant_class.value_counts().pipe(vcd)
     C["genes_total"] = len(genes)
     C["genes_selected"] = int(genes.selected.sum())
     C["selected_gene_list"] = genes[genes.selected].sort_values("n_individuals_mappable", ascending=False).gene.tolist()
@@ -146,29 +189,29 @@ def main():
     C["genes_missense_ge20_selected"] = int((genes.selected & (genes.n_individuals_missense >= MIN_INDIVIDUALS)).sum())
     C["genes_missense_ge20_selected_list"] = genes[genes.selected & (genes.n_individuals_missense >= MIN_INDIVIDUALS)].gene.tolist()
     ms = v[v.variant_class == "missense"]
-    C["am_missense_rows_all"] = len(ms); C["am_matched_all"] = int((ms.am_match_status == "matched").sum())
-    C["am_status_all"] = ms.am_match_status.value_counts().to_dict()
+    C["am_missense_rows_all"] = len(ms); C["am_matched_all"] = int(ms.am_match_status.str.startswith("matched").sum())
+    C["am_status_all"] = ms.am_match_status.value_counts().pipe(vcd)
     mss = ms[ms.gene_selected]
-    C["am_missense_rows_selected"] = len(mss); C["am_matched_selected"] = int((mss.am_match_status == "matched").sum())
-    C["am_status_selected"] = mss.am_match_status.value_counts().to_dict()
+    C["am_missense_rows_selected"] = len(mss); C["am_matched_selected"] = int(mss.am_match_status.str.startswith("matched").sum())
+    C["am_status_selected"] = mss.am_match_status.value_counts().pipe(vcd)
     C["p_pos_compared"] = int(v.p_pos_agree.notna().sum()); C["p_pos_agree"] = int(v.p_pos_agree.sum())
     C["p_pos_agree_by_class"] = v[v.p_pos_agree.notna()].groupby("variant_class").p_pos_agree.mean().round(4).to_dict()
     C["hgvs_p_compared"] = int(v.hgvs_p_string_agree.notna().sum()); C["hgvs_p_agree"] = int(v.hgvs_p_string_agree.sum())
     C["hgvs_c_compared"] = int(v.hgvs_c_string_agree.notna().sum()); C["hgvs_c_agree"] = int(v.hgvs_c_string_agree.sum())
     C["ppkt_transcript_is_mane"] = int(v.ppkt_tx_is_mane.sum()); C["ppkt_transcript_present"] = int(v.transcript_c.notna().sum())
-    C["ref_aa_matches_af_selected"] = vs.ref_aa_matches_af.value_counts(dropna=False).astype(int).to_dict()
+    C["ref_aa_matches_af_selected"] = vs.ref_aa_matches_af.value_counts(dropna=False).pipe(vcd)
     ptc = v[v.variant_class.isin(["nonsense", "frameshift"])]
-    C["ptc_all"] = len(ptc); C["nmd_escape_all"] = ptc.nmd_escape.value_counts(dropna=False).to_dict()
+    C["ptc_all"] = len(ptc); C["nmd_escape_all"] = ptc.nmd_escape.value_counts(dropna=False).pipe(vcd)
     pa = ptc[ptc.gene == "ANKRD11"]
-    C["ankrd11_ptc"] = len(pa); C["ankrd11_nmd_escape"] = pa.nmd_escape.value_counts(dropna=False).to_dict()
+    C["ankrd11_ptc"] = len(pa); C["ankrd11_nmd_escape"] = pa.nmd_escape.value_counts(dropna=False).pipe(vcd)
     C["ankrd11_individuals"] = int((ind.gene == "ANKRD11").sum())
-    C["ankrd11_variant_class"] = v[v.gene == "ANKRD11"].variant_class.value_counts().to_dict()
+    C["ankrd11_variant_class"] = v[v.gene == "ANKRD11"].variant_class.value_counts().pipe(vcd)
     C["phenotypes_explicit_cells"] = len(ph); C["phenotypes_propagated_cells"] = len(pp)
     C["selection_fail_reasons"] = {
         "n20_mappable": int(genes.passes_n20_mappable.sum()),
         "n20_mappable_but_af_fragmented": genes[genes.passes_n20_mappable & (genes.af_n_fragments > 1)].gene.tolist(),
         "n20_mappable_but_no_af_model": genes[genes.passes_n20_mappable & (genes.af_n_fragments == 0)].gene.tolist(),
-        "n20_mappable_af_single_but_seq_mismatch": genes[genes.passes_n20_mappable & (genes.af_n_fragments == 1) & ~genes.passes_seq_concordance].gene.tolist(),
+        "n20_mappable_af_single_but_lt20_on_structure": genes[genes.passes_n20_mappable & (genes.af_n_fragments == 1) & ~genes.passes_n20_on_structure].gene.tolist(),
     }
     C["fragmented_genes_all"] = genes[genes.af_n_fragments > 1].gene.tolist()
     C["genes_without_uniprot"] = genes[genes.uniprot.isna()].gene.tolist()

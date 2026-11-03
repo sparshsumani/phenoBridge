@@ -4,9 +4,13 @@
 
 Mappable variant classes (protein position defined): missense, nonsense, frameshift,
 inframe_indel, start_lost, stop_lost.
-Selection: gene has >= 20 individuals carrying >= 1 mappable variant in that gene AND a
-single-fragment AlphaFold model (proteome v6) for its UniProt accession AND the AlphaFold /
-UniProt sequence equals the MANE Select protein used by VEP (so VEP positions index the model).
+Position mapping: VEP positions are on the MANE Select protein ('protein_pos').  They are mapped
+  * onto the AlphaFold model residue numbering ('structure_pos'; used for residue features), and
+  * onto the current UniProt canonical sequence ('uniprot_pos'; used for AlphaMissense),
+by identity when the sequences are equal, otherwise through a global pairwise alignment in which
+only aligned blocks of >= 10 residues with >= 90 % identity are trusted (other positions -> NA).
+Selection: gene has >= 20 individuals carrying >= 1 mappable variant whose position maps onto a
+single-fragment AlphaFold model (proteome v6 tar; GNAS P63092 from the Swiss-Prot tar).
 Outputs INTER/variants_annot.parquet, INTER/gene_summary.parquet, INTER/selection_log.json
 """
 import json
@@ -48,6 +52,25 @@ def af_sequence(path):
                 except Exception:
                     seq.append("X")
     return "".join(seq)
+
+
+def align_map(a, b, min_block=10, min_block_id=0.9):
+    """Global alignment of sequence a (MANE protein) to b (target). Returns ({pos_a: pos_b} restricted to
+    aligned blocks of length >= min_block with identity >= min_block_id, identity = identical aligned
+    residues / len(a))."""
+    from Bio import Align
+    al = Align.PairwiseAligner(mode="global", match_score=2, mismatch_score=-1,
+                               open_gap_score=-10, extend_gap_score=-0.5)
+    aln = al.align(a, b)[0]
+    m, same = {}, 0
+    for (s1, e1), (s2, e2) in zip(*aln.aligned):
+        L = e1 - s1
+        ids = sum(a[s1 + k] == b[s2 + k] for k in range(L))
+        same += ids
+        if L >= min_block and ids / L >= min_block_id:
+            for k in range(L):
+                m[s1 + k + 1] = s2 + k + 1
+    return m, (same / len(a) if len(a) else 0.0)
 
 
 def main():
@@ -96,15 +119,36 @@ def main():
     g["af_eq_uniprot_seq"] = [(a == b) if isinstance(a, str) and isinstance(b, str) else None for a, b in zip(g.af_sequence, g.sequence)]
     g["mane_eq_uniprot_seq"] = [(a == b) if isinstance(a, str) and isinstance(b, str) else None for a, b in zip(g.vep_protein_seq, g.sequence)]
     g["mane_eq_af_seq"] = [(a == b) if isinstance(a, str) and isinstance(b, str) else None for a, b in zip(g.vep_protein_seq, g.af_sequence)]
-    # per-variant ref aa check against AF model sequence
-    afseq = dict(zip(g.hgnc_id, g.af_sequence))
-    def refchk(h, pos, ref, cls):
-        s = afseq.get(h)
+    # MANE protein position -> AlphaFold model position and -> current UniProt canonical position
+    def build_maps(target_col, tag):
+        maps, ident = {}, {}
+        for h, a, b in zip(g.hgnc_id, g.vep_protein_seq, g[target_col]):
+            if not (isinstance(a, str) and isinstance(b, str)):
+                continue
+            if a == b:
+                maps[h] = None; ident[h] = 1.0
+            else:
+                maps[h], ident[h] = align_map(a, b)
+        g[f"mane_{tag}_map"] = g.hgnc_id.map(lambda h: "identity" if h in maps and maps[h] is None else ("alignment" if h in maps else None))
+        g[f"mane_{tag}_identity"] = g.hgnc_id.map(ident)
+        def conv(h, pos):
+            if pd.isna(pos) or h not in maps:
+                return None
+            m = maps[h]
+            return int(pos) if m is None else m.get(int(pos))
+        return pd.array([conv(h, p) for h, p in zip(v.hgnc_id, v.protein_pos)], dtype="Int64")
+    v["uniprot_pos"] = build_maps("sequence", "uniprot")
+    v["structure_pos"] = build_maps("af_sequence", "af")
+    # per-variant ref aa check against the sequence at the mapped position
+    def refchk(seqs, h, pos, ref):
+        s = seqs.get(h)
         if not isinstance(s, str) or pd.isna(pos) or not isinstance(ref, str) or ref in ("?", "*"):
             return None
         pos = int(pos)
         return bool(1 <= pos <= len(s) and s[pos - 1] == ref)
-    v["ref_aa_matches_af"] = pd.array([refchk(h, p, r, c) for h, p, r, c in zip(v.hgnc_id, v.protein_pos, v.vep_p_ref, v.variant_class)], dtype="boolean")
+    afseq = dict(zip(g.hgnc_id, g.af_sequence)); upseq = dict(zip(g.hgnc_id, g.sequence))
+    v["ref_aa_matches_af"] = pd.array([refchk(afseq, h, p, r) for h, p, r in zip(v.hgnc_id, v.structure_pos, v.vep_p_ref)], dtype="boolean")
+    v["ref_aa_matches_uniprot"] = pd.array([refchk(upseq, h, p, r) for h, p, r in zip(v.hgnc_id, v.uniprot_pos, v.vep_p_ref)], dtype="boolean")
     # counts per gene
     ind = pd.read_parquet(INTER / "individuals_raw.parquet")
     cnt = v.groupby("hgnc_id").agg(n_individuals=("phenopacket_id", "nunique"))
@@ -114,13 +158,14 @@ def main():
     cnt["n_individuals_structural"] = v[v.variant_class == "structural"].groupby("hgnc_id").phenopacket_id.nunique()
     cnt["n_unique_variants"] = v.groupby("hgnc_id").variant_id.nunique()
     cnt["n_unique_mappable_positions"] = v[v.mappable].groupby("hgnc_id").protein_pos.nunique()
+    cnt["n_individuals_mappable_on_structure"] = v[v.mappable & v.structure_pos.notna()].groupby("hgnc_id").phenopacket_id.nunique()
     cnt = cnt.fillna(0).astype(int)
     g = g.merge(cnt, left_on="hgnc_id", right_index=True, how="left")
     g["cohort"] = g.hgnc_id.map(v.groupby("hgnc_id").cohort.first())
     g["passes_n20_mappable"] = g.n_individuals_mappable >= MIN_INDIVIDUALS
     g["passes_af_single"] = g.af_n_fragments == 1
-    g["passes_seq_concordance"] = g.mane_eq_af_seq.fillna(False).astype(bool)
-    g["selected"] = g.passes_n20_mappable & g.passes_af_single & g.passes_seq_concordance
+    g["passes_n20_on_structure"] = g.n_individuals_mappable_on_structure >= MIN_INDIVIDUALS
+    g["selected"] = g.passes_n20_mappable & g.passes_af_single & g.passes_n20_on_structure
     g["af_mean_plddt"] = np.nan
     v.to_parquet(INTER / "variants_annot.parquet", index=False)
     g.to_parquet(INTER / "gene_summary.parquet", index=False)
@@ -130,7 +175,10 @@ def main():
         genes_n20_mappable_and_af_single=int((g.passes_n20_mappable & g.passes_af_single).sum()),
         genes_n20_mappable_fragmented=g[g.passes_n20_mappable & (g.af_n_fragments > 1)].gene.tolist(),
         genes_n20_mappable_no_af=g[g.passes_n20_mappable & (g.af_n_fragments == 0)].gene.tolist(),
-        genes_n20_mappable_af_single_seq_mismatch=g[g.passes_n20_mappable & g.passes_af_single & ~g.passes_seq_concordance].gene.tolist(),
+        genes_mane_ne_uniprot=g[g.mane_uniprot_map == "alignment"].gene.tolist(),
+        genes_mane_ne_af=g[g.mane_af_map == "alignment"].gene.tolist(),
+        genes_af_ne_uniprot=g[g.af_eq_uniprot_seq == False].gene.tolist(),
+        genes_n20_mappable_af_single_but_lt20_on_structure=g[g.passes_n20_mappable & g.passes_af_single & ~g.passes_n20_on_structure].gene.tolist(),
         genes_selected=int(g.selected.sum()),
         genes_missense_n20=int((g.n_individuals_missense >= MIN_INDIVIDUALS).sum()),
         genes_missense_n20_selected=int((g.selected & (g.n_individuals_missense >= MIN_INDIVIDUALS)).sum()),

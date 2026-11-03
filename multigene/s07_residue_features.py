@@ -12,7 +12,8 @@ Domain annotation columns:
   in_domain        uniprot_domain or pfam_domain non-empty
   in_domain_broad  in_domain or uniprot_region or Motif non-empty
   domain_name      Pfam name if any, else UniProt domain name
-AlphaMissense per-residue summary (am_mean, am_max over the 19 substitutions) is merged if
+AlphaMissense per-residue summary (am_mean, am_max over the 19 substitutions; am_pos = the
+AlphaMissense residue index after mapping AF->AM sequence, see am_mapping) is merged if
 INTER/alphamissense_subset.parquet exists (run s08 first, or rerun this step after s08).
 """
 import sys, json, time
@@ -55,6 +56,25 @@ def annotate(pos, ft):
     return out
 
 
+def am_mapping(acc, af_seq, other_hits, am):
+    """AlphaMissense accession + {AF pos: AM pos} (None = identity) for one protein."""
+    from s06_select_genes import align_map
+    cands = [acc] + [x for x in (other_hits or "").split(",") if x]
+    for c in cands:
+        sub = am[am.uniprot_id == c].drop_duplicates("pos").sort_values("pos")
+        if not len(sub):
+            continue
+        seq = ["X"] * int(sub.pos.max())
+        for p_, r_ in zip(sub.pos, sub.ref):
+            seq[p_ - 1] = r_
+        seq = "".join(seq)
+        if seq == af_seq:
+            return c, None
+        m, idn = align_map(af_seq, seq)
+        return c, m
+    return None, None
+
+
 def one(args):
     gene, acc, path, useq = args
     import structfeat as SF
@@ -75,6 +95,7 @@ def main():
     amf = INTER / "alphamissense_subset.parquet"
     am = pd.read_parquet(amf) if amf.exists() else None
     jobs = [(r.gene, r.uniprot, r.af_pdb, r.sequence) for r in sel.itertuples()]
+    other = dict(zip(sel.uniprot, sel.other_hits))
     metas = []
     with ProcessPoolExecutor(4) as ex:
         for df, meta in ex.map(one, jobs):
@@ -83,9 +104,15 @@ def main():
             for k, v in ann.items():
                 df[k] = v
             if am is not None:
-                a = am[am.uniprot_id == acc]
-                s = a.groupby("pos").am_pathogenicity.agg(["mean", "max", "count"])
-                df["am_mean"] = df.pos.map(s["mean"]); df["am_max"] = df.pos.map(s["max"]); df["am_n_subst"] = df.pos.map(s["count"])
+                am_acc, posmap = am_mapping(acc, "".join(df.aa_af), other.get(acc), am)
+                meta["am_accession"] = am_acc
+                meta["am_mapping"] = None if am_acc is None else ("identity" if posmap is None else "alignment")
+                if am_acc is not None:
+                    a = am[am.uniprot_id == am_acc]
+                    s = a.groupby("pos").am_pathogenicity.agg(["mean", "max", "count"])
+                    ap = df.pos if posmap is None else df.pos.map(posmap)
+                    df["am_pos"] = ap
+                    df["am_mean"] = ap.map(s["mean"]); df["am_max"] = ap.map(s["max"]); df["am_n_subst"] = ap.map(s["count"])
             df.to_parquet(RFDIR / f"{acc}.parquet", index=False)
             meta.pop("af_sequence", None)
             metas.append(meta)

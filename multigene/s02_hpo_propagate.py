@@ -126,6 +126,7 @@ def main():
     log["propagated_excluded"] = int((df.value == 0).sum())
     df["hpo_label"] = df.hpo_id.map(labels)
     df["value"] = df.value.astype("int8")
+    df = df.sort_values(["cohort", "phenopacket_id", "hpo_id"], kind="mergesort").reset_index(drop=True)  # deterministic
     df.to_parquet(INTER / "phenotypes_propagated.parquet", index=False)
     ph.to_parquet(INTER / "phenotypes_explicit.parquet", index=False)
     pd.DataFrame({"hpo_id": list(labels), "label": [labels[t] for t in labels],

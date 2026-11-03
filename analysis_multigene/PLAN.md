@@ -69,3 +69,21 @@ Reported separately (kbg_followup/), with its own pre-specified plan.
 S1 global permutation p < 0.01, with pi1 clearly above that of the permuted data, and
 the signal not explained by P0 (structural features are residualised on position).
 A null would be reported as a null, with the power implied by the sample sizes.
+
+## Amendment 1 (added before any multi-gene association was computed)
+Prompted by the literature review (`paper/notes/literature.md`).
+- **Extra baseline features** (Analysis A, also residualised on position):
+  - S6: mean pLDDT over the graph neighbourhood of the seed (1-hop and 2-hop
+    contact neighbours). This tests whether the RWR fingerprint is just smoothed
+    local pLDDT.
+  - S7: in an annotated UniProt domain (0/1). This is the GPSEA-style region
+    covariate; for a binary feature the per-test comparison uses Fisher's exact test.
+- **Comparison with GPSEA.** GPSEA (Rekerle et al., AJHG 2026) tested hand-picked
+  genotype classes in 85 phenopacket-store cohorts using Fisher tests. Our Analysis B
+  (missense vs truncating) is the closest analogue; we report how many of our cohorts
+  overlap with theirs.
+- **Positive controls (fixed now).** Reported individually: TBX5 (G80R cardiac vs
+  R237 limb), LMNA (Ig-fold vs rod domain), SPTAN1 (R19W spastic paraplegia),
+  SETD2 (R1740W), IKZF1 (N159). NF1, FBN1 and ITPR1 have no single-fragment
+  AlphaFold model and are excluded from the structural analysis.
+- **Null controls.** STXBP1 (no position signal expected), POGZ, EHMT1.

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Variant recurrence inflates genotype–phenotype tests</title>
+<style>
+  @page { size: Letter; margin: 0.65in 0.62in 0.7in 0.62in;
+    @bottom-center { content: counter(page); font-family: "FreeSerif"; font-size: 9pt; } }
+  html { font-family: "FreeSerif", "Liberation Serif", serif; font-size: 9.5pt; line-height: 1.23; color: #000; }
+  body { margin: 0; }
+  h1.title { text-wrap: balance; font-size: 15.5pt; line-height: 1.18; text-align: center; margin: 0 0 9pt; font-weight: bold; }
+  .authors { text-align: center; font-size: 11pt; margin-bottom: 10pt; }
+  .abstract { margin: 0 0.3in 8pt; font-size: 9pt; text-align: justify; }
+  .abstract p { text-indent: 0; margin-bottom: 2pt; }
+  .kw { margin: 3pt 0.3in 10pt; font-size: 8.7pt; }
+  .cols { column-count: 2; column-gap: 0.25in; text-align: justify; hyphens: auto; }
+  p { margin: 0; text-indent: 1.2em; }
+  h2 + p, h3 + p, .noind { text-indent: 0; }
+  h2 { font-size: 10.3pt; margin: 7pt 0 2.5pt; font-weight: bold; break-after: avoid; }
+  h3 { font-size: 9.4pt; margin: 5pt 0 1.5pt; font-style: italic; font-weight: bold; break-after: avoid; }
+  .eq { text-align: center; margin: 4pt 0; text-indent: 0; position: relative; }
+  .eq .num { position: absolute; right: 0; }
+  .v { font-style: italic; }
+  figure { margin: 6pt 0 8pt; break-inside: avoid; }
+  figure img { width: 100%; display: block; }
+  figcaption { font-size: 8.2pt; line-height: 1.2; text-align: justify; margin-top: 3pt; }
+  figure.wide { margin: 4pt 0 10pt; }
+  table { border-collapse: collapse; width: 100%; font-size: 7.9pt; line-height: 1.17; }
+  table caption { caption-side: top; font-size: 8.2pt; text-align: justify; margin-bottom: 3pt; line-height: 1.2; }
+  th, td { padding: 1.2pt 2.6pt; text-align: right; vertical-align: top; }
+  th:first-child, td:first-child { text-align: left; }
+  thead tr { border-top: 1px solid #000; border-bottom: 0.6px solid #000; }
+  tbody tr:last-child { border-bottom: 1px solid #000; }
+  tr.mid td { border-top: 0.6px solid #000; }
+  td.l, th.l { text-align: left; }
+  .tbl { break-inside: avoid; margin: 6pt 0 8pt; }
+  .tnote { font-size: 7.6pt; line-height: 1.17; margin-top: 2pt; text-align: justify; text-indent: 0; }
+  ol.refs { font-size: 7.4pt; line-height: 1.13; padding-left: 1.7em; margin: 0; text-align: left; }
+  ol.refs li { margin-bottom: 0.8pt; }
+  .mono { font-family: "Liberation Mono", monospace; font-size: 7.9pt; }
+  ul.tight { margin: 1pt 0 2pt; padding-left: 1.2em; }
+  ul.tight li { margin: 0 0 1pt; }
+</style>
+</head>
+<body>
+
+<h1 class="title">Variant recurrence inflates genotype&ndash;phenotype tests in curated patient cohorts: a calibrated evaluation of AlphaFold structural features in 44 Mendelian genes</h1>
+<div class="authors">Sparsh Sumani &nbsp;&nbsp;&nbsp; Yuzhang Fu</div>
+
+<div class="abstract">
+<p><b>Background.</b> Case-level resources such as phenopacket-store now allow genotype&ndash;phenotype correlations to be tested in hundreds of Mendelian cohorts, and AlphaFold supplies structural descriptors for every patient variant. Analyses of these data usually treat each individual as an independent observation.</p>
+<p><b>Methods.</b> From phenopacket-store v0.1.27 we assembled 5,703 individuals in 98 genes with single-fragment AlphaFold models. Variants were annotated with Ensembl VEP on MANE Select transcripts. For each missense variant we computed nine structural or predicted-effect features, including random-walk-with-restart fingerprints on the AlphaFold contact graph and AlphaMissense. We tested each feature, after adjustment for sequence position, against HPO terms within genes, and compared two permutation nulls: one that shuffles features among individuals and one that shuffles them among distinct variants.</p>
+<p><b>Results.</b> In the 44 genes with testable terms (1,675 missense carriers, 670 distinct variants, 474 gene&ndash;term tests per feature), 76% of individuals share their variant with another individual, and 74% of such pairs come from the same publication. Shuffling individuals implies that 4.7% of tests reach <i>p</i> &lt; 0.05 by chance. Shuffling variants, the correct null for a property of the variant, gives 14.9%: the naive test's false-positive rate is inflated 3.2-fold. Kish's design effect, computed from the within-variant phenotype correlation, predicts this inflation without any permutation (73 predicted vs 71 observed false positives; gene-level Spearman &rho; = 0.92). Under the variant-level null, only relative position (<i>p</i> = 0.012) and missense-versus-truncating class (<i>p</i> = 0.011) exceed chance. AlphaMissense (<i>p</i> = 0.058), the contact-graph fingerprints (<i>p</i> &ge; 0.12) and pLDDT-based features do not, and none survives spline adjustment for position. For the class test, the valid null removes 55% of per-test discoveries. A KBG syndrome case study (<i>ANKRD11</i>, <i>n</i> = 333) with a power analysis gives a concordant null.</p>
+<p><b>Conclusions.</b> In curated cohorts the variant, not the patient, is the unit of replication for variant-level features. We provide a design-effect diagnostic and a variant-level permutation test that can be added to existing genotype&ndash;phenotype workflows.</p>
+</div>
+<div class="kw"><b>Keywords:</b> genotype&ndash;phenotype correlation; phenopackets; Human Phenotype Ontology; AlphaFold; AlphaMissense; permutation test; design effect; pseudoreplication; KBG syndrome.</div>
+
+<div class="cols">
+
+<h2>1&nbsp;&nbsp;Introduction</h2>
+<p>Genotype&ndash;phenotype correlations (GPCs) guide prognosis and counselling in Mendelian disease and point to disease mechanisms. Until recently each GPC was examined in a single published series. The GA4GH Phenopacket schema [1] and phenopacket-store [2], a corpus of literature-derived case reports with Human Phenotype Ontology (HPO) annotations [4], have changed this. With them, GPCs can be tested systematically in many cohorts at once. GPSEA [3] did so for 85 phenopacket-store cohorts and reported 253 significant correlations in 48 of them. It used Fisher exact tests on observed and excluded HPO terms, with genotype classes chosen per cohort.</p>
+<p>A second development is that AlphaFold [5,6] provides a predicted structure, with a per-residue confidence score (pLDDT), for nearly every human protein. AlphaMissense [7] provides a structure-aware pathogenicity score for every possible missense change. Pathogenic missense variants cluster in three dimensions [8], and structure-derived mechanism scores differ between phenotypes at the level of genes and diseases [9,10]. A natural next step is to ask whether a patient's variant-level structural context explains which phenotypes that patient has, within a gene, beyond what simpler genotype descriptors already explain.</p>
+<p>Both kinds of analysis rest on a shared assumption: individuals are independent observations. In curated cohorts this is doubtful. Recurrent variants are common. Carriers of the same variant are often relatives or members of one case series, and their phenotypes were recorded by the same authors with the same checklist. A structural feature is a property of the variant, so it takes the same value for every carrier. If carriers of one variant resemble each other for any reason, true variant-specific biology included, an individual-level test counts one variant many times. This is <i>pseudoreplication</i> [11], and the variance inflation it causes is the <i>design effect</i> of cluster sampling [12,13].</p>
+<p>We started from PhenoBridge, an open pipeline that computes random-walk-with-restart (RWR) fingerprints on AlphaFold contact graphs, and asked whether such features carry within-gene phenotype signal across phenopacket-store. The decisive finding concerned calibration. Here we (i) quantify variant recurrence in phenopacket-store; (ii) show that individual-level inference is miscalibrated and that a closed-form design effect predicts by how much; (iii) evaluate eight structural or predicted-effect features against position under a valid, variant-level null; (iv) re-score a GPSEA-style variant-class test; and (v) report a KBG syndrome case study with an explicit power analysis.</p>
+
+<h2>2&nbsp;&nbsp;Methods</h2>
+<h3>2.1&nbsp;&nbsp;Data and variant annotation</h3>
+<p>We parsed all 10,377 phenopackets of phenopacket-store v0.1.27 (699 genes) [2]. Every variant was re-annotated with the Ensembl Variant Effect Predictor (VEP) REST service [14] on the MANE Select transcript [15]. VEP protein positions agreed with the curated HGVS p. strings for 99.66% of the 9,086 variants that had both. Premature termination codons (PTCs) were classified for nonsense-mediated decay (NMD) with the 50-nt rule. Structures were the AlphaFold human proteome models (v6) [6,16]. Proteins longer than 2,700 residues are distributed only as overlapping fragments, so seven genes with &ge;20 eligible individuals were excluded for that reason (<i>ASPM</i>, <i>FBN1</i>, <i>ITPR1</i>, <i>KMT2D</i>, <i>NF1</i>, <i>NIPBL</i>, <i>UBR5</i>). AlphaMissense scores [7] were matched to 2,961 of 2,964 missense records in the selected genes. HPO annotations were propagated by the true-path rule: an observed term implies its ancestors and an excluded term implies its descendants. Cells that received both calls were dropped. Unannotated cells were left missing and never coded as absent.</p>
+
+<h3>2.2&nbsp;&nbsp;Inclusion</h3>
+<p>An individual was included if they had exactly one causative allele (heterozygous or hemizygous) that mapped to a protein position. A gene was included if it had a single-fragment AlphaFold model and at least 20 such individuals. This selected 98 genes with 5,703 individuals, 5,041 of whom had structural features. Biallelic individuals were analysed only in a sensitivity analysis. A gene&ndash;term pair was tested if, among the carriers analysed, at least five had the term observed and at least five had it excluded.</p>
+
+<h3>2.3&nbsp;&nbsp;Variant features</h3>
+<p>For each residue we built the C&alpha; contact graph <span class="v">G</span> (edges at &le;8 &Aring;) and split residues into Core, Semi-core and Disorder classes by the protein's own pLDDT quantiles (&ge;<span class="v">q</span><sub>0.9</sub>; <span class="v">q</span><sub>0.5</sub>&ndash;<span class="v">q</span><sub>0.9</sub>; &le;<span class="v">q</span><sub>0.5</sub>). The RWR profile seeded at residue <span class="v">s</span> was obtained exactly as</p>
+<div class="eq"><b><span class="v">p</span></b><sub><span class="v">s</span></sub> = <span class="v">&alpha;</span> (<span class="v">I</span> &minus; (1&minus;<span class="v">&alpha;</span>) <span class="v">A D</span><sup>&minus;1</sup>)<sup>&minus;1</sup> <b><span class="v">e</span></b><sub><span class="v">s</span></sub>, &nbsp;&nbsp; <span class="v">&alpha;</span> = 0.3,<span class="num">(1)</span></div>
+<p class="noind">using one sparse LU factorisation per protein. This matches the iterative PhenoBridge implementation to 2&times;10<sup>&minus;10</sup>. The fingerprint component for a region is the stationary mass that falls in it [17&ndash;19]. The features were:</p>
+<ul class="tight">
+<li><b>S1</b>, log<sub>10</sub> Semi-core mass (primary structural feature);</li>
+<li><b>S2</b>, seed pLDDT;</li>
+<li><b>S3</b>, log<sub>10</sub> Core mass;</li>
+<li><b>S4</b>, contact degree;</li>
+<li><b>S5</b>, AlphaMissense (reference predictor);</li>
+<li><b>S6a/S6b</b>, mean pLDDT of 1-hop and 2-hop contact neighbours, to test whether RWR is more than smoothed local pLDDT;</li>
+<li><b>S7</b>, location in a UniProt or Pfam domain (binary, the analogue of GPSEA's region predicates);</li>
+<li><b>S8</b>, log<sub>10</sub> Disorder mass;</li>
+<li><b>P0</b>, relative sequence position.</li>
+</ul>
+<p class="noind">Within each gene, every continuous feature except P0 was residualised on relative position by least squares. A structural feature therefore had to add something beyond where the variant lies along the chain.</p>
+
+<h3>2.4&nbsp;&nbsp;Association tests</h3>
+<p><b>Analysis A (primary; missense carriers).</b> For every eligible gene&ndash;term pair and feature we compared the feature between individuals with the term observed and those with it excluded. Continuous features used a two-sided Mann&ndash;Whitney test with tie correction; S7 used Fisher's exact test. <b>Analysis B (reference; all mappable individuals).</b> For every gene&ndash;term pair we ran Fisher's exact test of missense against PTC (nonsense or frameshift) carriers. This is the closest analogue of GPSEA's most common predicate [3].</p>
+
+<h3>2.5&nbsp;&nbsp;Two permutation nulls</h3>
+<p>For each feature, the global statistic was the number of tests with <i>p</i> &lt; 0.05 across all genes and terms. Permutation keeps every gene's phenotype matrix intact, so the dependence between overlapping HPO terms is preserved. We compared two schemes, each applied within genes:</p>
+<ul class="tight">
+<li><b>Individual-level:</b> feature values are shuffled among carriers. This is the null implied by any test that treats individuals as exchangeable, including Fisher and Mann&ndash;Whitney tests.</li>
+<li><b>Variant-level:</b> feature vectors are shuffled among <i>distinct variants</i>, and every carrier of variant <span class="v">v</span> receives the features of variant &sigma;(<span class="v">v</span>). Variants were keyed by gene and VEP protein change, falling back to genomic HGVS.</li>
+</ul>
+<p class="noind">The variant-level scheme preserves whatever makes carriers of one variant alike and asks only whether variants with high feature values differ from variants with low ones. Each scheme used <span class="v">B</span> = 2,000 permutations; empirical <i>p</i> = (1 + #{<span class="v">T<sub>b</sub></span> &ge; <span class="v">T</span><sub>obs</sub>})/(1 + <span class="v">B</span>) [20]. The same permutations gave a per-test permutation <i>p</i>, to which we applied Benjamini&ndash;Hochberg correction [21] at <i>q</i> &lt; 0.1 within each feature. We also report Storey's &pi;<sub>1</sub> [22]. With 2,000 permutations no per-test <i>p</i> can fall below 5&times;10<sup>&minus;4</sup>, so per-test discoveries are conservative under both schemes.</p>
+
+<h3>2.6&nbsp;&nbsp;Design effect</h3>
+<p>Let the analysed carriers for a test fall into variant clusters of sizes <span class="v">m<sub>k</sub></span>, and let &rho; be the one-way ANOVA intraclass correlation of the binary phenotype within variants (truncated at 0). Because the feature is constant within clusters, the variance of a rank or correlation statistic is inflated by the design effect [12,13]</p>
+<div class="eq">DE = 1 + (<span class="v">m&#771;</span> &minus; 1) &rho;, &nbsp;&nbsp; <span class="v">m&#771;</span> = &Sigma;<span class="v">m<sub>k</sub></span><sup>2</sup> / &Sigma;<span class="v">m<sub>k</sub></span>,<span class="num">(2)</span></div>
+<p class="noind">and a nominal 5% test rejects with probability about 2[1 &minus; &Phi;(1.96/&radic;DE)]. We computed DE for every primary S1 test and compared the predicted rate with the variant-level permutation rate. That rate is the naive test's actual type I error under the variant-level null. For this comparison we ran a separate set of 500 permutations per gene.</p>
+
+<h3>2.7&nbsp;&nbsp;Controls and sensitivity analyses</h3>
+<p>We fixed the control genes before any association was computed, using the literature and GPSEA [3]. Positive controls were <i>LMNA</i> (Ig-fold vs rod) [23], <i>TBX5</i> (G80R cardiac vs R237 limb) [24], <i>SPTAN1</i> (R19W spastic paraplegia) [25], <i>SETD2</i> (R1740W) [26] and <i>IKZF1</i> (N159) [27]. Null controls were <i>STXBP1</i> [28], <i>POGZ</i> and <i>EHMT1</i>. Sensitivity analyses, each with 400 permutations, varied:</p>
+<ul class="tight">
+<li>phenotypes: explicit calls only;</li>
+<li>RWR restart: &alpha; = 0.15 and 0.5;</li>
+<li>genes: excluding those with mean pLDDT &lt; 50;</li>
+<li>position adjustment: a 4-df natural cubic spline instead of a linear term (in genes with &ge;12 carriers and &ge;8 distinct positions);</li>
+<li>allele model: biallelic carriers, using the mean feature over both alleles.</li>
+</ul>
+
+<h3>2.8&nbsp;&nbsp;KBG syndrome case study</h3>
+<p><i>ANKRD11</i> is the largest cohort in the store whose variants are almost all truncating, so it is the setting in which the original PhenoBridge analysis was developed [29&ndash;31]. Its separate analysis plan specified nested logistic likelihood-ratio tests of log<sub>10</sub> Semi-core mass, adjusted for VEP variant class and position, on 34 HPO terms with &ge;10 observed and &ge;10 excluded explicit calls. Global inference used a within-stratum omnibus permutation. Sparse terms used Firth regression [34]. Power was estimated by simulation from each term's fitted baseline model (1,000 simulations per effect size).</p>
+
+<h3>2.9&nbsp;&nbsp;Pre-specification</h3>
+<p>The multi-gene analysis plan, including features, eligibility, controls and sensitivity analyses, was written and version-controlled before any multi-gene association was computed. One amendment was added after a 20-permutation pilot but before the final run: variant-level permutation became the decisive test and the spline sensitivity was added. The pilot had shown excess small <i>p</i>-values for every feature. Because of this, the designation of the variant-level null as primary is post hoc. The design-effect analysis and the &alpha; = 0.5 spline check (&sect;3.6) are exploratory.</p>
+
+<h2>3&nbsp;&nbsp;Results</h2>
+<h3>3.1&nbsp;&nbsp;Most patients share their variant, usually within one publication</h3>
+<p>Analysis A included 2,053 single-allele missense carriers with structural features. In the 44 genes with at least one eligible term there were 1,675 carriers of 670 distinct variants, contributing 474 gene&ndash;term tests per feature (316 distinct HPO terms; median 28 carriers per test, range 10&ndash;205). Of these carriers, 1,266 (76%) share their variant with at least one other individual (Fig.&nbsp;1a).</p>
+<ul class="tight">
+<li>The largest clusters are <i>LMNA</i> p.Arg482Trp (62 carriers), <i>RAB32</i> p.Ser71Arg (38) and <i>LMNA</i> p.Arg482Gln (36).</li>
+<li>Recurrence is mostly within publications. Of 261 recurrent variants, 214 (82%) are reported by a single publication, and 5,515 of the 7,459 same-variant pairs (74%) share a publication.</li>
+<li>Two genes, <i>LIM2</i> and <i>RAB32</i>, contribute a single missense variant each. Their features are constant, so they cannot inform a structural test at all.</li>
+</ul>
+
+<h3>3.2&nbsp;&nbsp;Individual-level inference is miscalibrated, and the design effect predicts by how much</h3>
+<p>For S1, shuffling features among individuals gave a null mean of 22.2 tests with <i>p</i> &lt; 0.05 (4.7% of 474), close to the nominal 23.7. Shuffling among variants gave a null mean of 70.6 (14.9%), 3.2 times higher (Fig.&nbsp;1b). Every continuous feature had the same pattern, with null means of 70.4&ndash;71.2 (Table&nbsp;1), because the inflation comes from the phenotypes and the cluster structure, not from the feature.</p>
+<p>Per gene, the naive test's type I error had a median of 9.6% (individual-level shuffle: 4.7%) and exceeded 10% in 21 of 44 genes. It was highest in <i>SPTAN1</i> and <i>SAMD9L</i> (38%), <i>SETD2</i> (37%), <i>TBX5</i> (31%) and <i>LMNA</i> (29%). Carriers-per-variant alone predicted it poorly (Spearman &rho; = 0.17). The design effect, which also uses the within-variant phenotype correlation, predicted it well (&rho; = 0.92; Fig.&nbsp;1c).</p>
+<ul class="tight">
+<li>The median within-variant ICC was 0.25, and 61% of tests had ICC &gt; 0.1.</li>
+<li>The median DE was 1.37 (mean 2.37, maximum 38.6).</li>
+<li>Summed over the 474 tests, the predicted number of false positives at &alpha; = 0.05 was 73.3, against 70.6 measured by variant-level permutation.</li>
+</ul>
+<p>The diagnostic therefore needs no permutation: a curator can compute DE from the cohort table alone.</p>
+
+</div>
+
+<figure class="wide">
+<img src="fig/fig1_recurrence.svg" alt="Figure 1">
+<figcaption><b>Figure 1.</b> Variant recurrence and the calibration of individual-level tests. (a) The 1,675 missense carriers in the 44 tested genes, by the number of carriers of their variant. (b) Null distributions of the number of S1 tests (of 474) with <i>p</i> &lt; 0.05: shuffling the feature among individuals (grey) or among distinct variants (blue). The dotted line is the nominal expectation (23.7) and the red line the observed count. (c) Per gene, the type I error of the naive Mann&ndash;Whitney test at &alpha; = 0.05 (S1; 500 permutations per gene), plotted against the mean Kish design effect of the gene's tests (Eq.&nbsp;2). The solid line is the prediction 2[1 &minus; &Phi;(1.96/&radic;DE)]. The gene at DE &asymp; 7.4 with error 1.0 is <i>NEK8</i>, which has one tested term and three variants.</figcaption>
+</figure>
+
+<div class="cols">
+<div class="tbl">
+<table>
+<caption><b>Table 1.</b> Global results of Analysis A (missense; 474 tests per feature, 233 for S7) and Analysis B (missense vs PTC; 545 tests). <i>Obs.</i> is the number of tests with <i>p</i> &lt; 0.05. Null means and permutation <i>p</i> use 2,000 permutations; the spline column uses 400. <i>Disc.</i> counts per-test BH <i>q</i> &lt; 0.1 on permutation <i>p</i> (individual / variant scheme).</caption>
+<thead><tr><th>Feature</th><th>Obs.</th><th>Null<br>indiv.</th><th>Null<br>variant</th><th><i>p</i><br>variant</th><th><i>p</i><br>spline</th><th>Disc.<br>ind./var.</th></tr></thead>
+<tbody>
+<tr><td>P0 relative position</td><td>103</td><td>22.4</td><td>70.8</td><td><b>0.012</b></td><td>&mdash;</td><td>65 / 8</td></tr>
+<tr><td>S5 AlphaMissense</td><td>95</td><td>22.2</td><td>70.7</td><td>0.058</td><td>0.187</td><td>69 / 0</td></tr>
+<tr><td>S1 RWR semi-core</td><td>88</td><td>22.2</td><td>70.6</td><td>0.116</td><td>0.399</td><td>64 / 0</td></tr>
+<tr><td>S2 seed pLDDT</td><td>87</td><td>22.2</td><td>70.9</td><td>0.135</td><td>0.748</td><td>33 / 0</td></tr>
+<tr><td>S6a 1-hop pLDDT</td><td>76</td><td>22.1</td><td>70.7</td><td>0.349</td><td>0.823</td><td>26 / 0</td></tr>
+<tr><td>S4 contact degree</td><td>71</td><td>22.3</td><td>71.2</td><td>0.482</td><td>0.853</td><td>26 / 3</td></tr>
+<tr><td>S3 RWR core</td><td>60</td><td>22.2</td><td>70.8</td><td>0.792</td><td>0.384</td><td>29 / 0</td></tr>
+<tr><td>S6b 2-hop pLDDT</td><td>59</td><td>22.2</td><td>70.6</td><td>0.816</td><td>0.853</td><td>25 / 0</td></tr>
+<tr><td>S8 RWR disorder</td><td>41</td><td>22.1</td><td>70.4</td><td>0.999</td><td>0.988</td><td>12 / 0</td></tr>
+<tr><td>S7 in domain (Fisher)</td><td>15</td><td>4.8</td><td>17.3</td><td>0.704</td><td>0.726</td><td>9 / 0</td></tr>
+<tr class="mid"><td>B missense vs PTC</td><td>71</td><td>11.7</td><td>43.9</td><td><b>0.011</b></td><td>&mdash;</td><td>47 / 21</td></tr>
+</tbody></table>
+<div class="tnote">Under individual-level permutation every feature has permutation <i>p</i> &le; 0.011, and all except S8 have <i>p</i> &lt; 0.001 (Fisher-based S7 and B are conservative, hence their null means below 5%). P0 is not residualised, so it has no spline row.</div>
+</div>
+
+<h3>3.3&nbsp;&nbsp;Structural features under a valid null</h3>
+<p>Under the individual-level null every feature, including the RWR disorder mass, appeared highly significant (Table&nbsp;1). Under the variant-level null only relative position exceeded chance (103 observed vs 70.8 expected; <i>p</i> = 0.012; Fig.&nbsp;2). AlphaMissense was borderline (<i>p</i> = 0.058). The primary structural feature, S1, did not reach significance (<i>p</i> = 0.116), and neither did seed pLDDT, neighbourhood pLDDT, contact degree, Core or Disorder mass, or domain membership (all <i>p</i> &ge; 0.135).</p>
+<p>With position modelled by a spline, every structural feature and AlphaMissense lost what signal it had (S1 <i>p</i> = 0.40; S5 <i>p</i> = 0.19). Storey's &pi;<sub>1</sub> was 0.15&ndash;0.29 for every continuous feature, so it did not separate them. Per-test discoveries fell from 25&ndash;69 per feature (individual scheme) to 0 for every structural feature except contact degree (3). Relative position kept 8 discoveries:</p>
+<ul class="tight">
+<li><i>LMNA</i>: dilated cardiomyopathy, loss of truncal fat and elevated creatine kinase;</li>
+<li><i>TGFBR1</i>: self-healing squamous epithelioma;</li>
+<li><i>TGFBR2</i>: malar flattening and aortic dissection;</li>
+<li><i>U2AF2</i>: severe intellectual disability;</li>
+<li><i>PPP2R1A</i>: corpus callosum hypoplasia.</li>
+</ul>
+<p class="noind">The structural features add nothing measurable beyond position in this resource. The RWR fingerprints also do no better than the simpler pLDDT features they summarise.</p>
+
+<figure>
+<img src="fig/fig2_features.svg" alt="Figure 2">
+<figcaption><b>Figure 2.</b> Observed fraction of tests with <i>p</i> &lt; 0.05 (red) for each feature, against the 95% range of the individual-level (grey) and variant-level (blue) permutation nulls. Ticks mark null means. The right column gives the variant-level permutation <i>p</i>. Structural features (S) are residualised on relative position; S7 and B use Fisher's exact test, which is conservative under the individual-level null.</figcaption>
+</figure>
+
+<h3>3.4&nbsp;&nbsp;Variant class</h3>
+<p>The missense-versus-PTC test (3,708 individuals; 545 tests in 33 genes) remained significant under the variant-level null (71 observed vs 43.9 expected; <i>p</i> = 0.011). Variant class is a real source of within-gene phenotype variation, as GPSEA reported [3]. The number of discoveries changed substantially, however:</p>
+<ul class="tight">
+<li><b>Analytic Fisher with BH</b> (the GPSEA-style analysis): 32 tests in 15 genes at <i>q</i> &lt; 0.1.</li>
+<li><b>Individual-level permutation <i>p</i>:</b> 47 tests in 16 genes.</li>
+<li><b>Variant-level permutation <i>p</i>:</b> 21 tests in 9 genes (<i>AHDC1</i>, <i>CTCF</i>, <i>FGD1</i>, <i>GNAS</i>, <i>LMNA</i>, <i>PTPN11</i>, <i>SATB2</i>, <i>SETD2</i>, <i>SPTAN1</i>).</li>
+</ul>
+<p class="noind">Six genes with analytic discoveries had none at variant level: <i>EHMT1</i>, <i>GLI3</i>, <i>SOCS1</i>, <i>TBX5</i>, <i>TGFB2</i> and <i>TGFBR1</i>.</p>
+<p>The losses are informative. In <i>SPTAN1</i>, spastic paraplegia separates missense from truncating carriers analytically (<i>p</i> = 2&times;10<sup>&minus;4</sup>), but the signal comes from the single recurrent p.Arg19Trp, so at variant level <i>p</i> = 0.58. Motor axonal neuropathy, which is shared by many distinct truncating variants, survives (<i>p</i> = 0.003). Likewise, <i>LMNA</i> lipodystrophy (analytic <i>p</i> = 3&times;10<sup>&minus;6</sup>) is carried by the Arg482 hotspot, and its variant-level <i>p</i> is 0.14.</p>
+
+<div class="tbl">
+<table>
+<caption><b>Table 2.</b> Control genes in Analysis A: number of tests with variant-level permutation <i>p</i> &lt; 0.05 for P0, S1 and S5, out of <i>T</i> tests. <i>N</i>/<i>V</i> is missense carriers / distinct variants.</caption>
+<thead><tr><th>Gene</th><th class="l">Expected</th><th><i>N</i>/<i>V</i></th><th><i>T</i></th><th>P0</th><th>S1</th><th>S5</th></tr></thead>
+<tbody>
+<tr><td><i>LMNA</i></td><td class="l">positive</td><td>218/45</td><td>70</td><td>22</td><td>7</td><td>11</td></tr>
+<tr><td><i>TBX5</i></td><td class="l">positive</td><td>80/20</td><td>13</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td><i>IKZF1</i></td><td class="l">positive</td><td>56/17</td><td>16</td><td>0</td><td>0</td><td>3</td></tr>
+<tr><td><i>SPTAN1</i></td><td class="l">positive</td><td>34/13</td><td>7</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><i>SETD2</i></td><td class="l">positive</td><td>27/13</td><td>13</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><i>EHMT1</i></td><td class="l">null</td><td>28/18</td><td>13</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td><i>POGZ</i>, <i>STXBP1</i></td><td class="l">null</td><td>10/9, 248/105</td><td>0</td><td colspan="3" style="text-align:center">no eligible terms</td></tr>
+</tbody></table>
+<div class="tnote">Under the individual-level scheme the same cells read <i>LMNA</i> 42/28/40, <i>TBX5</i> 6/5/4, <i>IKZF1</i> 4/4/6 and <i>SPTAN1</i> 4/5/2. <i>IKZF1</i> seed pLDDT (S2) had 4 tests at variant-level <i>p</i> &lt; 0.05, with a minimum of 0.0025.</div>
+</div>
+
+<h3>3.5&nbsp;&nbsp;Control genes</h3>
+<p>Table&nbsp;2 shows that the variant-level test keeps the dominant, multi-variant <i>LMNA</i> signal. It still distinguishes rod-domain cardiac and muscle phenotypes from Ig-fold lipodystrophy across 45 variants. It attenuates the positive controls whose published signal rests on one or two residues: <i>TBX5</i> G80R and R237Q (19 and 21 carriers), <i>SPTAN1</i> R19W and <i>SETD2</i> R1740W. This is not a loss of sensitivity to a feature effect. A residue-specific effect is one observation of a structural property, however many carriers it has. Confirming it as a structural rule needs further variants with the same property, not more carriers of the same one. The null control <i>EHMT1</i> gave 1 nominal test of 13 for S1 (0.65 expected). <i>STXBP1</i> and <i>POGZ</i> had no term with five observed and five excluded missense carriers.</p>
+
+<h3>3.6&nbsp;&nbsp;Sensitivity analyses</h3>
+<p>The variant-level conclusions held across the sensitivity analyses. Relative position stayed significant:</p>
+<ul class="tight">
+<li>explicit calls only, <i>p</i> = 0.005;</li>
+<li>genes with mean pLDDT &ge; 50, <i>p</i> = 0.010;</li>
+<li>spline-model permutation set, <i>p</i> = 0.022.</li>
+</ul>
+<p class="noind">S1 stayed non-significant with explicit calls (<i>p</i> = 0.10), at &alpha; = 0.15 (0.060) and with pLDDT &ge; 50 (0.11). At &alpha; = 0.5, S1 reached <i>p</i> = 0.010, one nominal result among 45 sensitivity cells. In an exploratory check it disappeared when position was modelled by a spline (<i>p</i> = 0.33; position itself <i>p</i> = 0.010). The biallelic analysis yielded only two eligible tests and was uninformative.</p>
+
+</div>
+
+<figure class="wide">
+<img src="fig/fig3_kbg_lollipop.svg" alt="Figure 3">
+<figcaption><b>Figure 3.</b> KBG case study: the 256 <i>ANKRD11</i> point variants by VEP class (MANE Select), above the AlphaFold pLDDT track (confident segments shaded), the exon structure, the ankyrin repeats and the UniProt C-terminal degradation region. The dashed line marks the 50-nt NMD-escape boundary; for frameshifts the rule applies to the downstream stop codon. The 77 16q24.3 CNVs are not shown.</figcaption>
+</figure>
+
+<div class="cols">
+<h3>3.7&nbsp;&nbsp;Case study: KBG syndrome</h3>
+<p>The <i>ANKRD11</i> cohort shows the same issues in one gene.</p>
+<p><b>Cohort composition.</b> All 333 individuals cite one review but come from 41 original sources, and 58 fall in 22 family clusters. VEP classes were:</p>
+<ul class="tight">
+<li>point variants: 174 frameshift, 66 nonsense, 7 canonical splice, 7 missense, 2 in-frame;</li>
+<li>16q24.3 CNVs (77): 70 deletions, 6 duplications, and one that does not overlap the gene.</li>
+</ul>
+<p class="noind">So 96.5% of point variants are truncating (Fig.&nbsp;3). One frameshift, c.1903_1907del, is carried by 34 individuals. Six of the seven missense variants cluster in aa 2491&ndash;2585, the confident C-terminal segment, where functional work has placed pathogenic missense variants [35].</p>
+<p><b>NMD prediction.</b> By the 50-nt rule, 238 of 240 PTCs are predicted to trigger NMD. ANKRD11 has 13 exons, and its giant exon 9 is not the last. Most PTCs (224) lie in this 6,578-nt exon, however, where NMD efficiency is reduced [32], and mutant protein has been reported to accumulate [33]. NMD is therefore a rule-based prediction here, not an established fact.</p>
+
+<figure>
+<img src="fig/fig4_kbg_power.svg" alt="Figure 4">
+<figcaption><b>Figure 4.</b> KBG case study: power of the per-term likelihood-ratio test as a function of the true odds ratio per SD of log<sub>10</sub> Semi-core mass. The line is the median over 34 terms and the band spans the 10th&ndash;90th percentiles (1,000 simulations per point).</figcaption>
+</figure>
+
+<p><b>Primary test.</b> In the pre-specified nested models, no term reached <i>p</i> &lt; 0.05 (minimum <i>p</i> = 0.080, ADHD; minimum <i>q</i> = 0.79), and the omnibus permutation <i>p</i> was 0.70.</p>
+<p><b>Power.</b> The power analysis bounds what this null means (Fig.&nbsp;4). The median minimum detectable odds ratio was 1.96 per SD at &alpha; = 0.05 and 2.42 at &alpha; = 0.005, and power at OR 1.5 per SD was 41%. The data exclude large structural effects, not modest ones.</p>
+<p><b>Secondary signal.</b> One secondary component, Disorder mass, was associated with intellectual disability (OR 0.36 per SD, <i>p</i> = 2.5&times;10<sup>&minus;4</sup>; Bonferroni-adjusted <i>p</i> = 0.043 across 170 tests). It was robust in every exploratory check, including one per family and leave-one-source-out. It rests, however, on 25 individuals with ID excluded, an absence that may reflect age at report. We treat it as a hypothesis for replication.</p>
+<p><b>Published claims.</b> Published KBG claims [31] all replicated in direction but with smaller effects; none reached <i>q</i> &lt; 0.05.</p>
+<p><b>Correction of our earlier draft.</b> An earlier draft of this work used a regex-based truncation flag and stated that 69.5% of point variants were truncating. That flag misclassified 28.5% of individuals, including 65 of 66 nonsense variants. Correcting it does not change the null result.</p>
+
+<h2>4&nbsp;&nbsp;Discussion</h2>
+<p>The central finding is about inference, not structure. In curated case-level data, the carriers of one variant are not independent. Three-quarters of missense carriers share their variant, and most such pairs come from one publication. Tests that treat individuals as exchangeable reject about three times too often. A feature can therefore look strongly associated with phenotype while carrying no more information than an arbitrary label attached to each variant. The size of the problem is predictable: Kish's design effect, computed from the phenotype intraclass correlation within variants, reproduced the permutation-based error rate across 44 genes.</p>
+<p><b>Which null is right?</b> For a feature that is a property of the variant, such as a structural descriptor, a pathogenicity score, a domain or a variant class, the variant is the unit to which the &ldquo;treatment&rdquo; is assigned. The variant-level permutation is then the appropriate null, exactly as in cluster-randomised trials [13]. Its null hypothesis is still meaningful. It allows carriers of a variant to be alike for any reason, and asks whether the feature orders variants by phenotype. The price is that effects carried by one or two hotspot variants cannot be established as feature effects. That is the correct answer: 62 carriers of <i>LMNA</i> p.Arg482Trp, largely from a few series, are one data point about what an Arg482-like residue does. Specific-variant predicates (&ldquo;Arg482Trp vs other&rdquo;) remain valid questions. For them the replication unit is the independent family or publication, which the phenopacket identifiers make easy to count.</p>
+<p><b>Implications for GPSEA-style analyses.</b> GPSEA&rsquo;s Fisher tests [3] are individual-level tests. Our class analysis is not a re-analysis of GPSEA&rsquo;s hand-chosen hypotheses, but it suggests that some reported correlations in cohorts with strong recurrence may not survive variant-level inference. In our class test, 6 of 15 genes with analytic discoveries lost them. We suggest three additions, all simple to implement:</p>
+<ul class="tight">
+<li>report the numbers of distinct variants and publications behind each genotype group;</li>
+<li>report the design effect as a diagnostic;</li>
+<li>for variant-level predicates, add a variant-level permutation <i>p</i>, or fit models with variant or publication random effects.</li>
+</ul>
+<p><b>Structural features.</b> Once position is accounted for and inference is valid, AlphaFold-derived context, including network-propagation fingerprints, adds little measurable within-gene phenotype information in phenopacket-store. AlphaMissense comes closest. This is not evidence that structure is irrelevant to phenotype. Several factors work against detection:</p>
+<ul class="tight">
+<li>the effective sample size is the number of distinct variants (median 15&ndash;20 per gene), not the number of patients;</li>
+<li>monomeric models and pLDDT say little about the motif-mediated interactions in disordered regions where many variants lie [36,37];</li>
+<li>literature HPO calls are coarse and incompletely ascertained.</li>
+</ul>
+<p class="noind">Earlier positive structure&ndash;phenotype studies worked at the level of gene families or diseases [9,10], where variant counts are larger. The KBG case shows a related limit: in a cohort that is 96.5% truncating, missense structural context barely varies. There, a cohort of 333 can exclude only odds ratios of about 2 per SD.</p>
+<p><b>Limitations.</b></p>
+<ul class="tight">
+<li><b>Exchangeability.</b> The variant-level null assumes that variants within a gene are exchangeable apart from the feature. Variants that differ systematically in ascertainment (for example, recurrent variants reported in larger, better-phenotyped series) could still bias tests in either direction.</li>
+<li><b>Post-hoc primary null.</b> Making the variant-level null primary was a post-hoc amendment, prompted by a pilot. The pilot result is itself the paper&rsquo;s main finding, and the individual-level results are reported in full alongside it.</li>
+<li><b>Gene coverage.</b> Excluding fragmented AlphaFold models removed some classic genotype&ndash;phenotype genes (<i>NF1</i>, <i>FBN1</i>, <i>ITPR1</i>).</li>
+<li><b>Dependent tests.</b> Ontology propagation makes tests within a gene dependent; the global permutation handles this, but per-test BH assumes positive dependence.</li>
+<li><b>Permutation resolution.</b> Per-test permutation <i>p</i>-values are bounded below at 5&times;10<sup>&minus;4</sup>, so variant-level discoveries are lower bounds.</li>
+<li><b>No external replication.</b> We did not replicate in an independent cohort.</li>
+</ul>
+<p><b>Conclusion.</b> Recurrent variants make individual-level genotype&ndash;phenotype tests in curated cohorts anti-conservative by a factor that a one-line design-effect calculation predicts. Under valid, variant-level inference, sequence position and variant class carry within-gene phenotype signal in phenopacket-store; AlphaFold structural features, as implemented here, do not add measurably to position.</p>
+
+<h2>Data and code availability</h2>
+<p class="noind" style="text-align:left">All code is available at <span class="mono">github.com/sparshsumani/phenobridge</span>:</p>
+<ul class="tight">
+<li><span class="mono">multigene/</span>: data pipeline;</li>
+<li><span class="mono">analysis_multigene/</span>: analysis plan, amendments, analysis code and all output tables;</li>
+<li><span class="mono">kbg_followup/</span>: KBG case study;</li>
+<li><span class="mono">manuscript/</span>: figures and this manuscript.</li>
+</ul>
+<p class="noind">Inputs are public: phenopacket-store v0.1.27, HPO, the AlphaFold human proteome v6, AlphaMissense, and the Ensembl, UniProt and InterPro REST services. The permutation seed is fixed (20261103).</p>
+
+<h2>References</h2>
+<ol class="refs">
+<li>Jacobsen JOB, Baudis M, Baynam GS, et al. The GA4GH Phenopacket schema defines a computable representation of clinical data. <i>Nat Biotechnol</i> 40:817&ndash;820, 2022. doi:10.1038/s41587-022-01357-4.</li>
+<li>Danis D, Bamshad MJ, Bridges Y, et al. A corpus of GA4GH phenopackets: case-level phenotyping for genomic diagnostics and discovery. <i>HGG Adv</i> 6(1):100371, 2025. doi:10.1016/j.xhgg.2024.100371.</li>
+<li>Rekerle L, Danis D, Rehburg F, et al. GA4GH phenopacket-driven characterization of genotype&ndash;phenotype correlations in Mendelian disorders. <i>Am J Hum Genet</i> 113(1):57&ndash;70, 2026. doi:10.1016/j.ajhg.2025.12.001.</li>
+<li>K&ouml;hler S, Gargano M, Matentzoglu N, et al. The Human Phenotype Ontology in 2021. <i>Nucleic Acids Res</i> 49(D1):D1207&ndash;D1217, 2021. doi:10.1093/nar/gkaa1043.</li>
+<li>Jumper J, Evans R, Pritzel A, et al. Highly accurate protein structure prediction with AlphaFold. <i>Nature</i> 596:583&ndash;589, 2021. doi:10.1038/s41586-021-03819-2.</li>
+<li>Varadi M, Anyango S, Deshpande M, et al. AlphaFold Protein Structure Database. <i>Nucleic Acids Res</i> 50(D1):D439&ndash;D444, 2022. doi:10.1093/nar/gkab1061.</li>
+<li>Cheng J, Novati G, Pan J, et al. Accurate proteome-wide missense variant effect prediction with AlphaMissense. <i>Science</i> 381:eadg7492, 2023. doi:10.1126/science.adg7492.</li>
+<li>Sivley RM, Dou X, Meiler J, et al. Comprehensive analysis of constraint on the spatial distribution of missense variants in human protein structures. <i>Am J Hum Genet</i> 102(3):415&ndash;426, 2018. doi:10.1016/j.ajhg.2018.01.017.</li>
+<li>Badonyi M, Marsh JA. Prevalence of loss-of-function, gain-of-function and dominant-negative mechanisms across genetic disease phenotypes. <i>Nat Commun</i> 16:8392, 2025. doi:10.1038/s41467-025-63234-3.</li>
+<li>Br&uuml;nger T, Ivaniuk A, P&eacute;rez-Palma E, et al. Conserved missense variant pathogenicity and correlated phenotypes across paralogous genes. <i>Genome Biol</i> 26:197, 2025. doi:10.1186/s13059-025-03663-x.</li>
+<li>Hurlbert SH. Pseudoreplication and the design of ecological field experiments. <i>Ecol Monogr</i> 54(2):187&ndash;211, 1984. doi:10.2307/1942661.</li>
+<li>Kish L. <i>Survey Sampling</i>. New York: Wiley, 1965.</li>
+<li>Donner A, Klar N. <i>Design and Analysis of Cluster Randomization Trials in Health Research</i>. London: Arnold, 2000.</li>
+<li>McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. <i>Genome Biol</i> 17:122, 2016. doi:10.1186/s13059-016-0974-4.</li>
+<li>Morales J, Pujar S, Loveland JE, et al. A joint NCBI and EMBL-EBI transcript set for clinical genomics and research. <i>Nature</i> 604:310&ndash;315, 2022. doi:10.1038/s41586-022-04558-8.</li>
+<li>Tunyasuvunakool K, Adler J, Wu Z, et al. Highly accurate protein structure prediction for the human proteome. <i>Nature</i> 596:590&ndash;596, 2021. doi:10.1038/s41586-021-03828-1.</li>
+<li>Chennubhotla C, Bahar I. Markov propagation of allosteric effects in biomolecular systems: application to GroEL&ndash;GroES. <i>Mol Syst Biol</i> 2:36, 2006. doi:10.1038/msb4100075.</li>
+<li>Tong H, Faloutsos C, Pan J-Y. Fast random walk with restart and its applications. <i>Proc. IEEE ICDM</i>, 613&ndash;622, 2006. doi:10.1109/ICDM.2006.70.</li>
+<li>Cowen L, Ideker T, Raphael BJ, Sharan R. Network propagation: a universal amplifier of genetic associations. <i>Nat Rev Genet</i> 18:551&ndash;562, 2017. doi:10.1038/nrg.2017.38.</li>
+<li>Phipson B, Smyth GK. Permutation P-values should never be zero: calculating exact P-values when permutations are randomly drawn. <i>Stat Appl Genet Mol Biol</i> 9:39, 2010. doi:10.2202/1544-6115.1585.</li>
+<li>Benjamini Y, Hochberg Y. Controlling the false discovery rate: a practical and powerful approach to multiple testing. <i>J R Stat Soc B</i> 57(1):289&ndash;300, 1995.</li>
+<li>Storey JD, Tibshirani R. Statistical significance for genomewide studies. <i>Proc Natl Acad Sci USA</i> 100(16):9440&ndash;9445, 2003. doi:10.1073/pnas.1530509100.</li>
+<li>Shackleton S, Lloyd DJ, Jackson SN, et al. LMNA, encoding lamin A/C, is mutated in partial lipodystrophy. <i>Nat Genet</i> 24:153&ndash;156, 2000. doi:10.1038/72807.</li>
+<li>Basson CT, Huang T, Lin RC, et al. Different TBX5 interactions in heart and limb defined by Holt&ndash;Oram syndrome mutations. <i>Proc Natl Acad Sci USA</i> 96(6):2919&ndash;2924, 1999. doi:10.1073/pnas.96.6.2919.</li>
+<li>Van de Vondel L, De Winter J, Beijer D, et al. De novo and dominantly inherited SPTAN1 variants cause spastic paraplegia and cerebellar ataxia. <i>Mov Disord</i> 37(6):1175&ndash;1186, 2022. doi:10.1002/mds.28959.</li>
+<li>Rabin R, Radmanesh A, Glass IA, et al. Genotype&ndash;phenotype correlation at codon 1740 of SETD2. <i>Am J Med Genet A</i> 182(9):2037&ndash;2048, 2020. doi:10.1002/ajmg.a.61724.</li>
+<li>Boutboul D, Kuehn HS, Van de Wyngaert Z, et al. Dominant-negative IKZF1 mutations cause a T, B, and myeloid cell combined immunodeficiency. <i>J Clin Invest</i> 128(7):3071&ndash;3087, 2018. doi:10.1172/JCI98164.</li>
+<li>Xian J, Thalwitzer KM, McKee J, et al. Assessing the landscape of STXBP1-related disorders in 534 individuals. <i>Brain</i> 145(5):1668&ndash;1683, 2022. doi:10.1093/brain/awab327.</li>
+<li>Sirmaci A, Spiliopoulos M, Brancati F, et al. Mutations in ANKRD11 cause KBG syndrome, characterized by intellectual disability, skeletal malformations, and macrodontia. <i>Am J Hum Genet</i> 89(2):289&ndash;294, 2011. doi:10.1016/j.ajhg.2011.06.007.</li>
+<li>Low K, Ashraf T, Canham N, et al. Clinical and genetic aspects of KBG syndrome. <i>Am J Med Genet A</i> 170(11):2835&ndash;2846, 2016. doi:10.1002/ajmg.a.37842.</li>
+<li>Martinez-Cayuelas E, Blanco-Kelly F, Lopez-Grondona F, et al. Clinical description, molecular delineation and genotype&ndash;phenotype correlation in 340 patients with KBG syndrome: addition of 67 new patients. <i>J Med Genet</i> 60(7):644&ndash;654, 2023. doi:10.1136/jmg-2022-108632.</li>
+<li>Lindeboom RGH, Supek F, Lehner B. The rules and impact of nonsense-mediated mRNA decay in human cancers. <i>Nat Genet</i> 48:1112&ndash;1118, 2016. doi:10.1038/ng.3664.</li>
+<li>Walz K, Cohen D, Neilsen PM, et al. Characterization of ANKRD11 mutations in humans and mice related to KBG syndrome. <i>Hum Genet</i> 134(2):181&ndash;190, 2015. doi:10.1007/s00439-014-1509-2.</li>
+<li>Firth D. Bias reduction of maximum likelihood estimates. <i>Biometrika</i> 80(1):27&ndash;38, 1993. doi:10.1093/biomet/80.1.27.</li>
+<li>de Boer E, Ockeloen CW, Kampen RA, et al. Missense variants in ANKRD11 cause KBG syndrome by impairment of stability or transcriptional activity of the encoded protein. <i>Genet Med</i> 24(10):2051&ndash;2064, 2022. doi:10.1016/j.gim.2022.06.007.</li>
+<li>Ruff KM, Pappu RV. AlphaFold and implications for intrinsically disordered proteins. <i>J Mol Biol</i> 433(20):167208, 2021. doi:10.1016/j.jmb.2021.167208.</li>
+<li>Hubrich D, Alvarado Valverde J, Lee CY, et al. Variant characterization in the intrinsically disordered human proteome. <i>Nat Struct Mol Biol</i> 33(8):1183&ndash;1193, 2026. doi:10.1038/s41594-026-01846-z.</li>
+</ol>
+</div>
+</body>
+</html>

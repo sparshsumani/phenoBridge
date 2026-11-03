@@ -122,3 +122,11 @@ the gene's P fraction alone gives about 0.92 (Arnoult 2026).
   - TEST variants last evaluated before vs after 2024-09-01;
   - genes with a ClinGen VCEP PM1 hotspot rule (PTEN, TP53, HRAS/KRAS/RAF1/PTPN11/SOS1
     and other RASopathy genes, MYH7, MYBPC3, CDH1, RUNX1) vs the rest.
+
+## Amendment 2 (after the data were built, before any model was fit or scored)
+- **Strict temporal sensitivity.** About 18% of dated TEST variants were last evaluated
+  before 2023-01-31 (submitted later). A sensitivity analysis keeps only TEST variants
+  with `last_evaluated_2026_after_cutoff`.
+- **Stratifications** promised in Amendment 1, now implemented as named analyses:
+  - evaluated before vs after 2024-09-01;
+  - VCEP-PM1 genes vs other genes.

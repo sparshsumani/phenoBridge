@@ -28,6 +28,8 @@ ALPHAS = (0.15, 0.3, 0.5)
 SIGMAS = (4.0, 6.0, 8.0, 12.0)
 LAMBDAS = (2.0, 5.0, 10.0, 20.0)
 DEFAULT = {"rwr": 0.3, "r3d": 6.0, "w1d": 5.0}
+VCEP_PM1 = ["PTEN", "TP53", "HRAS", "KRAS", "NRAS", "RAF1", "PTPN11", "SOS1", "SOS2", "BRAF", "MAP2K1", "MAP2K2",
+            "RIT1", "SHOC2", "CBL", "LZTR1", "RRAS2", "MYH7", "MYBPC3", "CDH1", "RUNX1"]
 
 
 # ------------------------------------------------------------------ data
@@ -351,7 +353,12 @@ def main():
     fixed = dict(best); fixed.update(DEFAULT)
     for tag, kw in (("ge2_stars", dict(test_filter=lambda t: t.stars_2026 >= 2)),
                     ("prior_vus_only", dict(test_filter=lambda t: t.status_2023 == "VUS")),
-                    ("genes_ge20_labels", dict(min_lab=20))):
+                    ("genes_ge20_labels", dict(min_lab=20)),
+                    ("strict_temporal", dict(test_filter=lambda t: t.last_evaluated_2026_after_cutoff.fillna(False).astype(bool))),
+                    ("evaluated_after_2024_09", dict(test_filter=lambda t: pd.to_datetime(t.last_evaluated_2026, errors="coerce") >= "2024-09-01")),
+                    ("evaluated_before_2024_09", dict(test_filter=lambda t: pd.to_datetime(t.last_evaluated_2026, errors="coerce") < "2024-09-01")),
+                    ("non_vcep_pm1_genes", dict(test_filter=lambda t: ~t.gene.isin(VCEP_PM1))),
+                    ("vcep_pm1_genes", dict(test_filter=lambda t: t.gene.isin(VCEP_PM1)))):
         M, B, _, _ = evaluate(v, F, best, sb, rng, tag, **kw); allm.append(M); allb.append(B)
     M, B, _, _ = evaluate(v, F, fixed, sb, rng, "fixed_params"); allm.append(M); allb.append(B)
     Fs = build_features(v, include_self=True)

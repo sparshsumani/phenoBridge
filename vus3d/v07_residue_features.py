@@ -125,7 +125,7 @@ def main():
             ft.to_parquet(METADIR / f"{acc}.features.parquet", index=False)
             df.to_parquet(RFDIR / f"{acc}.parquet", index=False)
             e.to_parquet(GRAPHDIR / f"{acc}.parquet", index=False)
-            (METADIR / f"{acc}.json").write_text(json.dumps(meta, default=str))
+            tmp = METADIR / f"{acc}.json.tmp"; tmp.write_text(json.dumps(meta, default=str)); tmp.rename(METADIR / f"{acc}.json")
             print(f"[{k + 1}/{len(jobs)} {time.time() - t0:.0f}s] {meta['gene']:10s} {acc} L={meta['L']} edges={meta['n_edges']} am={meta['am_mapping']} {meta['seconds']:.1f}s", flush=True)
     th.shutdown()
     metas = [json.loads((METADIR / f"{a}.json").read_text()) for a in sel.uniprot]

@@ -4,6 +4,10 @@ isoform and the AlphaFold v6 model numbering (allelic/a04 logic; a04's load_mane
 vep_pick, multigene s03 run_vep (cache/vep_region) and s06 align_map / af_sequence are reused).
 
   * protein change from the ClinVar Name of the label-defining release (train: 2023-01, test: 2026-11)
+  * MANE Select row (v1.5) by the Name gene symbol, accepted only if its HGNC id is among the record's
+    ClinVar HGNC_ID(s); else by ClinVar HGNC_ID.  The gene key used everywhere downstream ('gene') is the
+    MANE symbol: Name symbols differ between releases for renamed genes (e.g. SPATA5 -> AFG2A), which
+    would otherwise split one protein into two genes.  The Name symbol is kept as 'clinvar_gene'.
   * 'clinvar_tx_is_mane': Name transcript (version ignored) == MANE RefSeq_nuc and the ref aa equals the
     MANE protein residue -> MANE position = ClinVar position
   * else 'vep_mane': Ensembl VEP REST GRCh38 on the VCF coordinates; MANE Select consequence of the same
@@ -40,13 +44,19 @@ def main():
     seqs = dict(zip(mane.RefSeq_prot, mane.mane_protein_seq))
     rows = []
     for r in s.itertuples():
+        hg = [h for h in str(r.clinvar_hgnc_ids).split(";") if h.startswith("HGNC:")]
         mr = by_sym.loc[r.name_gene] if r.name_gene in by_sym.index else None
         how = "symbol"
+        if mr is not None and hg and mr.HGNC_ID not in hg:
+            mr, how = None, None          # symbol now used by another gene: fall back to ClinVar HGNC ids
+            log["symbol_match_rejected_hgnc_mismatch"] += 1
         if mr is None:
-            for h in str(r.clinvar_hgnc_ids).split(";"):
+            for h in hg:
                 if h in by_hgnc.index:
                     mr = by_hgnc.loc[h]; how = "hgnc"; break
-        d = dict(variation_id=r.variation_id, gene=r.name_gene, mane_lookup=how if mr is not None else None)
+        # gene key = MANE / HGNC symbol (ClinVar Name symbols differ between releases for renamed genes)
+        d = dict(variation_id=r.variation_id, clinvar_gene=r.name_gene, gene=mr.symbol if mr is not None else r.name_gene,
+                 mane_lookup=how if mr is not None else None)
         if mr is None:
             d["map_status"] = "no_mane_select_for_gene"; rows.append(d); continue
         d.update(gene_mane=mr.symbol, hgnc_id=mr.HGNC_ID, mane_nm=mr.RefSeq_nuc, mane_np=mr.RefSeq_prot,
@@ -63,6 +73,8 @@ def main():
     mp = s[["variation_id", "set", "chrom", "pos_vcf", "ref_vcf", "alt_vcf", "name_tx", "clinvar_protein_pos", "ref_aa", "alt_aa",
             "hgvs_p", "hgvs_c"]].merge(pd.DataFrame(rows), on="variation_id")
     assert len(mp) == len(s)
+    log["clinvar_name_symbol_ne_mane_symbol"] = int((mp.clinvar_gene != mp.gene).sum())
+    log["mane_lookup"] = {k: int(v) for k, v in mp.mane_lookup.value_counts().items()}
     log.update({f"pre_vep_{k}": int(v) for k, v in mp.map_status.value_counts().items()})
     log.update({f"needs_vep_{k}": int(v) for k, v in mp.needs_vep_reason.value_counts().items()})
 

@@ -23,7 +23,7 @@ def main():
     meta = pd.read_parquet(INTER / "structure_meta.parquet")
     feat = set(meta.uniprot)
     out = pd.DataFrame(dict(
-        variation_id=u.variation_id, allele_id=u.allele_id, gene=u.gene, hgnc_id=u.hgnc_id, uniprot=u.uniprot,
+        variation_id=u.variation_id, allele_id=u.allele_id, gene=u.gene, clinvar_gene=u.clinvar_gene, hgnc_id=u.hgnc_id, uniprot=u.uniprot,
         mane_np=u.mane_np, mane_enst=u.mane_enst, protein_pos=u.mane_pos.astype(int), af_pos=u.af_pos.astype(int),
         uniprot_pos=u.uniprot_pos.astype("Int64"), ref=u.mane_ref, alt=u.mane_alt))
     out["hgvs_p"] = ["p." + AA1TO3[r] + str(int(p)) + AA1TO3[a] for r, p, a in zip(out.ref, out.protein_pos, out.alt)]
@@ -73,7 +73,7 @@ def main():
 
     g["has_residue_features"] = g.uniprot.isin(feat)
     mcols = ["L", "mean_plddt", "frac_plddt_lt50", "frac_plddt_ge70", "q_core", "q_semi", "G_all_edges", "n_edges", "am_accession", "am_mapping", "source"]
-    mi = meta.set_index("uniprot")
+    mi = meta.drop_duplicates("uniprot").set_index("uniprot")
     for c in mcols:
         if c in mi:
             g["struct_" + c] = g.uniprot.map(mi[c])

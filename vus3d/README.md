@@ -27,7 +27,7 @@ Isolated mode (`-I`): the scripts read downloaded files; code lives here, downlo
 | 4 | `v04_protein_mapping.py` | MANE / VEP / UniProt / AlphaFold mapping, ref-aa check, AF model extraction | 6 min (+11 min cold: VEP + tar) |
 | 5 | `v05_genes.py` | per-gene counts, evaluable thresholds, same-residue flags | 10 s |
 | 6 | `v06_alphamissense.py` | awk stream of AlphaMissense: exact rows + per-residue summaries | 10 min |
-| 7 | `v07_residue_features.py` | contact graphs + residue features for feature proteins (4 processes, resumable) | ~45 min |
+| 7 | `v07_residue_features.py` | contact graphs + residue features for 3,192 feature proteins (4 processes, resumable) | ~25 min |
 | 8 | `v08_assemble.py` | `variants.parquet`, `genes.parquet`, `counts.json` | 1 min |
 | 9 | `v09_sanity.py` | sanity checks, ClinVar VCV spot-check, RWR verification → `counts.json["sanity"]` | 1 min |
 
@@ -61,8 +61,10 @@ Isolated mode (`-I`): the scripts read downloaded files; code lives here, downlo
   (VEP for non-MANE Names); only single-fragment AlphaFold v6 models; ref aa must match the model.
 
 ## Known limitations
-* ~17 % of TEST variants have a 2026 aggregate LastEvaluated on/before 2023-01-31 (classification
+* ~17.6 % of dated TEST variants have a 2026 aggregate LastEvaluated on/before 2023-01-31 (classification
   existed before the cutoff but was submitted to ClinVar later, or a VUS-era date carried forward);
   the column `last_evaluated_2026_after_cutoff` allows a stricter test set.
 * TEST is dominated by prior-ABSENT benign variants (bulk lab submissions after 2023).
-* Fragmented AlphaFold proteins (>2,700 aa; 210 genes incl. TTN, RYR1, FBN1) are excluded.
+* Fragmented AlphaFold proteins (>2,700 aa; 208 genes incl. TTN, RYR1, FBN1) are excluded.
+* Gene key = MANE symbol (ClinVar Name symbols change between releases for renamed genes). Identical-protein
+  paralogs (HBA1/HBA2, H3-3A/H3-3B, …) remain separate genes sharing one UniProt structure file.

@@ -101,20 +101,26 @@ def protein_features(prot, labs, queries, include_self=False):
     q_idx = np.array([prot.idx[int(q)] for q in queries])
     selfP, selfB = P[q_idx].astype(float), B[q_idx].astype(float)
     out = {}
+    sw = {}
     for a in ALPHAS:
         mP, dg = prot.rwr_mass(q_idx, P, a)
         mB, _ = prot.rwr_mass(q_idx, B, a)
-        if not include_self:
-            mP = mP - dg * selfP; mB = mB - dg * selfB
-        out[f"rwr{a}_P"], out[f"rwr{a}_B"] = mP, mB
+        out[f"rwr{a}_P"], out[f"rwr{a}_B"] = mP - dg * selfP, mB - dg * selfB
+        sw[f"rwr{a}"] = dg
     for name, params, fn in (("r3d", SIGMAS, prot.r3d_w), ("w1d", LAMBDAS, prot.w1d)):
         for s in params:
             w = fn(q_idx, s)
-            if not include_self:
-                w[np.arange(len(q_idx)), q_idx] = 0.0
+            sw[f"{name}{s}"] = w[np.arange(len(q_idx)), q_idx].copy()
+            w[np.arange(len(q_idx)), q_idx] = 0.0
             out[f"{name}{s}_P"], out[f"{name}{s}_B"] = w @ P, w @ B
-    F = pd.DataFrame(out, index=queries)
-    return F.clip(lower=0)
+    F = pd.DataFrame(out, index=queries).clip(lower=0)
+    if include_self:
+        # self weight and own-residue label; added per variant in build_features so that a
+        # TRAIN variant never sees its own label
+        for k, x in sw.items():
+            F[f"{k}_sw"] = x
+        F["self_P"], F["self_B"] = selfP, selfB
+    return F
 
 
 def build_features(v, include_self=False):
@@ -137,14 +143,27 @@ def build_features(v, include_self=False):
         # gene prior, leave-own-residue-out for every query residue
         nP, nB = int((lab_u.lab == "P").sum()), int((lab_u.lab == "B").sum())
         own = lab_u.set_index("pos").lab.reindex(qs)
-        oP = (own == "P").astype(int).values if not include_self else 0
-        oB = (own == "B").astype(int).values if not include_self else 0
-        F["n_lab_res"] = nP + nB - (oP + oB if not include_self else 0)
+        oP = (own == "P").astype(int).values
+        oB = (own == "B").astype(int).values
+        F["n_lab_res"] = nP + nB - (oP + oB)
         pr = (nP - oP + 1) / (nP + nB - oP - oB + 2)
         F["gene_prior"] = np.log(pr / (1 - pr))
         rows.append(F.reset_index(drop=True))
     F = pd.concat(rows, ignore_index=True)
-    return v.merge(F, on=["uniprot", "pos"], how="inner")
+    out = v.merge(F, on=["uniprot", "pos"], how="inner")
+    if include_self:
+        # Same-residue evidence (PS1/PM5-like). TEST variants use every TRAIN label at their
+        # residue; a TRAIN variant uses its residue's label only when other TRAIN variants
+        # at that residue exist (their labels agree, since mixed residues are dropped).
+        ntr = tr.groupby(["uniprot", "pos"]).size().rename("n_tr_res").reset_index()
+        out = out.merge(ntr, on=["uniprot", "pos"], how="left")
+        ok = np.where(out.set == "train", out.n_tr_res.fillna(0) >= 2, True).astype(float)
+        for c in [c for c in out.columns if c.endswith("_sw")]:
+            k = c[:-3]
+            out[f"{k}_P"] += out[c] * out.self_P * ok
+            out[f"{k}_B"] += out[c] * out.self_B * ok
+        out = out.drop(columns=[c for c in out.columns if c.endswith("_sw")] + ["n_tr_res"])
+    return out
 
 
 # ------------------------------------------------------------------ models
@@ -247,7 +266,7 @@ def boot_gene(te, preds, pairs, nboot, rng, metric="strat"):
         p = 2 * min((d <= 0).mean(), (d >= 0).mean())
         res.append(dict(metric=metric, contrast=f"{a} - {b}", delta_auc=obs, ci_lo=np.percentile(d, 2.5),
                         ci_hi=np.percentile(d, 97.5), ci90_lo=np.percentile(d, 5), ci90_hi=np.percentile(d, 95),
-                        p_boot=max(p, 1 / len(d)), n_boot=len(d)))
+                        p_boot=min(1.0, max(p, 1 / len(d))), n_boot=len(d)))
     return pd.DataFrame(res)
 
 

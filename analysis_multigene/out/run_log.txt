@@ -1,0 +1,90 @@
+               analysis           feature  n_tests  n_genes  n_p05  expected_p05  perm_mean_p05   perm_p  n_q10  n_genes_q10      pi1  n_permtest_p05  n_permtest_q10
+                primary        S1_logSemi      474       44     88         23.70        70.6040 0.115942     55           17 0.223629              29               0
+                primary          S2_pLDDT      474       44     87         23.70        70.8730 0.134933     27           14 0.253165              28               0
+                primary        S3_logCore      474       44     60         23.70        70.7595 0.792104     18            7 0.147679              17               0
+                primary         S4_degree      474       44     71         23.70        71.2480 0.481759     23            7 0.219409              28               3
+                primary  S5_AlphaMissense      473       44     95         23.65        70.7020 0.057971     58           17 0.188161              32               0
+                primary    S6a_nbr1_pLDDT      474       44     76         23.70        70.6850 0.348826     17            8 0.270042              24               0
+                primary    S6b_nbr2_pLDDT      474       44     59         23.70        70.6300 0.815592     21           10 0.185654              17               0
+                primary      S7_in_domain      233       26     15         11.65        17.2700 0.703648      6            2 0.000000               5               0
+                primary    S8_logDisorder      474       44     41         23.70        70.3910 0.998501     11            6 0.109705              15               0
+                primary        P0_rel_pos      474       44    103         23.70        70.7670 0.011994     61           16 0.291139              41               8
+primary_individual_perm        S1_logSemi      474       44     88         23.70        22.2130 0.000500     55           17 0.223629              88              64
+primary_individual_perm          S2_pLDDT      474       44     87         23.70        22.2400 0.000500     27           14 0.253165              89              33
+primary_individual_perm        S3_logCore      474       44     60         23.70        22.1605 0.000500     18            7 0.147679              62              29
+primary_individual_perm         S4_degree      474       44     71         23.70        22.3335 0.000500     23            7 0.219409              73              26
+primary_individual_perm  S5_AlphaMissense      473       44     95         23.65        22.2100 0.000500     58           17 0.188161              96              69
+primary_individual_perm    S6a_nbr1_pLDDT      474       44     76         23.70        22.1265 0.000500     17            8 0.270042              76              26
+primary_individual_perm    S6b_nbr2_pLDDT      474       44     59         23.70        22.2225 0.000500     21           10 0.185654              62              25
+primary_individual_perm      S7_in_domain      233       26     15         11.65         4.7525 0.001000      6            2 0.000000              20               9
+primary_individual_perm    S8_logDisorder      474       44     41         23.70        22.1460 0.011494     11            6 0.109705              44              12
+primary_individual_perm        P0_rel_pos      474       44    103         23.70        22.3790 0.000500     61           16 0.291139             105              65
+   sens_spline_position        S1_logSemi      474       44     76         23.70        71.7075 0.399002     27           10 0.160338              28               0
+   sens_spline_position          S2_pLDDT      474       44     64         23.70        72.4600 0.748130     24            8 0.164557              21               0
+   sens_spline_position        S3_logCore      474       44     75         23.70        70.7725 0.384040     32           10 0.215190              25               0
+   sens_spline_position         S4_degree      474       44     58         23.70        71.7950 0.852868     15            4 0.210970              26               0
+   sens_spline_position  S5_AlphaMissense      473       44     84         23.65        70.7600 0.187032     27           12 0.260042              17               0
+   sens_spline_position    S6a_nbr1_pLDDT      474       44     60         23.70        72.2225 0.822943     22            9 0.164557              18               0
+   sens_spline_position    S6b_nbr2_pLDDT      474       44     59         23.70        72.0375 0.852868     28           10 0.219409              24               0
+   sens_spline_position      S7_in_domain      233       26     15         11.65        17.3550 0.725686      6            2 0.000000               5               0
+   sens_spline_position    S8_logDisorder      474       44     47         23.70        71.7875 0.987531     10            5 0.118143              22               0
+   sens_spline_position        P0_rel_pos      474       44    103         23.70        70.8175 0.022444     61           16 0.291139              43               0
+                primary B_missense_vs_PTC      545       33     71         27.25        43.9095 0.010995     32           15 0.000000              55              21
+primary_individual_perm B_missense_vs_PTC      545       33     71         27.25        11.7480 0.000500     32           15 0.000000              98              47
+          sens_explicit        S1_logSemi      380       42     58         19.00        48.4000 0.099751     30           14 0.136842              28               0
+          sens_explicit          S2_pLDDT      380       42     54         19.00        49.3075 0.256858     22           14 0.163158              28               0
+          sens_explicit        S3_logCore      380       42     40         19.00        48.5775 0.930175      8            5 0.105263              16               0
+          sens_explicit         S4_degree      380       42     44         19.00        49.0475 0.812968      9            4 0.168421              20               0
+          sens_explicit  S5_AlphaMissense      379       42     57         18.95        48.6450 0.102244     16           11 0.076517              24               0
+          sens_explicit    S6a_nbr1_pLDDT      380       42     52         19.00        49.1025 0.376559     15            8 0.189474              20               0
+          sens_explicit    S6b_nbr2_pLDDT      380       42     53         19.00        49.5200 0.334165     19           10 0.173684              19               0
+          sens_explicit      S7_in_domain      194       24     11          9.70        11.7175 0.620948      2            2 0.000000               2               0
+          sens_explicit    S8_logDisorder      380       42     36         19.00        49.1675 0.985037     11            6 0.126316              16               0
+          sens_explicit        P0_rel_pos      380       42     67         19.00        48.7075 0.004988     26            9 0.205263              26               0
+          sens_alpha015        S1_logSemi      474       44     93         23.70        70.1475 0.059850     63           19 0.172996              26               0
+          sens_alpha015          S2_pLDDT      474       44     87         23.70        70.9025 0.139651     27           14 0.253165              29               0
+          sens_alpha015        S3_logCore      474       44     59         23.70        71.2025 0.850374     10            5 0.168776              23               0
+          sens_alpha015         S4_degree      474       44     71         23.70        71.3225 0.496259     23            7 0.219409              32               0
+          sens_alpha015  S5_AlphaMissense      473       44     95         23.65        70.6125 0.042394     58           17 0.188161              33               0
+          sens_alpha015    S6a_nbr1_pLDDT      474       44     76         23.70        70.8550 0.366584     17            8 0.270042              22               0
+          sens_alpha015    S6b_nbr2_pLDDT      474       44     59         23.70        71.2150 0.830424     21           10 0.185654              17               0
+          sens_alpha015      S7_in_domain      233       26     15         11.65        17.3850 0.723192      6            2 0.000000               5               0
+          sens_alpha015    S8_logDisorder      474       44     52         23.70        70.5275 0.932668     14            8 0.164557              16               0
+          sens_alpha015        P0_rel_pos      474       44    103         23.70        70.7875 0.017456     61           16 0.291139              42               0
+           sens_alpha05        S1_logSemi      474       44    101         23.70        71.1150 0.009975     57           19 0.265823              27               0
+           sens_alpha05          S2_pLDDT      474       44     87         23.70        70.1900 0.142145     27           14 0.253165              27               0
+           sens_alpha05        S3_logCore      474       44     69         23.70        70.3775 0.526185     21            8 0.189873              20               0
+           sens_alpha05         S4_degree      474       44     71         23.70        71.1825 0.478803     23            7 0.219409              27               0
+           sens_alpha05  S5_AlphaMissense      473       44     95         23.65        70.6600 0.054863     58           17 0.188161              36               0
+           sens_alpha05    S6a_nbr1_pLDDT      474       44     76         23.70        70.5100 0.336658     17            8 0.270042              21               0
+           sens_alpha05    S6b_nbr2_pLDDT      474       44     59         23.70        70.5175 0.825436     21           10 0.185654              15               0
+           sens_alpha05      S7_in_domain      233       26     15         11.65        17.4150 0.693267      6            2 0.000000               5               0
+           sens_alpha05    S8_logDisorder      474       44     44         23.70        70.0225 0.992519     13            7 0.113924              19               0
+           sens_alpha05        P0_rel_pos      474       44    103         23.70        70.2025 0.007481     61           16 0.291139              40               0
+       sens_meanpLDDT50        S1_logSemi      443       41     83         22.15        63.9825 0.109726     58           16 0.218962              27               0
+       sens_meanpLDDT50          S2_pLDDT      443       41     79         22.15        64.1250 0.134663     25           13 0.237020              23               0
+       sens_meanpLDDT50        S3_logCore      443       41     55         22.15        63.9225 0.763092     16            6 0.124153              17               0
+       sens_meanpLDDT50         S4_degree      443       41     70         22.15        64.0575 0.329177     28            9 0.214447              32               0
+       sens_meanpLDDT50  S5_AlphaMissense      442       41     86         22.10        64.2725 0.057357     55           16 0.171946              33               0
+       sens_meanpLDDT50    S6a_nbr1_pLDDT      443       41     65         22.15        64.3250 0.476309     15            6 0.250564              19               0
+       sens_meanpLDDT50    S6b_nbr2_pLDDT      443       41     48         22.15        64.1650 0.910224     18            8 0.160271              14               0
+       sens_meanpLDDT50      S7_in_domain      209       24     14         10.45        14.6150 0.578554      9            3 0.000000               5               0
+       sens_meanpLDDT50    S8_logDisorder      443       41     39         22.15        63.6550 0.992519      9            5 0.137698              16               0
+       sens_meanpLDDT50        P0_rel_pos      443       41     98         22.15        63.4500 0.009975     60           15 0.291196              42               0
+    sens_biallelic_mean        S1_logSemi        2        1      0          0.10         0.1525 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean          S2_pLDDT        2        1      0          0.10         0.1075 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean        S3_logCore        2        1      0          0.10         0.1125 1.000000      0            0 1.000000               0               0
+    sens_biallelic_mean         S4_degree        2        1      1          0.10         0.1375 0.134663      2            1 1.000000               0               0
+    sens_biallelic_mean  S5_AlphaMissense        2        1      0          0.10         0.1400 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean    S6a_nbr1_pLDDT        2        1      0          0.10         0.1300 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean    S6b_nbr2_pLDDT        2        1      0          0.10         0.1275 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean      S7_in_domain        2        1      0          0.10         0.0150 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean    S8_logDisorder        2        1      0          0.10         0.1400 1.000000      0            0 0.000000               0               0
+    sens_biallelic_mean        P0_rel_pos        2        1      0          0.10         0.1475 1.000000      0            0 0.000000               0               0
+{
+ "primary_missense_individuals": 2053,
+ "primary_distinct_missense_variants": 884,
+ "primary_genes_with_tests": 44,
+ "primary_terms_tested_S1": 474,
+ "B_individuals": 3708
+}

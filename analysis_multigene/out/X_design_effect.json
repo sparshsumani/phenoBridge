@@ -1,0 +1,67 @@
+{
+ "tests": 474,
+ "median_icc": 0.24820393590180195,
+ "frac_icc_gt_0p1": 0.609704641350211,
+ "median_de": 1.3746657754010694,
+ "mean_de": 2.3675663961989475,
+ "max_de": 38.59649122807018,
+ "pooled_pred_p05": 73.33899739200555,
+ "pooled_perm_variant_mean_p05": 70.604,
+ "spearman_gene_de_vs_variant_null_rate": [
+  0.905841322041693,
+  2.893567530880126e-17
+ ],
+ "spearman_gene_pred_vs_variant_null_rate": [
+  0.9178975849673724,
+  1.8361920602109703e-18
+ ],
+ "recurrent_variants": 261,
+ "recurrent_variants_one_pmid": 214,
+ "individuals_in_recurrent": 1266,
+ "same_variant_pairs": 7459,
+ "same_variant_pairs_same_pmid": 5515,
+ "frac_same_variant_pairs_same_pmid": 0.7393752513741788,
+ "n_pmids_total": 212,
+ "top_variants": [
+  {
+   "vkey": "LMNA:p.Arg482Trp",
+   "carriers": 62,
+   "pmids": 3
+  },
+  {
+   "vkey": "RAB32:p.Ser71Arg",
+   "carriers": 38,
+   "pmids": 2
+  },
+  {
+   "vkey": "LMNA:p.Arg482Gln",
+   "carriers": 36,
+   "pmids": 1
+  },
+  {
+   "vkey": "LIM2:p.Arg130Cys",
+   "carriers": 27,
+   "pmids": 3
+  },
+  {
+   "vkey": "RAB3A:p.Arg83Trp",
+   "carriers": 25,
+   "pmids": 3
+  },
+  {
+   "vkey": "TGFB3:p.Arg300Trp",
+   "carriers": 22,
+   "pmids": 2
+  },
+  {
+   "vkey": "SMAD3:p.Arg287Trp",
+   "carriers": 22,
+   "pmids": 1
+  },
+  {
+   "vkey": "SPTAN1:p.Arg19Trp",
+   "carriers": 21,
+   "pmids": 2
+  }
+ ]
+}

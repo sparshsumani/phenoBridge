@@ -1,0 +1,160 @@
+{
+ "recurrence": {
+  "individuals": 1675,
+  "distinct_variants": 670,
+  "variants_with_1_carrier": 409,
+  "individuals_sharing_variant": 1266,
+  "frac_individuals_sharing": 0.7558208955223881,
+  "max_carriers": 62,
+  "max_variant": "LMNA:p.Arg482Trp",
+  "top10": [
+   [
+    "LMNA:p.Arg482Trp",
+    62
+   ],
+   [
+    "RAB32:p.Ser71Arg",
+    38
+   ],
+   [
+    "LMNA:p.Arg482Gln",
+    36
+   ],
+   [
+    "LIM2:p.Arg130Cys",
+    27
+   ],
+   [
+    "RAB3A:p.Arg83Trp",
+    25
+   ],
+   [
+    "TGFB3:p.Arg300Trp",
+    22
+   ],
+   [
+    "SMAD3:p.Arg287Trp",
+    22
+   ],
+   [
+    "SPTAN1:p.Arg19Trp",
+    21
+   ],
+   [
+    "TBX5:p.Arg237Gln",
+    21
+   ],
+   [
+    "TBX5:p.Gly80Arg",
+    19
+   ]
+  ]
+ },
+ "per_gene_calibration": {
+  "genes": 44,
+  "median_null_rate_individual_S1": 0.04682857142857143,
+  "median_null_rate_variant_S1": 0.0964,
+  "genes_variant_null_rate_gt_0p10": 21,
+  "spearman_rho_cpv_vs_variant_null_rate": 0.16640823272232877,
+  "spearman_p": 0.28032064911646515
+ },
+ "alpha05_spline": [
+  {
+   "feature": "S1_logSemi",
+   "n_tests": 474,
+   "n_p05": 76,
+   "perm_mean_p05": 70.398,
+   "perm_p": 0.32667332667332666
+  },
+  {
+   "feature": "S5_AlphaMissense",
+   "n_tests": 473,
+   "n_p05": 84,
+   "perm_mean_p05": 71.708,
+   "perm_p": 0.2177822177822178
+  },
+  {
+   "feature": "P0_rel_pos",
+   "n_tests": 474,
+   "n_p05": 103,
+   "perm_mean_p05": 70.726,
+   "perm_p": 0.00999000999000999
+  }
+ ],
+ "controls_missense_n_variants": [
+  {
+   "gene": "ANKRD11",
+   "n": 7,
+   "n_variants": 6
+  },
+  {
+   "gene": "EHMT1",
+   "n": 28,
+   "n_variants": 18
+  },
+  {
+   "gene": "IKZF1",
+   "n": 56,
+   "n_variants": 17
+  },
+  {
+   "gene": "LMNA",
+   "n": 218,
+   "n_variants": 45
+  },
+  {
+   "gene": "POGZ",
+   "n": 10,
+   "n_variants": 9
+  },
+  {
+   "gene": "SETD2",
+   "n": 27,
+   "n_variants": 13
+  },
+  {
+   "gene": "SPTAN1",
+   "n": 34,
+   "n_variants": 13
+  },
+  {
+   "gene": "STXBP1",
+   "n": 248,
+   "n_variants": 105
+  },
+  {
+   "gene": "TBX5",
+   "n": 80,
+   "n_variants": 20
+  }
+ ],
+ "class_test": {
+  "tests": 545,
+  "genes": 33,
+  "bh_analytic_q10": 32,
+  "bh_analytic_q10_genes": 15,
+  "bh_perm_variant_q10": 21,
+  "bh_perm_variant_q10_genes": 9,
+  "bh_perm_individual_q10": 47,
+  "bh_perm_individual_q10_genes": 16,
+  "lost_genes": [
+   "EHMT1",
+   "GLI3",
+   "SOCS1",
+   "TBX5",
+   "TGFB2",
+   "TGFBR1"
+  ],
+  "kept_genes": [
+   "AHDC1",
+   "CTCF",
+   "FGD1",
+   "GNAS",
+   "LMNA",
+   "PTPN11",
+   "SATB2",
+   "SETD2",
+   "SPTAN1"
+  ]
+ }
+}

@@ -91,7 +91,7 @@ def main():
     gd.to_parquet(INTER / "gene_disease_counts.parquet", index=False)
 
     g = gi.reset_index()[["gene", "hgnc_id", "uniprot", "uniprot_entry", "uniprot_map", "uniprot_length", "mane_enst", "mane_np",
-                          "mane_ensp", "af_n_fragments", "af_single_fragment", "af_pdb", "mane_eq_af", "mane_af_map",
+                          "mane_ensp", "af_n_fragments", "af_source", "af_single_fragment", "af_pdb", "mane_eq_af", "mane_af_map",
                           "mane_af_identity", "mane_eq_uniprot", "af_eq_uniprot"]].copy()
     vc = v.groupby("hgnc_id")
     g["n_variants_all_sources"] = g.hgnc_id.map(vc.size()).fillna(0).astype(int)

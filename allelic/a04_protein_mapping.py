@@ -18,7 +18,8 @@ UniProt / AlphaFold
     Ensembl transcript (version ignored); fallback HGNC xref; fallback primary gene name.
   * AlphaFold: fragments per accession from the v6 proteome tar listing (multigene/s05); single-fragment
     models are extracted (tar -T list) into raw/alphafold/models/.  Fragmented models (proteins >2,700 aa)
-    are excluded and listed.
+    are excluded and listed.  Accessions missing from the proteome tar whose model multigene already
+    fetched from swissprot_pdb_v6.tar (GNAS P63092) are used from raw/alphafold/models/.
   * MANE pos -> AF pos and -> UniProt pos by identity when sequences are equal, else multigene/s06
     align_map (global alignment; only aligned blocks >=10 aa with >=90% identity are trusted).
   * ref_matches_af: MANE ref aa == AF model residue at the mapped position.
@@ -199,6 +200,13 @@ def main():
                           uniprot_length=int(u.length), uniprot_seq=u.sequence, uniprot_seq_version=u.seq_version,
                           mane_protein_seq=seqs.get(g.mane_np), af_n_fragments=nf))
     gm = pd.DataFrame(grows)
+    # accessions absent from the proteome tar but whose v6 model was already fetched by multigene
+    # (fetch_af_from_swissprot_tar.py, e.g. GNAS P63092) are used as single-fragment models
+    gm["af_source"] = np.where(gm.af_n_fragments > 0, "proteome_tar", None)
+    sw = (gm.af_n_fragments == 0) & gm.uniprot.map(lambda a: isinstance(a, str) and af_model_path(a).exists())
+    gm.loc[sw, "af_n_fragments"] = 1
+    gm.loc[sw, "af_source"] = "swissprot_tar_range_request(multigene)"
+    log["af_models_from_swissprot_tar"] = sorted(gm[sw].gene)
     gm["af_single_fragment"] = gm.af_n_fragments == 1
     todo = sorted({f"AF-{a}-F1-model_v6.pdb.gz" for a in gm[gm.af_single_fragment].uniprot if not af_model_path(a).exists()})
     log["af_models_to_extract"] = len(todo)

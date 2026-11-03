@@ -29,8 +29,23 @@ NULL_CTRL = ["FGFR2", "PRNP", "VCP", "ABCA4"]
 
 
 # ------------------------------------------------------------------ data
-def load_variants():
+def load_variants(labels="combined"):
+    """Usable variants with one label column set. labels='combined' (ClinVar + phenopacket-store;
+    primary) or 'clinvar' (ClinVar labels only). Broad MONDO grouping units are excluded,
+    because the plan asks for specific diseases."""
     v = pd.read_parquet(C.OUT / "variants.parquet")
+    v = v[v.countable.fillna(False).astype(bool) & v.has_residue_features.fillna(False).astype(bool)
+          & v.af_single_fragment.fillna(False).astype(bool) & v.af_pos.notna()].copy()
+    v["pos"] = v.af_pos.astype(int)
+    if labels == "combined":
+        v["single_label"] = v.combined_single_label.fillna(False).astype(bool)
+        v["disease_unit"] = v.combined_disease_unit
+    else:
+        v = v[v.source.isin(["clinvar", "both"])].copy()
+        v["single_label"] = v.single_label.fillna(False).astype(bool)
+    d = pd.read_parquet(C.OUT / "diseases.parquet")
+    broad = set(d.loc[d.broad_unit.fillna(False).astype(bool), "disease_unit"])
+    v.loc[v.disease_unit.isin(broad), "single_label"] = False
     return v
 
 
@@ -193,21 +208,20 @@ def calibration(Dstore, k, ncal, rng):
 
 
 # ------------------------------------------------------------------ secondary
-FEATS = {"plddt": "plddt", "core": "core_a0.3", "semi": "semi_a0.3", "disorder": "disorder_a0.3",
-         "degree": "degree", "burial": "burial", "nbr1_plddt": "nbr1_plddt", "am": "am_mean", "rel_pos": "rel_pos"}
+FEATS = {"plddt": "plddt", "core": "CoreImpact", "semi": "SemiCoreImpact", "disorder": "DisorderImpact",
+         "degree": "degree_8A", "burial": "n_ca_10A", "nbr1_plddt": "nbr1_mean_plddt", "am": "am_obs",
+         "rel_pos": "rel_pos"}
 
 
 def residue_features(E, v):
     """Attach residue-level features (residue tables) and residue-mean AlphaMissense."""
-    am = v.groupby(["gene", "pos"]).am_pathogenicity.mean().rename("am_mean").reset_index() \
-        if "am_pathogenicity" in v.columns else None
+    am = v.groupby(["gene", "pos"]).am_pathogenicity.mean().rename("am_obs").reset_index()
     parts = []
     for uni, d in E.groupby("uniprot"):
-        rf = C._residue_table(uni)
+        rf = C._residue_table(uni).drop(columns=["gene", "uniprot"], errors="ignore")
         parts.append(d.merge(rf, on="pos", how="left"))
     F = pd.concat(parts, ignore_index=True)
-    if am is not None:
-        F = F.merge(am, on=["gene", "pos"], how="left")
+    F = F.merge(am, on=["gene", "pos"], how="left")
     return F
 
 
@@ -275,13 +289,13 @@ def ad_ar(F, diseases):
         ad, ar = d[d.inh == "AD"], d[d.inh == "AR"]
         if len(ad) >= MIN_RES and len(ar) >= MIN_RES:
             rec = dict(gene=g, n_ad=len(ad), n_ar=len(ar))
-            for f in ["burial", "degree", "plddt", "core_a0.3", "am_mean"]:
+            for f in ["n_ca_10A", "degree_8A", "plddt", "CoreImpact", "am_obs"]:
                 if f in d.columns:
                     rec[f] = float(np.nanmedian(ar[f]) - np.nanmedian(ad[f]))
             rows.append(rec)
     T = pd.DataFrame(rows)
     S = []
-    for f in ["burial", "degree", "plddt", "core_a0.3", "am_mean"]:
+    for f in ["n_ca_10A", "degree_8A", "plddt", "CoreImpact", "am_obs"]:
         if f in T.columns and T[f].notna().sum() >= 5:
             x = T[f].dropna().to_numpy()
             nz = x[x != 0]
@@ -359,12 +373,11 @@ def main():
     run_sens("alpha0.15", E, alphas=(0.15,), rwr="rwr0.15")
     run_sens("alpha0.5", E, alphas=(0.5,), rwr="rwr0.5")
     run_sens("majority_labels", eligible(residue_labels(v, majority=True)))
-    if "stars" in v.columns:
-        run_sens("clinvar_ge2_stars", eligible(residue_labels(v[(v.source == "ppkt") | (v.stars >= 2)])))
-    run_sens("clinvar_only", eligible(residue_labels(v[v.source.isin(["clinvar", "both"])])))
+    run_sens("clinvar_ge2_stars", eligible(residue_labels(v[(v.source == "ppkt") | (v.stars.fillna(0) >= 2)])))
+    run_sens("clinvar_only", eligible(residue_labels(load_variants("clinvar"))))
     gm = pd.read_parquet(C.OUT / "genes.parquet")
-    if "mean_plddt" in gm.columns:
-        hi = set(gm.loc[gm.mean_plddt >= 70, "gene"])
+    if "struct_mean_plddt" in gm.columns:
+        hi = set(gm.loc[gm.struct_mean_plddt >= 70, "gene"])
         run_sens("mean_pLDDT_ge70", E[E.gene.isin(hi)])
     # leakage 1: drop single-site diseases (all residues within 5 aa)
     keep = []

@@ -6,7 +6,7 @@ Files go to $DATA/raw/<source>/ ; a provenance record is written to
 $DATA/derived_allelic/intermediate/downloads.json.  Existing files are not re-downloaded
 (delete a file to refresh it).  AlphaMissense is streamed + filtered later (a09), not stored whole.
 """
-import hashlib, json, re, subprocess, sys, gzip
+import hashlib, json, re, subprocess, sys, gzip, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import URLS, FILES, INTER, save_json
@@ -44,6 +44,22 @@ def main():
             rec = dict(url=url, file=str(out), http=hd)
         else:
             rec = prov.get(key, dict(url=url, file=str(out), http=None))
+            if not rec.get("http") and key != "uniprot_human":
+                # file present but headers not recorded: record the server's current headers and
+                # whether the server's size equals the local file (same release)
+                rec["http"] = head(url)
+                rec["http_checked_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        if key == "uniprot_human":
+            if not rec.get("uniprot_release"):
+                h = subprocess.run(["curl", "-sSI", "https://rest.uniprot.org/uniprotkb/search?query=accession:P29033&size=1"],
+                                   capture_output=True, text=True).stdout
+                rel = [l.split(":", 1)[1].strip() for l in h.splitlines() if l.lower().startswith("x-uniprot-release:")]
+                rec["uniprot_release"] = rel[0] if rel else None
+                rec["uniprot_release_date"] = next((l.split(":", 1)[1].strip() for l in h.splitlines()
+                                                    if l.lower().startswith("x-uniprot-release-date:")), None)
+            rec["downloaded_at"] = rec.get("downloaded_at") or time.strftime("%Y-%m-%d", time.gmtime(out.stat().st_mtime))
+        cl = (rec.get("http") or {}).get("content-length")
+        rec["server_size_equals_local"] = (int(cl) == out.stat().st_size) if cl and cl.isdigit() else None
         rec["size"] = out.stat().st_size
         rec["sha256"] = sha256(out)
         # in-file version strings
@@ -66,7 +82,10 @@ def main():
                 rec["version"] = [l.strip() for l in fh.readlines()[:3] if "Generated" in l]
         elif key == "clinvar":
             rec["version"] = "variant_summary.txt.gz, Last-Modified " + str((rec.get("http") or {}).get("last-modified"))
+        elif key in ("mane_summary", "mane_protein"):
+            rec["version"] = "MANE v1.5"
         prov[key] = rec
+        save_json(prov, prov_f)
         print(key, json.dumps({k: v for k, v in rec.items() if k != "sha256"}), flush=True)
     save_json(prov, prov_f)
 

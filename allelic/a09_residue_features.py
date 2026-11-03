@@ -17,6 +17,8 @@ Per protein (AlphaFold v6 single-fragment PDB, raw/alphafold/models/):
                                Bio.PDB.HSExposureCA, radius 13 A): number of C-alpha atoms in the half
                                sphere on the side-chain side (up) / opposite side (down); NaN for the
                                terminal residues (needs both neighbours)
+    hse_cb_up, hse_cb_down     same with the real C-alpha->C-beta vector (Bio.PDB.HSExposureCB, 13 A);
+                               NaN for Gly (no C-beta)
   domain annotation (multigene/s04 query + s07.annotate): uniprot_domain, uniprot_region,
     uniprot_disordered_region, uniprot_topology, uniprot_motif, pfam_domain, in_domain,
     in_domain_broad, domain_name  (UniProt REST entry JSON and InterPro Pfam API, cached in cache/)
@@ -72,7 +74,7 @@ def uniprot_features(acc, hgnc_id):
 
 def one(args):
     gene, acc, path = args
-    from Bio.PDB import HSExposureCA
+    from Bio.PDB import HSExposureCA, HSExposureCB
     t0 = time.time()
     feats, meta, (G_all, nodes, W, core, semi, dis, bb) = SF.compute_residue_features(path)
     st = SF.read_structure(path)
@@ -106,6 +108,11 @@ def one(args):
         x = res.xtra
         up[int(res.id[1])] = x.get("EXP_HSE_A_U", np.nan); dn[int(res.id[1])] = x.get("EXP_HSE_A_D", np.nan)
     df["hse_ca_up"] = df.pos.map(up).astype(float); df["hse_ca_down"] = df.pos.map(dn).astype(float)
+    st2 = SF.read_structure(path); m2 = next(st2.get_models())
+    HSExposureCB(m2, radius=13.0)
+    cu = {int(r.id[1]): r.xtra.get("EXP_HSE_B_U", np.nan) for r in next(m2.get_chains()).get_residues() if not r.id[0].strip()}
+    cd = {int(r.id[1]): r.xtra.get("EXP_HSE_B_D", np.nan) for r in next(m2.get_chains()).get_residues() if not r.id[0].strip()}
+    df["hse_cb_up"] = df.pos.map(cu).astype(float); df["hse_cb_down"] = df.pos.map(cd).astype(float)
     meta.update(gene=gene, uniprot=acc, af_pdb=path, seconds=time.time() - t0, n_edges=len(e))
     return df, e, meta
 

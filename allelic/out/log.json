@@ -1,0 +1,20 @@
+{
+ "residues_labelled": 3403,
+ "residues_conflict": 168,
+ "eligible_genes": 71,
+ "eligible_residues": 2625,
+ "calibration": {
+  "H1": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.3333333333333333
+  },
+  "H2": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.0
+  },
+  "H2b": {
+   "median_of_median_diff": 0.0,
+   "frac_p05": 0.0
+  }
+ }
+}

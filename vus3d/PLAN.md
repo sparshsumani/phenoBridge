@@ -99,3 +99,26 @@ but practically small.
   label-propagation scores. That is the intended clinical use, but it means part of the
   gain could reflect how curators reason rather than biology. We report it as a
   limitation, and the within-gene and same-residue-excluded analyses reduce it.
+
+## Amendment 1 (after the literature review, before any data were seen)
+Prompted by `vus3d/notes/literature.md`. Pooled AUROC is inflated by gene base rates:
+the gene's P fraction alone gives about 0.92 (Arnoult 2026).
+- **New primary metric: gene-stratified AUROC.**
+  - It is the concordance computed only over P–B pairs *within the same gene*, pooled
+    across genes: Σ_g concordant pairs / Σ_g pairs, with ties counted as ½.
+  - Uncertainty comes from a paired bootstrap over genes (2,000 resamples).
+  - H1–H3 are unchanged in form but are tested on this metric.
+  - Pooled AUROC (the original primary) is kept as a secondary metric.
+  - Only genes with ≥1 P and ≥1 B TEST variant contribute pairs.
+- **H3 equivalence.** We also report whether the 3D-vs-1D difference lies inside an
+  equivalence margin of ±0.005 (90% CI).
+- **Evidence thresholds.** These follow Pejaver et al. 2022 (prior 0.0441): Supporting
+  LR ≥ 2.406, Moderate ≥ 5.790, Strong ≥ 33.53. A bin is assigned a strength only if the
+  one-sided 95% bootstrap lower bound of its TRAIN LR exceeds the threshold. Because
+  PP3 + PM1 is capped at Strong, the hotspot evidence is calibrated *conditional on
+  AlphaMissense*: it is the propagation component, i.e. the M2 log-odds minus the M1
+  log-odds.
+- **Added stratifications** (reported, not tested):
+  - TEST variants last evaluated before vs after 2024-09-01;
+  - genes with a ClinGen VCEP PM1 hotspot rule (PTEN, TP53, HRAS/KRAS/RAF1/PTPN11/SOS1
+    and other RASopathy genes, MYH7, MYBPC3, CDH1, RUNX1) vs the rest.

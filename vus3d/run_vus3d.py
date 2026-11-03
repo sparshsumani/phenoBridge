@@ -187,24 +187,55 @@ def tune(tr):
 
 
 # ------------------------------------------------------------------ evaluation
-def boot_gene(te, preds, pairs, nboot, rng):
+def strat_auc(y, s, g):
+    """Gene-stratified AUROC: concordance over P-B pairs within the same gene."""
+    num = den = 0.0
+    for gg in np.unique(g):
+        m = g == gg
+        yy, ss = y[m], s[m]
+        if yy.min() == yy.max():
+            continue
+        p, b = ss[yy == 1], ss[yy == 0]
+        r = stats_rank(np.r_[p, b])
+        nP, nB = len(p), len(b)
+        u = r[:nP].sum() - nP * (nP + 1) / 2
+        num += u; den += nP * nB
+    return num / den if den else np.nan
+
+
+def stats_rank(x):
+    from scipy.stats import rankdata
+    return rankdata(x)
+
+
+def boot_gene(te, preds, pairs, nboot, rng, metric="strat"):
     genes = te.gene.unique()
     gidx = {g: np.where(te.gene.values == g)[0] for g in genes}
     out = {p: [] for p in pairs}
     y = te.y.values
+    gl = te.gene.values
+
+    def met(ii, s, gg):
+        if metric == "strat":
+            return strat_auc(y[ii], s[ii], gg)
+        return roc_auc_score(y[ii], s[ii])
     for _ in range(nboot):
-        ii = np.concatenate([gidx[g] for g in rng.choice(genes, len(genes))])
+        pick = rng.choice(genes, len(genes))
+        ii = np.concatenate([gidx[g] for g in pick])
+        gg = np.concatenate([np.full(len(gidx[g]), k) for k, g in enumerate(pick)])  # resampled genes stay distinct
         if y[ii].min() == y[ii].max():
             continue
         for a, b in pairs:
-            out[(a, b)].append(roc_auc_score(y[ii], preds[a][ii]) - roc_auc_score(y[ii], preds[b][ii]))
+            out[(a, b)].append(met(ii, preds[a], gg) - met(ii, preds[b], gg))
     res = []
+    allii = np.arange(len(y))
     for (a, b), d in out.items():
         d = np.array(d)
-        obs = roc_auc_score(y, preds[a]) - roc_auc_score(y, preds[b])
+        obs = met(allii, preds[a], gl) - met(allii, preds[b], gl)
         p = 2 * min((d <= 0).mean(), (d >= 0).mean())
-        res.append(dict(contrast=f"{a} - {b}", delta_auc=obs, ci_lo=np.percentile(d, 2.5),
-                        ci_hi=np.percentile(d, 97.5), p_boot=max(p, 1 / len(d))))
+        res.append(dict(metric=metric, contrast=f"{a} - {b}", delta_auc=obs, ci_lo=np.percentile(d, 2.5),
+                        ci_hi=np.percentile(d, 97.5), ci90_lo=np.percentile(d, 5), ci90_hi=np.percentile(d, 95),
+                        p_boot=max(p, 1 / len(d))))
     return pd.DataFrame(res)
 
 
@@ -236,17 +267,21 @@ def evaluate(v, F, best, nboot, rng, tag, min_lab=5, test_filter=None):
         preds[m] = fm.predict_proba(design(te, m, par))[:, 1]
         wg, ng = within_gene_auc(te, pd.Series(preds[m]))
         rows.append(dict(analysis=tag, model=m, param=par, n_test=len(te), n_P=int(te.y.sum()),
-                         n_genes=te.gene.nunique(), auroc=roc_auc_score(te.y, preds[m]),
+                         n_genes=te.gene.nunique(), strat_auroc=strat_auc(te.y.values, preds[m], te.gene.values),
+                         auroc=roc_auc_score(te.y, preds[m]),
                          auprc=average_precision_score(te.y, preds[m]), brier=brier_score_loss(te.y, preds[m]),
                          within_gene_auroc=wg, n_genes_within=ng))
     # H3 compares the 3D model chosen on TRAIN CV
     cvbest = "M2-RWR" if best["_cv_rwr"] >= best["_cv_r3d"] else "M2-3D"
     pairs = [("M2-RWR", "M1"), ("M2-RWR", "M2-3D"), (cvbest, "M2-1D"), ("M2-3D", "M1"), ("M2-1D", "M1"), ("M1", "M0")]
-    B = boot_gene(te, preds, pairs, nboot, rng)
-    B.insert(0, "analysis", tag)
+    B = boot_gene(te, preds, pairs, nboot, rng, metric="strat")
     B["hypothesis"] = ["H1", "H2", "H3", "", "", ""]
     m = B.hypothesis != ""
     B.loc[m, "p_holm"] = holm(B.loc[m, "p_boot"].values)
+    Bp = boot_gene(te, preds, pairs, max(200, nboot // 5), rng, metric="pooled")
+    Bp["hypothesis"] = ["H1-pooled", "H2-pooled", "H3-pooled", "", "", ""]
+    B = pd.concat([B, Bp], ignore_index=True)
+    B.insert(0, "analysis", tag)
     return pd.DataFrame(rows), B, te, preds
 
 

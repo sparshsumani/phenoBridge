@@ -1,0 +1,63 @@
+{
+ "match": {
+  "n_json": 333,
+  "n_ppkt": 333,
+  "n_mismatch": 0,
+  "mismatches": []
+ },
+ "mane_transcript": "ENST00000301030.10",
+ "vep_mane_select": [
+  "NM_013275.6"
+ ],
+ "n_exons": 13,
+ "coding_exons": [
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13
+ ],
+ "largest_exon": 9,
+ "largest_exon_len": 6578,
+ "largest_exon_coding_frac": 0.8230730730730731,
+ "last_exon_coding_nt": 186,
+ "last_junction_after_c": 7806,
+ "n_points": 256,
+ "n_sv": 77,
+ "vclass_counts": {
+  "frameshift": 174,
+  "nonsense": 66,
+  "missense": 7,
+  "splice": 7,
+  "inframe": 2
+ },
+ "sv_type_counts": {
+  "deletion": 70,
+  "duplication": 6,
+  "unknown": 1
+ },
+ "regex_vs_vep": {
+  "0": {
+   "frameshift": 0,
+   "inframe": 0,
+   "missense": 7,
+   "nonsense": 65,
+   "splice": 6
+  },
+  "1": {
+   "frameshift": 174,
+   "inframe": 2,
+   "missense": 0,
+   "nonsense": 1,
+   "splice": 1
+  }
+ },
+ "vep_ptc_disagree_pp": 0,
+ "vep_first_disagree_pp": 0
+}

@@ -1,0 +1,119 @@
+                                       label    n  n_obs  n_exc        OR        lo        hi         p         q   firth_p   used
+0   Attention deficit hyperactivity disorder   68     53     15  0.594219  0.309956  1.139185  0.080201  0.788579  0.123011     ml
+1                          Microretrognathia   52     16     36  1.843032  0.848369  4.003879  0.090795  0.788579  0.134346     ml
+2                Delayed skeletal maturation  113     54     59  0.703607  0.453824  1.090868  0.109748  0.788579  0.118444     ml
+3            Intrauterine growth retardation   62     13     49  1.836581  0.778300  4.333845  0.124470  0.788579  0.185698     ml
+4                              Short stature  191    115     76  0.789307  0.573052  1.087170  0.137951  0.788579  0.153287     ml
+5                               Bulbous nose  110     74     36  0.694121  0.413358  1.165587  0.152112  0.788579  0.179537     ml
+6                                  Hypotonia   53     21     32  1.485442  0.827888  2.665261  0.165079  0.788579  0.208403     ml
+7                       Feeding difficulties  134     59     75  0.797993  0.550147  1.157497  0.230079  0.788579  0.244268     ml
+8                    Abnormality of the hand  214    155     59  0.827125  0.599335  1.141491  0.235704  0.788579  0.235704  firth
+9                    Intellectual disability  183    158     25  1.263355  0.861205  1.853294  0.241631  0.788579  0.214403     ml
+10                    Recurrent otitis media   53     24     29  0.750958  0.437002  1.290468  0.293165  0.788579  0.314825     ml
+11                           Triangular face   99     68     31  0.819461  0.553715  1.212748  0.306899  0.788579  0.352915     ml
+12                         Sleep disturbance   57     19     38  1.359146  0.726196  2.543770  0.317709  0.788579  0.385715     ml
+13                                Strabismus   70     16     54  0.746216  0.413850  1.345510  0.324709  0.788579  0.324709  firth
+14                               Motor delay   77     55     22  1.260044  0.736871  2.154666  0.401151  0.833549  0.391966     ml
+15                   Exaggerated cupid's bow   47     13     34  1.321255  0.661880  2.637511  0.408296  0.833549  0.511566     ml
+16   Delayed speech and language development  141    121     20  0.801512  0.454222  1.414334  0.438271  0.833549  0.438271  firth
+17                            Protruding ear   67     48     19  0.820678  0.490673  1.372628  0.441291  0.833549  0.509317     ml
+18                             Hypertelorism  101     59     42  1.146970  0.782539  1.681119  0.483666  0.864989  0.473870     ml
+19                             Long philtrum  130    104     26  0.867611  0.561695  1.340137  0.512712  0.864989  0.590271     ml
+20                           EEG abnormality   49     16     33  1.320427  0.540533  3.225570  0.534258  0.864989  0.596671     ml
+21                                 Synophrys   96     53     43  1.125036  0.738017  1.715011  0.584028  0.902588  0.584327     ml
+22                         Autistic behavior   72     40     32  0.895444  0.564995  1.419163  0.636674  0.925357  0.666053     ml
+23                               Macrodontia  212    170     42  1.079711  0.766578  1.520754  0.663154  0.925357  0.617208     ml
+24                 Ventricular septal defect  142     12    130  0.882502  0.478425  1.627865  0.702274  0.925357  0.702274  firth
+25                            Prominent nose   41     17     24  0.891293  0.430917  1.843518  0.756613  0.925357  0.745867     ml
+26                              Microcephaly  113     30     83  0.933771  0.590514  1.476557  0.770686  0.925357  0.727885     ml
+27             Conductive hearing impairment   92     23     69  1.099770  0.551140  2.194530  0.786404  0.925357  0.821288     ml
+28                     Low anterior hairline   88     55     33  0.942726  0.610262  1.456310  0.789275  0.925357  0.846906     ml
+29                            Cryptorchidism   82     35     47  0.948188  0.602862  1.491322  0.817838  0.926883  0.826154     ml
+30                          Anteverted nares   88     63     25  0.972550  0.609467  1.551937  0.906825  0.994582  0.963575     ml
+31                     Mandibular prognathia   47     13     34  0.987362  0.547187  1.781630  0.964292  0.995462  0.964292  firth
+32                              Low-set ears   41     21     20  1.016921  0.468163  2.208907  0.966184  0.995462  0.964323     ml
+33                             Thick eyebrow  131    106     25  1.000066  0.652349  1.533125  0.999758  0.999758  0.917549     ml
+omnibus: {'T_obs': 30.798007222976977, 'B': 5000, 'p': 0.7016596680663867, 'perm_mean': 36.468372728876616, 'perm_q95': 53.96127726835939, 'n_terms': 34, 'chi2_df_naive_p': 0.6253639270945824}
+                        analysis  n_terms     min_p     min_q  n_p05  n_q05                                  top_term    top_OR
+0                        primary       34  0.080201  0.788579      0      0  Attention deficit hyperactivity disorder  0.594219
+1                       S1_firth       34  0.118444  0.830513      0      0               Delayed skeletal maturation  0.716671
+2             S2_spline_position       34  0.051217  0.733920      0      0                             Short stature  0.723029
+3                  S3_log10_core       34  0.005888  0.200183      3      0                              Bulbous nose  1.951145
+4                    S3_backbone       34  0.008214  0.279293      3      0               Delayed skeletal maturation  0.000750
+5                    S3_disorder       34  0.000254  0.008633      1      1                   Intellectual disability  0.361749
+6                  S3_seed_plddt       34  0.046335  0.574816      1      0                   Intellectual disability  1.995644
+7         S4_keep_one_per_family       34  0.003639  0.123736      1      0                             Short stature  0.575344
+8  S4_keep_one_per_family_or_dup       34  0.002877  0.097816      1      0                             Short stature  0.567613
+9             S5_truncating_only       34  0.100766  0.764545      0      0                              Bulbous nose  0.641268
+/usr/local/lib/python3.13/site-packages/statsmodels/discrete/discrete_model.py:268: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/usr/local/lib/python3.13/site-packages/statsmodels/discrete/discrete_model.py:268: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/usr/local/lib/python3.13/site-packages/statsmodels/discrete/discrete_model.py:268: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/usr/local/lib/python3.13/site-packages/statsmodels/discrete/discrete_model.py:268: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+    trunc_flag      encoding  n_terms  n_p05     min_q                                                      hits
+0  regex_trunc      A (NA=0)       31      1  0.565144  Attention deficit hyperactivity disorder OR=0.53 p=0.023
+1  regex_trunc  B (explicit)       30      0  0.765469                                                          
+2     is_trunc      A (NA=0)       31      1  0.476119  Attention deficit hyperactivity disorder OR=0.51 p=0.015
+3     is_trunc  B (explicit)       30      0  0.770280                                                          
+B1_SV_vs_point
+                                      label    n        OR        lo         hi         p         q  prev_exp  prev_unexp
+0           Intrauterine growth retardation   79  3.280702  1.079988  10.047988  0.036348  0.464318  0.470588    0.209677
+1                         Microretrognathia   63  3.686868  1.025926  14.696763  0.045579  0.464318  0.636364    0.307692
+2                                 Synophrys  115  2.800622  0.973860   9.661945  0.056327  0.464318  0.789474    0.552083
+3                   Abnormality of the hand  271  0.561743  0.308111   1.034503  0.063930  0.464318  0.596491    0.724299
+4                 Ventricular septal defect  173  2.661176  0.893474   7.353684  0.076942  0.464318  0.193548    0.084507
+5                           Triangular face  128  0.491568  0.212859   1.133871  0.095291  0.464318  0.517241    0.686869
+6                                 Hypotonia   65  2.855302  0.832800  11.014061  0.095759  0.464318  0.666667    0.396226
+7  Attention deficit hyperactivity disorder   82  0.378864  0.117373   1.252642  0.109251  0.464318  0.571429    0.779412
+B1s_SVdeletion_vs_point
+                                      label    n        OR        lo         hi         p         q  prev_exp  prev_unexp
+0                   Abnormality of the hand  266  0.480331  0.258791   0.896488  0.021565  0.333879  0.557692    0.724299
+1                           Triangular face  124  0.364712  0.148310   0.876463  0.024225  0.333879  0.440000    0.686869
+2                         Microretrognathia   63  3.686868  1.025926  14.696763  0.045579  0.333879  0.636364    0.307692
+3           Intrauterine growth retardation   77  3.235294  1.010059  10.391501  0.048108  0.333879  0.466667    0.209677
+4                 Ventricular septal defect  170  3.016000  1.004641   8.427198  0.049100  0.333879  0.214286    0.084507
+5  Attention deficit hyperactivity disorder   81  0.334292  0.100072   1.126781  0.076220  0.379084  0.538462    0.779412
+6                                 Synophrys  114  2.619937  0.901801   9.088410  0.078047  0.379084  0.777778    0.552083
+7                     Mandibular prognathia   54  0.170370  0.001280   1.573351  0.137619  0.520082  0.000000    0.276596
+B2_nontrunc_vs_trunc
+                                      label    n        OR        lo          hi         p        q  prev_exp  prev_unexp
+0                     Low anterior hairline   88  0.180427  0.017486    1.033808  0.054691  0.97531  0.200000    0.650602
+1                                 Synophrys   96  0.250792  0.024434    1.424748  0.122061  0.97531  0.200000    0.571429
+2           Intrauterine growth retardation   62  4.130435  0.581219   29.574496  0.146958  0.97531  0.500000    0.189655
+3                   Abnormality of the hand  214  5.173934  0.595998  678.686993  0.161677  0.97531  1.000000    0.716346
+4                             Short stature  191  0.404445  0.091351    1.566780  0.188944  0.97531  0.375000    0.612022
+5                            Cryptorchidism   82  0.335970  0.033303    1.794826  0.214254  0.97531  0.166667    0.447368
+6                      Feeding difficulties  134  2.383788  0.508570   14.082148  0.270819  0.97531  0.666667    0.429688
+7  Attention deficit hyperactivity disorder   68  0.276190  0.021188    3.591811  0.293342  0.97531  0.500000    0.787879
+B3i_PTC_position_per10pct
+                             label    n        OR        lo        hi         p         q
+0                   Cryptorchidism   73  1.249863  1.040994  1.522333  0.016389  0.557237
+1                Microretrognathia   48  0.852502  0.669667  1.060814  0.155185  0.880477
+2             Feeding difficulties  125  1.109550  0.960991  1.285193  0.156550  0.880477
+3                      Macrodontia  200  1.109324  0.959430  1.297710  0.164727  0.880477
+4                Autistic behavior   68  1.121135  0.947980  1.337259  0.183112  0.880477
+5  Intrauterine growth retardation   57  1.160683  0.906237  1.494630  0.234686  0.880477
+6                    Hypertelorism   93  1.100076  0.938855  1.296185  0.239563  0.880477
+7            Low anterior hairline   79  1.104295  0.925808  1.331765  0.273430  0.880477
+B3ii_PTC_loses_Cterm_region
+                                     label    n        OR        lo          hi         p         q  prev_exp  prev_unexp
+0                           Cryptorchidism   73  0.242166  0.041878    1.034007  0.055687  0.714201  0.384615    0.750000
+1  Delayed speech and language development  133  3.540796  0.779831   13.889743  0.096117  0.714201  0.870968    0.666667
+2                        Autistic behavior   68  0.314758  0.055868    1.262805  0.106216  0.714201  0.517241    0.800000
+3                   Recurrent otitis media   48  0.241828  0.022817    1.450527  0.123863  0.714201  0.418605    0.800000
+4                    Low anterior hairline   79  0.175140  0.001304    1.735132  0.156420  0.714201  0.613333    1.000000
+5                               Strabismus   65  0.278351  0.039384    1.956699  0.186137  0.714201  0.213115    0.500000
+6          Intrauterine growth retardation   57  0.305748  0.051429    2.052495  0.205724  0.714201  0.173077    0.400000
+7                        Microretrognathia   48  4.728852  0.456912  642.027759  0.223531  0.714201  0.340909    0.000000
+                                                                 claim        reported    n        OR        lo        hi         p  prev_exp  prev_unexp  exp_n  unexp_n  fisher_p
+0                          a. Triangular face: sequence variant vs CNV  71.1% vs 42.5%  128  2.034306  0.881934  4.697948  0.095291  0.686869    0.517241   99.0     29.0  0.121567
+1          b. Short stature: exon 9 vs outside exon 9 (point variants)  62.5% vs 27.8%  191  1.604651  0.685108  3.762011  0.273055  0.616766    0.500000  167.0     24.0  0.372557
+2               c. ID/ADHD/ASD: c.1903_1907del vs other point variants  70.4% vs 89.4%  197  0.543391  0.170078  2.223238  0.362520  0.857143    0.909091   21.0    176.0  0.434029
+3                 c'. ID alone: c.1903_1907del vs other point variants  (not reported)  183  0.374017  0.131249  1.193373  0.092776  0.736842    0.878049   19.0    164.0  0.147465
+4        d. Macrodontia increases with deletion size (OR per doubling)      associated   45  1.222609  0.924184  1.669858  0.151844       NaN         NaN    NaN      NaN       NaN
+5       d. Comorbidities increase with deletion size (OR per doubling)      associated   43  1.305008  1.015446  1.793488  0.036945       NaN         NaN    NaN      NaN       NaN
+6  d. Hand anomalies increase with SMALLER deletions (OR per doubling)      associated   52  0.756082  0.509860  1.028434  0.079556       NaN         NaN    NaN      NaN       NaN
+done

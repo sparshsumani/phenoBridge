@@ -1,0 +1,74 @@
+           hpo                                     label    n  n_obs  typeI_005  MDE_OR_perSD_0.05  MDE_OR_per10fold_0.05  MDE_OR_perSD_0.005  MDE_OR_per10fold_0.005
+8   HP:0001155                   Abnormality of the hand  214    155      0.058           1.529474               2.268737            1.742899                2.918478
+23  HP:0001572                               Macrodontia  212    170      0.052           1.588696               2.441139            1.827348                3.197226
+4   HP:0004322                             Short stature  191    115      0.054           1.534951               2.284429            1.787921                3.065563
+9   HP:0001249                   Intellectual disability  183    158      0.065           1.702439               2.789267            1.948171                3.617270
+24  HP:0001629                 Ventricular septal defect  142     12      0.063           3.197279               9.401172                 NaN                     NaN
+16  HP:0000750   Delayed speech and language development  141    121      0.053           1.981481               3.737457            2.285294                4.920572
+7   HP:0011968                      Feeding difficulties  134     59      0.055           1.756757               2.963378            2.094000                4.157391
+33  HP:0000574                             Thick eyebrow  131    106      0.065           1.745200               2.925909            2.050360                3.991966
+19  HP:0000343                             Long philtrum  130    104      0.057           1.724699               2.860005            1.985294                3.751334
+2   HP:0002750               Delayed skeletal maturation  113     54      0.062           1.918478               3.511732            2.410112                5.451820
+26  HP:0000252                              Microcephaly  113     30      0.062           2.118056               4.249959            2.872549                7.647298
+5   HP:0000414                              Bulbous nose  110     74      0.058           1.953642               3.636882            2.413043                5.464610
+18  HP:0000316                             Hypertelorism  101     59      0.052           1.734043               2.889952            2.092199                4.150498
+11  HP:0000325                           Triangular face   99     68      0.057           1.651980               2.632075            1.964286                3.675178
+21  HP:0000664                                 Synophrys   96     53      0.061           1.883648               3.389850            2.297468                4.971233
+27  HP:0000405             Conductive hearing impairment   92     23      0.066           2.871901               7.643971                 NaN                     NaN
+30  HP:0000463                          Anteverted nares   88     63      0.042           1.909677               3.480739            2.278302                4.891588
+28  HP:0000294                     Low anterior hairline   88     55      0.066           1.850000               3.274075            2.198864                4.568090
+29  HP:0000028                            Cryptorchidism   82     35      0.052           1.945364               3.607230            2.417230                5.482902
+14  HP:0001270                               Motor delay   77     55      0.069           2.162844               4.424920            2.813665                7.347947
+22  HP:0000729                         Autistic behavior   72     40      0.079           1.950311               3.624933            2.420455                5.497013
+13  HP:0000486                                Strabismus   70     16      0.057           2.861940               7.592941                 NaN                     NaN
+0   HP:0007018  Attention deficit hyperactivity disorder   68     53      0.056           1.948830               3.619631            2.347500                5.182055
+17  HP:0000411                            Protruding ear   67     48      0.068           1.956522               3.647223            2.454000                5.644835
+3   HP:0001511           Intrauterine growth retardation   62     13      0.072           2.894531               7.760523                 NaN                     NaN
+12  HP:0002360                         Sleep disturbance   57     19      0.069           2.538793               6.026893            3.699571               12.455368
+10  HP:0000403                    Recurrent otitis media   53     24      0.060           2.248134               4.767481            3.201258                9.423741
+6   HP:0001252                                 Hypotonia   53     21      0.062           2.228365               4.686987            3.128205                9.013532
+1   HP:0000308                         Microretrognathia   52     16      0.053           2.634454               6.472356                 NaN                     NaN
+20  HP:0002353                           EEG abnormality   49     16      0.071           3.947674              14.115780                 NaN                     NaN
+15  HP:0002263                   Exaggerated cupid's bow   47     13      0.090           2.838462               7.473306                 NaN                     NaN
+31  HP:0000303                     Mandibular prognathia   47     13      0.063           2.671642               6.649652                 NaN                     NaN
+25  HP:0000448                            Prominent nose   41     17      0.078           3.275168               9.847698                 NaN                     NaN
+32  HP:0000369                              Low-set ears   41     21      0.068           3.323529              10.129963                 NaN                     NaN
+{
+ "nsim": 1000,
+ "grid": [
+  1.0,
+  1.1,
+  1.2,
+  1.3,
+  1.4,
+  1.5,
+  1.6,
+  1.75,
+  2.0,
+  2.25,
+  2.5,
+  3.0,
+  4.0
+ ],
+ "sd_log10_semi": 0.5186907811616662,
+ "n_terms": 34,
+ "median_n": 88.0,
+ "mean_typeI_at_005": 0.062205882352941166,
+ "mean_typeI_note": "empirical rejection rate at OR=1, alpha=0.05",
+ "median_MDE_perSD_0.05": 1.9550820616181976,
+ "min_MDE_perSD_0.05": 1.5294736842105263,
+ "n_terms_MDE_gt_4.0_0.05": 0,
+ "n_terms_MDE_le_1.5_0.05": 0,
+ "n_terms_MDE_le_2_0.05": 19,
+ "median_MDE_per10fold_0.05": 3.6420507382973355,
+ "mean_power_OR1.5_0.05": 0.4071176470588235,
+ "mean_power_OR2.0_0.05": 0.7412941176470589,
+ "median_MDE_perSD_0.005": 2.418842137592138,
+ "min_MDE_perSD_0.005": 1.7428994082840237,
+ "n_terms_MDE_gt_4.0_0.005": 10,
+ "n_terms_MDE_le_1.5_0.005": 0,
+ "n_terms_MDE_le_2_0.005": 6,
+ "median_MDE_per10fold_0.005": 5.4899553661548435,
+ "mean_power_OR1.5_0.005": 0.1602058823529412,
+ "mean_power_OR2.0_0.005": 0.4908823529411764
+}

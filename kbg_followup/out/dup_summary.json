@@ -1,0 +1,523 @@
+{
+ "n": 333,
+ "n_sources": 41,
+ "recurrent_alleles": {
+  "c1381_1384del_ANKRD11_NM_013275v6": 4,
+  "c1903_1907del_ANKRD11_NM_013275v6": 12,
+  "c2197CtoT_ANKRD11_NM_013275v6": 3,
+  "c2398_2401del_ANKRD11_NM_013275v6": 6,
+  "c2408_2412del_ANKRD11_NM_013275v6": 5,
+  "c3224_3227del_ANKRD11_NM_013275v6": 3
+ },
+ "labelled_families": [
+  {
+   "family": "KBG10",
+   "members": [
+    "KBG10A",
+    "KBG10B"
+   ],
+   "alleles": [
+    "c2329_2332del_ANKRD11_NM_013275v6",
+    "c6968_6975del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": false
+  },
+  {
+   "family": "KBG31",
+   "members": [
+    "KBG31A",
+    "KBG31B"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "KBG8",
+   "members": [
+    "KBG8A",
+    "KBG8B"
+   ],
+   "alleles": [
+    "c6628GtoT_ANKRD11_NM_013275v6",
+    "c7753CtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": false
+  },
+  {
+   "family": "Khalifa, 2013_P1",
+   "members": [
+    "Khalifa, 2013_P1A",
+    "Khalifa, 2013_P1B"
+   ],
+   "alleles": [
+    "ANKRD11_SV_16q24_3_89388113_89541926_x1"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam1",
+   "members": [
+    "Murray, 2017_P1 (1.1)",
+    "Murray, 2017_P2 (1.2)",
+    "Murray, 2017_P3 (1.3)"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam11",
+   "members": [
+    "Murray, 2017_P13 (11.1)"
+   ],
+   "alleles": [
+    "c7216CtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam13",
+   "members": [
+    "Murray, 2017_P16 (13.1)"
+   ],
+   "alleles": [
+    "c6472GtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam2",
+   "members": [
+    "Murray, 2017_P4 (2.1)"
+   ],
+   "alleles": [
+    "c505GtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam3",
+   "members": [
+    "Murray, 2017_P5 (3.1)",
+    "Murray, 2017_P6 (3.2)",
+    "Murray, 2017_P7 (3.3)"
+   ],
+   "alleles": [
+    "c4406GtoA_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam4",
+   "members": [
+    "Murray, 2017_P8 (4.1)"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam5",
+   "members": [
+    "Murray, 2017_P9 (5.1.)"
+   ],
+   "alleles": [
+    "c1173CtoG_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam7",
+   "members": [
+    "Murray, 2017_P10 (7.1.)"
+   ],
+   "alleles": [
+    "c7471AtoC_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam8",
+   "members": [
+    "Murray, 2017_P11 (8.1.)"
+   ],
+   "alleles": [
+    "c6409_6410del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam9",
+   "members": [
+    "Murray, 2017_P12 (9.1)"
+   ],
+   "alleles": [
+    "c3224_3227del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Sirmaci2011_F1",
+   "members": [
+    "Sirmaci2011_P1-F1 (previously published Tekin, 2004)",
+    "Sirmaci2011_P2-F1 (previously published Tekin, 2004)",
+    "Sirmaci2011_P3-F1 (previously published Tekin, 2004)"
+   ],
+   "alleles": [
+    "c7570_1GtoC_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  }
+ ],
+ "n_family_clusters_multi": 22,
+ "n_in_multi_family_clusters": 58,
+ "n_keep_one_per_family": 297,
+ "n_keep_one_per_family_or_dup": 281,
+ "n_likely_dup_pairs": 20,
+ "n_possible_dup_pairs": 13,
+ "expected_false_likely": 14.025464673449669,
+ "expected_false_possible": 12.08332677630026,
+ "n_keep_excl_likely_dups": 319,
+ "calibration": {
+  "null_rate_likely_criterion": 0.08014551241971239,
+  "null_pairs_5": 17593,
+  "null_rate_possible_criterion": 0.10693209536548902,
+  "null_pairs_10": 12709
+ },
+ "candidates": [
+  {
+   "a": "Bianchi, 2018",
+   "b": "Gnazzo, 2020_P11",
+   "allele": "c2408_2412del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Gnazzo, 2020_P10",
+   "b": "Low, 2016_P14 (2)",
+   "allele": "c2398_2401del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Gnazzo, 2020_P10",
+   "b": "Parenti2021_P4",
+   "allele": "c2398_2401del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "F",
+   "shared": 13,
+   "disc": 0,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Gnazzo, 2020_P4",
+   "b": "Low, 2016_P4 (5)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Gnazzo, 2020_P4",
+   "b": "Low, 2016_P5 (6)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Gnazzo, 2020_P4",
+   "b": "Low, 2016_P6 (7)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Gnazzo, 2020_P4",
+   "b": "Parenti2021_P18",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "M",
+   "shared": 12,
+   "disc": 0,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Gnazzo, 2020_P5",
+   "b": "Parenti2021_P3",
+   "allele": "c1977CtoG_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "F",
+   "shared": 14,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Gnazzo, 2020_P6",
+   "b": "Parenti2021_P3",
+   "allele": "c1977CtoG_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "F",
+   "shared": 14,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Goldenberg2016_P11",
+   "b": "KBG37",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 6,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Goldenberg2016_P9",
+   "b": "Parenti2021_P14",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 6,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "KBG31B",
+   "b": "Low, 2016_P1 (19)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "KBG31B",
+   "b": "Low, 2016_P4 (5)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "KBG31B",
+   "b": "Low, 2016_P5 (6)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "KBG31B",
+   "b": "Low, 2016_P6 (7)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "KBG37",
+   "b": "Low, 2016_P1 (19)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 10,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "KBG37",
+   "b": "Low, 2016_P4 (5)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 10,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": true
+  },
+  {
+   "a": "KBG37",
+   "b": "Low, 2016_P5 (6)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 10,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": true
+  },
+  {
+   "a": "KBG37",
+   "b": "Low, 2016_P6 (7)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 10,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": true
+  },
+  {
+   "a": "KBG37",
+   "b": "Low, 2016_P7 (8)",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "M",
+   "shared": 10,
+   "disc": 0,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "KBG56",
+   "b": "Parenti2021_P13",
+   "allele": "c1381_1384del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 5,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Low, 2016_P10 (18)",
+   "b": "Parenti2021_P5",
+   "allele": "c2408_2412del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "F",
+   "shared": 10,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Low, 2016_P12 (13)",
+   "b": "Parenti2021_P20",
+   "allele": "c2408_2412del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "M",
+   "shared": 10,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Low, 2016_P12 (13)",
+   "b": "Parenti2021_P5",
+   "allele": "c2408_2412del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 9,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Low, 2016_P6 (7)",
+   "b": "Parenti2021_P9",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "M",
+   "shared": 10,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Low, 2016_P7 (8)",
+   "b": "Parenti2021_P18",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 7,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Low, 2016_P7 (8)",
+   "b": "Parenti2021_P9",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 10,
+   "disc": 1,
+   "likely_dup": false,
+   "possible_dup": true
+  },
+  {
+   "a": "Low, 2016_P9 (1)",
+   "b": "Parenti2021_P5",
+   "allele": "c2408_2412del_ANKRD11_NM_013275v6",
+   "sex_a": "F",
+   "sex_b": "F",
+   "shared": 9,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Murray, 2017_P2 (1.2)",
+   "b": "Walz2015_PB",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 5,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  },
+  {
+   "a": "Ockeloen2015_P16",
+   "b": "Parenti2021_P9",
+   "allele": "c1903_1907del_ANKRD11_NM_013275v6",
+   "sex_a": "M",
+   "sex_b": "M",
+   "shared": 6,
+   "disc": 0,
+   "likely_dup": true,
+   "possible_dup": false
+  }
+ ]
+}

@@ -1,0 +1,391 @@
+{
+ "n_point": 256,
+ "sd_log10_semi": 0.5186907811616662,
+ "n_terms_primary": 34,
+ "primary": {
+  "n_terms": 34,
+  "min_p": 0.08020079853740825,
+  "min_q": 0.7885789584029608,
+  "n_p05": 0,
+  "n_q05": 0,
+  "top": [
+   {
+    "label": "Attention deficit hyperactivity disorder",
+    "n": 68,
+    "OR": 0.594219475688425,
+    "lo": 0.30995553934418113,
+    "hi": 1.1391852716506565,
+    "p": 0.08020079853740825,
+    "q": 0.7885789584029608
+   },
+   {
+    "label": "Microretrognathia",
+    "n": 52,
+    "OR": 1.8430315079371515,
+    "lo": 0.8483686610247141,
+    "hi": 4.003878614688878,
+    "p": 0.0907949945350524,
+    "q": 0.7885789584029608
+   },
+   {
+    "label": "Delayed skeletal maturation",
+    "n": 113,
+    "OR": 0.7036066969026985,
+    "lo": 0.4538244780081958,
+    "hi": 1.090867522393504,
+    "p": 0.10974755219438301,
+    "q": 0.7885789584029608
+   },
+   {
+    "label": "Intrauterine growth retardation",
+    "n": 62,
+    "OR": 1.8365810714117994,
+    "lo": 0.7782997019138638,
+    "hi": 4.333844691927447,
+    "p": 0.12446966858429782,
+    "q": 0.7885789584029608
+   },
+   {
+    "label": "Short stature",
+    "n": 191,
+    "OR": 0.7893066580227723,
+    "lo": 0.5730521336393671,
+    "hi": 1.087169846908112,
+    "p": 0.1379505921063123,
+    "q": 0.7885789584029608
+   }
+  ],
+  "n_firth_fallback": 5,
+  "firth_min_p": 0.11844417677388812,
+  "firth_min_q": 0.830512656448775,
+  "n_firth_p05": 0
+ },
+ "omnibus": {
+  "T_obs": 30.798007222976977,
+  "B": 5000,
+  "p": 0.7016596680663867,
+  "perm_mean": 36.468372728876616,
+  "perm_q95": 53.96127726835939,
+  "n_terms": 34,
+  "chi2_df_naive_p": 0.6253639270945824
+ },
+ "sensitivity": [
+  {
+   "analysis": "primary",
+   "n_terms": 34,
+   "min_p": 0.08020079853740825,
+   "min_q": 0.7885789584029608,
+   "n_p05": 0,
+   "n_q05": 0,
+   "top_term": "Attention deficit hyperactivity disorder",
+   "top_OR": 0.594219475688425
+  },
+  {
+   "analysis": "S1_firth",
+   "n_terms": 34,
+   "min_p": 0.11844417677388812,
+   "min_q": 0.830512656448775,
+   "n_p05": 0,
+   "n_q05": 0,
+   "top_term": "Delayed skeletal maturation",
+   "top_OR": 0.7166713999520611
+  },
+  {
+   "analysis": "S2_spline_position",
+   "n_terms": 34,
+   "min_p": 0.051217271765421395,
+   "min_q": 0.7339200205441143,
+   "n_p05": 0,
+   "n_q05": 0,
+   "top_term": "Short stature",
+   "top_OR": 0.7230287338013963
+  },
+  {
+   "analysis": "S3_log10_core",
+   "n_terms": 34,
+   "min_p": 0.005887747120525585,
+   "min_q": 0.2001834020978699,
+   "n_p05": 3,
+   "n_q05": 0,
+   "top_term": "Bulbous nose",
+   "top_OR": 1.9511447564471571
+  },
+  {
+   "analysis": "S3_backbone",
+   "n_terms": 34,
+   "min_p": 0.008214487899453515,
+   "min_q": 0.2792925885814195,
+   "n_p05": 3,
+   "n_q05": 0,
+   "top_term": "Delayed skeletal maturation",
+   "top_OR": 0.0007499939426246872
+  },
+  {
+   "analysis": "S3_disorder",
+   "n_terms": 34,
+   "min_p": 0.0002539086873750872,
+   "min_q": 0.008632895370752965,
+   "n_p05": 1,
+   "n_q05": 1,
+   "top_term": "Intellectual disability",
+   "top_OR": 0.36174850664712
+  },
+  {
+   "analysis": "S3_seed_plddt",
+   "n_terms": 34,
+   "min_p": 0.04633527081532825,
+   "min_q": 0.5748163397937281,
+   "n_p05": 1,
+   "n_q05": 0,
+   "top_term": "Intellectual disability",
+   "top_OR": 1.9956439992183737
+  },
+  {
+   "analysis": "S4_keep_one_per_family",
+   "n_terms": 34,
+   "min_p": 0.0036392958316557185,
+   "min_q": 0.12373605827629443,
+   "n_p05": 1,
+   "n_q05": 0,
+   "top_term": "Short stature",
+   "top_OR": 0.5753437792827479
+  },
+  {
+   "analysis": "S4_keep_one_per_family_or_dup",
+   "n_terms": 34,
+   "min_p": 0.0028769382052009447,
+   "min_q": 0.09781589897683211,
+   "n_p05": 1,
+   "n_q05": 0,
+   "top_term": "Short stature",
+   "top_OR": 0.5676132518525857
+  },
+  {
+   "analysis": "S5_truncating_only",
+   "n_terms": 34,
+   "min_p": 0.10076616982517216,
+   "min_q": 0.7645445919652375,
+   "n_p05": 0,
+   "n_q05": 0,
+   "top_term": "Bulbous nose",
+   "top_OR": 0.6412684745602544
+  }
+ ],
+ "draft_reproduction": [
+  {
+   "trunc_flag": "regex_trunc",
+   "encoding": "A (NA=0)",
+   "n_terms": 31,
+   "n_p05": 1,
+   "min_q": 0.565144171929061,
+   "hits": "Attention deficit hyperactivity disorder OR=0.53 p=0.023"
+  },
+  {
+   "trunc_flag": "regex_trunc",
+   "encoding": "B (explicit)",
+   "n_terms": 30,
+   "n_p05": 0,
+   "min_q": 0.765469074341527,
+   "hits": ""
+  },
+  {
+   "trunc_flag": "is_trunc",
+   "encoding": "A (NA=0)",
+   "n_terms": 31,
+   "n_p05": 1,
+   "min_q": 0.4761187463730237,
+   "hits": "Attention deficit hyperactivity disorder OR=0.51 p=0.015"
+  },
+  {
+   "trunc_flag": "is_trunc",
+   "encoding": "B (explicit)",
+   "n_terms": 30,
+   "n_p05": 0,
+   "min_q": 0.770279792847459,
+   "hits": ""
+  }
+ ],
+ "baseline": [
+  {
+   "family": "B1_SV_vs_point",
+   "n_terms": 34,
+   "n_p05": 2,
+   "n_q05": 0,
+   "min_p": 0.03634801011961858,
+   "min_q": 0.46431819219085546,
+   "top": "Intrauterine growth retardation",
+   "top_OR": 3.280701538805636,
+   "top_lo": 1.0799879495558977,
+   "top_hi": 10.047988139176343
+  },
+  {
+   "family": "B1s_SVdeletion_vs_point",
+   "n_terms": 34,
+   "n_p05": 5,
+   "n_q05": 0,
+   "min_p": 0.02156456934064444,
+   "min_q": 0.3338786110331284,
+   "top": "Abnormality of the hand",
+   "top_OR": 0.4803311153983079,
+   "top_lo": 0.25879139666699813,
+   "top_hi": 0.8964880347910364
+  },
+  {
+   "family": "B2_nontrunc_vs_trunc",
+   "n_terms": 34,
+   "n_p05": 0,
+   "n_q05": 0,
+   "min_p": 0.054690617903554,
+   "min_q": 0.9753102204765127,
+   "top": "Low anterior hairline",
+   "top_OR": 0.18042681345438247,
+   "top_lo": 0.01748572754369305,
+   "top_hi": 1.0338081903380112
+  },
+  {
+   "family": "B3i_PTC_position_per10pct",
+   "n_terms": 34,
+   "n_p05": 1,
+   "n_q05": 0,
+   "min_p": 0.016389330100302666,
+   "min_q": 0.5572372234102907,
+   "top": "Cryptorchidism",
+   "top_OR": 1.2498633552148746,
+   "top_lo": 1.0409944870175605,
+   "top_hi": 1.5223329750124535
+  },
+  {
+   "family": "B3ii_PTC_loses_Cterm_region",
+   "n_terms": 34,
+   "n_p05": 0,
+   "n_q05": 0,
+   "min_p": 0.0556873609402704,
+   "min_q": 0.7142008656364217,
+   "top": "Cryptorchidism",
+   "top_OR": 0.2421655973176072,
+   "top_lo": 0.04187816520710339,
+   "top_hi": 1.0340073785102826
+  }
+ ],
+ "n_ptc": 240,
+ "n_ptc_keep_deg": 19,
+ "mc2023": [
+  {
+   "claim": "a. Triangular face: sequence variant vs CNV",
+   "reported": "71.1% vs 42.5%",
+   "n": 128,
+   "OR": 2.0343064145741874,
+   "lo": 0.8819341532640431,
+   "hi": 4.697948016484323,
+   "p": 0.09529118973592207,
+   "prev_exp": 0.6868686868686869,
+   "prev_unexp": 0.5172413793103449,
+   "exp_n": 99.0,
+   "unexp_n": 29.0,
+   "fisher_p": 0.12156726969209211
+  },
+  {
+   "claim": "b. Short stature: exon 9 vs outside exon 9 (point variants)",
+   "reported": "62.5% vs 27.8%",
+   "n": 191,
+   "OR": 1.6046511645767707,
+   "lo": 0.6851076249665274,
+   "hi": 3.7620111468866226,
+   "p": 0.27305497645539506,
+   "prev_exp": 0.6167664670658682,
+   "prev_unexp": 0.5,
+   "exp_n": 167.0,
+   "unexp_n": 24.0,
+   "fisher_p": 0.37255671792289824
+  },
+  {
+   "claim": "c. ID/ADHD/ASD: c.1903_1907del vs other point variants",
+   "reported": "70.4% vs 89.4%",
+   "n": 197,
+   "OR": 0.5433911706457127,
+   "lo": 0.17007848403069117,
+   "hi": 2.223237681284976,
+   "p": 0.36252030324417484,
+   "prev_exp": 0.8571428571428571,
+   "prev_unexp": 0.9090909090909091,
+   "exp_n": 21.0,
+   "unexp_n": 176.0,
+   "fisher_p": 0.43402862451311364
+  },
+  {
+   "claim": "c'. ID alone: c.1903_1907del vs other point variants",
+   "reported": "(not reported)",
+   "n": 183,
+   "OR": 0.37401694054476947,
+   "lo": 0.131249173671866,
+   "hi": 1.1933726131443998,
+   "p": 0.09277571089464698,
+   "prev_exp": 0.7368421052631579,
+   "prev_unexp": 0.8780487804878049,
+   "exp_n": 19.0,
+   "unexp_n": 164.0,
+   "fisher_p": 0.14746462327619148
+  },
+  {
+   "claim": "d. Macrodontia increases with deletion size (OR per doubling)",
+   "reported": "associated",
+   "n": 45,
+   "OR": 1.2226092883967488,
+   "lo": 0.9241842104815929,
+   "hi": 1.669857872743297,
+   "p": 0.15184395416598995,
+   "prev_exp": NaN,
+   "prev_unexp": NaN,
+   "exp_n": NaN,
+   "unexp_n": NaN,
+   "fisher_p": NaN
+  },
+  {
+   "claim": "d. Comorbidities increase with deletion size (OR per doubling)",
+   "reported": "associated",
+   "n": 43,
+   "OR": 1.3050082999312898,
+   "lo": 1.0154463932611915,
+   "hi": 1.793488394523297,
+   "p": 0.03694473409512703,
+   "prev_exp": NaN,
+   "prev_unexp": NaN,
+   "exp_n": NaN,
+   "unexp_n": NaN,
+   "fisher_p": NaN
+  },
+  {
+   "claim": "d. Hand anomalies increase with SMALLER deletions (OR per doubling)",
+   "reported": "associated",
+   "n": 52,
+   "OR": 0.7560820942275946,
+   "lo": 0.5098600196170341,
+   "hi": 1.0284338637117367,
+   "p": 0.07955565238143218,
+   "prev_exp": NaN,
+   "prev_unexp": NaN,
+   "exp_n": NaN,
+   "unexp_n": NaN,
+   "fisher_p": NaN
+  }
+ ],
+ "n_missense": 7,
+ "n_inframe": 2,
+ "nmd": {
+  "n_ptc": 240,
+  "escape50": 2,
+  "escape55": 2,
+  "long_exon": 226,
+  "ptc_exon_counts": {
+   "9.0": 224,
+   "11.0": 7,
+   "8.0": 3,
+   "6.0": 2,
+   "13.0": 2,
+   "7.0": 1,
+   "10.0": 1
+  },
+  "loses_deg_region": 221,
+  "loses_all_CT_conf": 227
+ }
+}

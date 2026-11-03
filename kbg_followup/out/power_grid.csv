@@ -1,0 +1,443 @@
+hpo,label,n,n_obs,OR_per_SD,power_0.05,power_0.005
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.0,0.056,0.004
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.1,0.087,0.007
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.2,0.13,0.025
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.3,0.182,0.034
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.4,0.292,0.071
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.5,0.391,0.146
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.6,0.525,0.227
+HP:0007018,Attention deficit hyperactivity disorder,68,53,1.75,0.664,0.331
+HP:0007018,Attention deficit hyperactivity disorder,68,53,2.0,0.835,0.563
+HP:0007018,Attention deficit hyperactivity disorder,68,53,2.25,0.944,0.761
+HP:0007018,Attention deficit hyperactivity disorder,68,53,2.5,0.969,0.861
+HP:0007018,Attention deficit hyperactivity disorder,68,53,3.0,0.999,0.97
+HP:0007018,Attention deficit hyperactivity disorder,68,53,4.0,1.0,0.999
+HP:0000308,Microretrognathia,52,16,1.0,0.053,0.005
+HP:0000308,Microretrognathia,52,16,1.1,0.063,0.006
+HP:0000308,Microretrognathia,52,16,1.2,0.098,0.017
+HP:0000308,Microretrognathia,52,16,1.3,0.141,0.021
+HP:0000308,Microretrognathia,52,16,1.4,0.206,0.045
+HP:0000308,Microretrognathia,52,16,1.5,0.248,0.066
+HP:0000308,Microretrognathia,52,16,1.6,0.334,0.094
+HP:0000308,Microretrognathia,52,16,1.75,0.384,0.109
+HP:0000308,Microretrognathia,52,16,2.0,0.508,0.21
+HP:0000308,Microretrognathia,52,16,2.25,0.628,0.293
+HP:0000308,Microretrognathia,52,16,2.5,0.768,0.405
+HP:0000308,Microretrognathia,52,16,3.0,0.887,0.568
+HP:0000308,Microretrognathia,52,16,4.0,0.97,0.782
+HP:0002750,Delayed skeletal maturation,113,54,1.0,0.062,0.009
+HP:0002750,Delayed skeletal maturation,113,54,1.1,0.08,0.013
+HP:0002750,Delayed skeletal maturation,113,54,1.2,0.134,0.022
+HP:0002750,Delayed skeletal maturation,113,54,1.3,0.216,0.05
+HP:0002750,Delayed skeletal maturation,113,54,1.4,0.352,0.118
+HP:0002750,Delayed skeletal maturation,113,54,1.5,0.453,0.162
+HP:0002750,Delayed skeletal maturation,113,54,1.6,0.579,0.242
+HP:0002750,Delayed skeletal maturation,113,54,1.75,0.707,0.371
+HP:0002750,Delayed skeletal maturation,113,54,2.0,0.845,0.547
+HP:0002750,Delayed skeletal maturation,113,54,2.25,0.943,0.743
+HP:0002750,Delayed skeletal maturation,113,54,2.5,0.97,0.832
+HP:0002750,Delayed skeletal maturation,113,54,3.0,0.996,0.94
+HP:0002750,Delayed skeletal maturation,113,54,4.0,1.0,0.997
+HP:0001511,Intrauterine growth retardation,62,13,1.0,0.072,0.013
+HP:0001511,Intrauterine growth retardation,62,13,1.1,0.074,0.013
+HP:0001511,Intrauterine growth retardation,62,13,1.2,0.097,0.015
+HP:0001511,Intrauterine growth retardation,62,13,1.3,0.147,0.023
+HP:0001511,Intrauterine growth retardation,62,13,1.4,0.196,0.033
+HP:0001511,Intrauterine growth retardation,62,13,1.5,0.219,0.044
+HP:0001511,Intrauterine growth retardation,62,13,1.6,0.302,0.08
+HP:0001511,Intrauterine growth retardation,62,13,1.75,0.364,0.095
+HP:0001511,Intrauterine growth retardation,62,13,2.0,0.501,0.168
+HP:0001511,Intrauterine growth retardation,62,13,2.25,0.616,0.273
+HP:0001511,Intrauterine growth retardation,62,13,2.5,0.699,0.343
+HP:0001511,Intrauterine growth retardation,62,13,3.0,0.827,0.483
+HP:0001511,Intrauterine growth retardation,62,13,4.0,0.941,0.717
+HP:0004322,Short stature,191,115,1.0,0.054,0.003
+HP:0004322,Short stature,191,115,1.1,0.105,0.019
+HP:0004322,Short stature,191,115,1.2,0.24,0.05
+HP:0004322,Short stature,191,115,1.3,0.407,0.153
+HP:0004322,Short stature,191,115,1.4,0.61,0.29
+HP:0004322,Short stature,191,115,1.5,0.764,0.427
+HP:0004322,Short stature,191,115,1.6,0.867,0.613
+HP:0004322,Short stature,191,115,1.75,0.953,0.773
+HP:0004322,Short stature,191,115,2.0,0.993,0.951
+HP:0004322,Short stature,191,115,2.25,1.0,0.989
+HP:0004322,Short stature,191,115,2.5,1.0,0.999
+HP:0004322,Short stature,191,115,3.0,1.0,1.0
+HP:0004322,Short stature,191,115,4.0,1.0,1.0
+HP:0000414,Bulbous nose,110,74,1.0,0.058,0.006
+HP:0000414,Bulbous nose,110,74,1.1,0.064,0.006
+HP:0000414,Bulbous nose,110,74,1.2,0.134,0.027
+HP:0000414,Bulbous nose,110,74,1.3,0.221,0.049
+HP:0000414,Bulbous nose,110,74,1.4,0.309,0.1
+HP:0000414,Bulbous nose,110,74,1.5,0.434,0.16
+HP:0000414,Bulbous nose,110,74,1.6,0.53,0.213
+HP:0000414,Bulbous nose,110,74,1.75,0.677,0.33
+HP:0000414,Bulbous nose,110,74,2.0,0.828,0.542
+HP:0000414,Bulbous nose,110,74,2.25,0.915,0.695
+HP:0000414,Bulbous nose,110,74,2.5,0.979,0.856
+HP:0000414,Bulbous nose,110,74,3.0,0.998,0.95
+HP:0000414,Bulbous nose,110,74,4.0,1.0,0.994
+HP:0001252,Hypotonia,53,21,1.0,0.062,0.009
+HP:0001252,Hypotonia,53,21,1.1,0.077,0.011
+HP:0001252,Hypotonia,53,21,1.2,0.129,0.021
+HP:0001252,Hypotonia,53,21,1.3,0.197,0.05
+HP:0001252,Hypotonia,53,21,1.4,0.279,0.074
+HP:0001252,Hypotonia,53,21,1.5,0.335,0.106
+HP:0001252,Hypotonia,53,21,1.6,0.425,0.156
+HP:0001252,Hypotonia,53,21,1.75,0.538,0.212
+HP:0001252,Hypotonia,53,21,2.0,0.705,0.369
+HP:0001252,Hypotonia,53,21,2.25,0.809,0.46
+HP:0001252,Hypotonia,53,21,2.5,0.876,0.595
+HP:0001252,Hypotonia,53,21,3.0,0.957,0.78
+HP:0001252,Hypotonia,53,21,4.0,0.996,0.936
+HP:0011968,Feeding difficulties,134,59,1.0,0.055,0.008
+HP:0011968,Feeding difficulties,134,59,1.1,0.084,0.013
+HP:0011968,Feeding difficulties,134,59,1.2,0.171,0.037
+HP:0011968,Feeding difficulties,134,59,1.3,0.289,0.072
+HP:0011968,Feeding difficulties,134,59,1.4,0.396,0.147
+HP:0011968,Feeding difficulties,134,59,1.5,0.586,0.257
+HP:0011968,Feeding difficulties,134,59,1.6,0.682,0.351
+HP:0011968,Feeding difficulties,134,59,1.75,0.796,0.512
+HP:0011968,Feeding difficulties,134,59,2.0,0.944,0.753
+HP:0011968,Feeding difficulties,134,59,2.25,0.984,0.878
+HP:0011968,Feeding difficulties,134,59,2.5,0.989,0.938
+HP:0011968,Feeding difficulties,134,59,3.0,1.0,0.993
+HP:0011968,Feeding difficulties,134,59,4.0,1.0,1.0
+HP:0001155,Abnormality of the hand,214,155,1.0,0.058,0.01
+HP:0001155,Abnormality of the hand,214,155,1.1,0.092,0.017
+HP:0001155,Abnormality of the hand,214,155,1.2,0.243,0.053
+HP:0001155,Abnormality of the hand,214,155,1.3,0.418,0.145
+HP:0001155,Abnormality of the hand,214,155,1.4,0.603,0.298
+HP:0001155,Abnormality of the hand,214,155,1.5,0.772,0.46
+HP:0001155,Abnormality of the hand,214,155,1.6,0.867,0.639
+HP:0001155,Abnormality of the hand,214,155,1.75,0.956,0.808
+HP:0001155,Abnormality of the hand,214,155,2.0,0.995,0.956
+HP:0001155,Abnormality of the hand,214,155,2.25,1.0,0.995
+HP:0001155,Abnormality of the hand,214,155,2.5,1.0,1.0
+HP:0001155,Abnormality of the hand,214,155,3.0,1.0,1.0
+HP:0001155,Abnormality of the hand,214,155,4.0,1.0,1.0
+HP:0001249,Intellectual disability,183,158,1.0,0.065,0.004
+HP:0001249,Intellectual disability,183,158,1.1,0.068,0.006
+HP:0001249,Intellectual disability,183,158,1.2,0.157,0.027
+HP:0001249,Intellectual disability,183,158,1.3,0.26,0.084
+HP:0001249,Intellectual disability,183,158,1.4,0.431,0.156
+HP:0001249,Intellectual disability,183,158,1.5,0.573,0.266
+HP:0001249,Intellectual disability,183,158,1.6,0.688,0.382
+HP:0001249,Intellectual disability,183,158,1.75,0.852,0.605
+HP:0001249,Intellectual disability,183,158,2.0,0.968,0.851
+HP:0001249,Intellectual disability,183,158,2.25,0.996,0.964
+HP:0001249,Intellectual disability,183,158,2.5,1.0,0.992
+HP:0001249,Intellectual disability,183,158,3.0,1.0,1.0
+HP:0001249,Intellectual disability,183,158,4.0,1.0,1.0
+HP:0000403,Recurrent otitis media,53,24,1.0,0.06,0.006
+HP:0000403,Recurrent otitis media,53,24,1.1,0.063,0.012
+HP:0000403,Recurrent otitis media,53,24,1.2,0.128,0.027
+HP:0000403,Recurrent otitis media,53,24,1.3,0.198,0.048
+HP:0000403,Recurrent otitis media,53,24,1.4,0.249,0.058
+HP:0000403,Recurrent otitis media,53,24,1.5,0.313,0.103
+HP:0000403,Recurrent otitis media,53,24,1.6,0.386,0.1
+HP:0000403,Recurrent otitis media,53,24,1.75,0.557,0.213
+HP:0000403,Recurrent otitis media,53,24,2.0,0.667,0.332
+HP:0000403,Recurrent otitis media,53,24,2.25,0.801,0.449
+HP:0000403,Recurrent otitis media,53,24,2.5,0.875,0.574
+HP:0000403,Recurrent otitis media,53,24,3.0,0.955,0.768
+HP:0000403,Recurrent otitis media,53,24,4.0,0.991,0.927
+HP:0000325,Triangular face,99,68,1.0,0.057,0.007
+HP:0000325,Triangular face,99,68,1.1,0.079,0.014
+HP:0000325,Triangular face,99,68,1.2,0.197,0.031
+HP:0000325,Triangular face,99,68,1.3,0.296,0.093
+HP:0000325,Triangular face,99,68,1.4,0.484,0.186
+HP:0000325,Triangular face,99,68,1.5,0.64,0.311
+HP:0000325,Triangular face,99,68,1.6,0.765,0.434
+HP:0000325,Triangular face,99,68,1.75,0.866,0.614
+HP:0000325,Triangular face,99,68,2.0,0.959,0.831
+HP:0000325,Triangular face,99,68,2.25,0.992,0.932
+HP:0000325,Triangular face,99,68,2.5,1.0,0.983
+HP:0000325,Triangular face,99,68,3.0,1.0,0.998
+HP:0000325,Triangular face,99,68,4.0,1.0,1.0
+HP:0002360,Sleep disturbance,57,19,1.0,0.069,0.007
+HP:0002360,Sleep disturbance,57,19,1.1,0.066,0.01
+HP:0002360,Sleep disturbance,57,19,1.2,0.104,0.017
+HP:0002360,Sleep disturbance,57,19,1.3,0.176,0.033
+HP:0002360,Sleep disturbance,57,19,1.4,0.22,0.06
+HP:0002360,Sleep disturbance,57,19,1.5,0.287,0.069
+HP:0002360,Sleep disturbance,57,19,1.6,0.355,0.092
+HP:0002360,Sleep disturbance,57,19,1.75,0.437,0.148
+HP:0002360,Sleep disturbance,57,19,2.0,0.607,0.248
+HP:0002360,Sleep disturbance,57,19,2.25,0.707,0.346
+HP:0002360,Sleep disturbance,57,19,2.5,0.791,0.436
+HP:0002360,Sleep disturbance,57,19,3.0,0.907,0.637
+HP:0002360,Sleep disturbance,57,19,4.0,0.98,0.87
+HP:0000486,Strabismus,70,16,1.0,0.057,0.007
+HP:0000486,Strabismus,70,16,1.1,0.07,0.006
+HP:0000486,Strabismus,70,16,1.2,0.088,0.009
+HP:0000486,Strabismus,70,16,1.3,0.121,0.02
+HP:0000486,Strabismus,70,16,1.4,0.177,0.041
+HP:0000486,Strabismus,70,16,1.5,0.232,0.055
+HP:0000486,Strabismus,70,16,1.6,0.27,0.053
+HP:0000486,Strabismus,70,16,1.75,0.362,0.083
+HP:0000486,Strabismus,70,16,2.0,0.495,0.165
+HP:0000486,Strabismus,70,16,2.25,0.577,0.233
+HP:0000486,Strabismus,70,16,2.5,0.703,0.359
+HP:0000486,Strabismus,70,16,3.0,0.837,0.516
+HP:0000486,Strabismus,70,16,4.0,0.939,0.733
+HP:0001270,Motor delay,77,55,1.0,0.069,0.007
+HP:0001270,Motor delay,77,55,1.1,0.076,0.005
+HP:0001270,Motor delay,77,55,1.2,0.108,0.024
+HP:0001270,Motor delay,77,55,1.3,0.175,0.031
+HP:0001270,Motor delay,77,55,1.4,0.242,0.06
+HP:0001270,Motor delay,77,55,1.5,0.339,0.102
+HP:0001270,Motor delay,77,55,1.6,0.461,0.171
+HP:0001270,Motor delay,77,55,1.75,0.563,0.262
+HP:0001270,Motor delay,77,55,2.0,0.729,0.398
+HP:0001270,Motor delay,77,55,2.25,0.838,0.564
+HP:0001270,Motor delay,77,55,2.5,0.924,0.699
+HP:0001270,Motor delay,77,55,3.0,0.981,0.86
+HP:0001270,Motor delay,77,55,4.0,0.996,0.976
+HP:0002263,Exaggerated cupid's bow,47,13,1.0,0.09,0.006
+HP:0002263,Exaggerated cupid's bow,47,13,1.1,0.09,0.016
+HP:0002263,Exaggerated cupid's bow,47,13,1.2,0.136,0.026
+HP:0002263,Exaggerated cupid's bow,47,13,1.3,0.144,0.037
+HP:0002263,Exaggerated cupid's bow,47,13,1.4,0.206,0.043
+HP:0002263,Exaggerated cupid's bow,47,13,1.5,0.274,0.064
+HP:0002263,Exaggerated cupid's bow,47,13,1.6,0.332,0.092
+HP:0002263,Exaggerated cupid's bow,47,13,1.75,0.404,0.117
+HP:0002263,Exaggerated cupid's bow,47,13,2.0,0.547,0.205
+HP:0002263,Exaggerated cupid's bow,47,13,2.25,0.65,0.283
+HP:0002263,Exaggerated cupid's bow,47,13,2.5,0.712,0.348
+HP:0002263,Exaggerated cupid's bow,47,13,3.0,0.842,0.536
+HP:0002263,Exaggerated cupid's bow,47,13,4.0,0.943,0.721
+HP:0000750,Delayed speech and language development,141,121,1.0,0.053,0.004
+HP:0000750,Delayed speech and language development,141,121,1.1,0.065,0.007
+HP:0000750,Delayed speech and language development,141,121,1.2,0.112,0.025
+HP:0000750,Delayed speech and language development,141,121,1.3,0.182,0.056
+HP:0000750,Delayed speech and language development,141,121,1.4,0.288,0.093
+HP:0000750,Delayed speech and language development,141,121,1.5,0.389,0.14
+HP:0000750,Delayed speech and language development,141,121,1.6,0.492,0.217
+HP:0000750,Delayed speech and language development,141,121,1.75,0.675,0.336
+HP:0000750,Delayed speech and language development,141,121,2.0,0.81,0.554
+HP:0000750,Delayed speech and language development,141,121,2.25,0.937,0.788
+HP:0000750,Delayed speech and language development,141,121,2.5,0.973,0.873
+HP:0000750,Delayed speech and language development,141,121,3.0,0.998,0.978
+HP:0000750,Delayed speech and language development,141,121,4.0,1.0,0.999
+HP:0000411,Protruding ear,67,48,1.0,0.068,0.014
+HP:0000411,Protruding ear,67,48,1.1,0.07,0.014
+HP:0000411,Protruding ear,67,48,1.2,0.143,0.031
+HP:0000411,Protruding ear,67,48,1.3,0.208,0.046
+HP:0000411,Protruding ear,67,48,1.4,0.287,0.082
+HP:0000411,Protruding ear,67,48,1.5,0.409,0.142
+HP:0000411,Protruding ear,67,48,1.6,0.536,0.217
+HP:0000411,Protruding ear,67,48,1.75,0.686,0.352
+HP:0000411,Protruding ear,67,48,2.0,0.824,0.533
+HP:0000411,Protruding ear,67,48,2.25,0.914,0.698
+HP:0000411,Protruding ear,67,48,2.5,0.965,0.823
+HP:0000411,Protruding ear,67,48,3.0,0.993,0.954
+HP:0000411,Protruding ear,67,48,4.0,1.0,0.99
+HP:0000316,Hypertelorism,101,59,1.0,0.052,0.004
+HP:0000316,Hypertelorism,101,59,1.1,0.098,0.02
+HP:0000316,Hypertelorism,101,59,1.2,0.154,0.034
+HP:0000316,Hypertelorism,101,59,1.3,0.286,0.084
+HP:0000316,Hypertelorism,101,59,1.4,0.416,0.159
+HP:0000316,Hypertelorism,101,59,1.5,0.547,0.237
+HP:0000316,Hypertelorism,101,59,1.6,0.674,0.36
+HP:0000316,Hypertelorism,101,59,1.75,0.815,0.515
+HP:0000316,Hypertelorism,101,59,2.0,0.932,0.748
+HP:0000316,Hypertelorism,101,59,2.25,0.984,0.889
+HP:0000316,Hypertelorism,101,59,2.5,0.989,0.958
+HP:0000316,Hypertelorism,101,59,3.0,0.999,0.99
+HP:0000316,Hypertelorism,101,59,4.0,0.999,0.999
+HP:0000343,Long philtrum,130,104,1.0,0.057,0.009
+HP:0000343,Long philtrum,130,104,1.1,0.086,0.015
+HP:0000343,Long philtrum,130,104,1.2,0.15,0.035
+HP:0000343,Long philtrum,130,104,1.3,0.283,0.071
+HP:0000343,Long philtrum,130,104,1.4,0.414,0.129
+HP:0000343,Long philtrum,130,104,1.5,0.569,0.277
+HP:0000343,Long philtrum,130,104,1.6,0.731,0.386
+HP:0000343,Long philtrum,130,104,1.75,0.814,0.544
+HP:0000343,Long philtrum,130,104,2.0,0.947,0.816
+HP:0000343,Long philtrum,130,104,2.25,0.989,0.927
+HP:0000343,Long philtrum,130,104,2.5,0.998,0.978
+HP:0000343,Long philtrum,130,104,3.0,1.0,0.998
+HP:0000343,Long philtrum,130,104,4.0,1.0,1.0
+HP:0002353,EEG abnormality,49,16,1.0,0.071,0.014
+HP:0002353,EEG abnormality,49,16,1.1,0.069,0.01
+HP:0002353,EEG abnormality,49,16,1.2,0.071,0.01
+HP:0002353,EEG abnormality,49,16,1.3,0.098,0.022
+HP:0002353,EEG abnormality,49,16,1.4,0.117,0.024
+HP:0002353,EEG abnormality,49,16,1.5,0.177,0.034
+HP:0002353,EEG abnormality,49,16,1.6,0.191,0.053
+HP:0002353,EEG abnormality,49,16,1.75,0.258,0.069
+HP:0002353,EEG abnormality,49,16,2.0,0.343,0.097
+HP:0002353,EEG abnormality,49,16,2.25,0.43,0.166
+HP:0002353,EEG abnormality,49,16,2.5,0.481,0.169
+HP:0002353,EEG abnormality,49,16,3.0,0.637,0.284
+HP:0002353,EEG abnormality,49,16,4.0,0.809,0.466
+HP:0000664,Synophrys,96,53,1.0,0.061,0.008
+HP:0000664,Synophrys,96,53,1.1,0.077,0.008
+HP:0000664,Synophrys,96,53,1.2,0.14,0.029
+HP:0000664,Synophrys,96,53,1.3,0.242,0.073
+HP:0000664,Synophrys,96,53,1.4,0.346,0.111
+HP:0000664,Synophrys,96,53,1.5,0.474,0.183
+HP:0000664,Synophrys,96,53,1.6,0.594,0.267
+HP:0000664,Synophrys,96,53,1.75,0.715,0.39
+HP:0000664,Synophrys,96,53,2.0,0.874,0.613
+HP:0000664,Synophrys,96,53,2.25,0.956,0.785
+HP:0000664,Synophrys,96,53,2.5,0.973,0.864
+HP:0000664,Synophrys,96,53,3.0,0.997,0.963
+HP:0000664,Synophrys,96,53,4.0,1.0,0.997
+HP:0000729,Autistic behavior,72,40,1.0,0.079,0.011
+HP:0000729,Autistic behavior,72,40,1.1,0.074,0.012
+HP:0000729,Autistic behavior,72,40,1.2,0.135,0.029
+HP:0000729,Autistic behavior,72,40,1.3,0.219,0.044
+HP:0000729,Autistic behavior,72,40,1.4,0.307,0.089
+HP:0000729,Autistic behavior,72,40,1.5,0.442,0.158
+HP:0000729,Autistic behavior,72,40,1.6,0.536,0.22
+HP:0000729,Autistic behavior,72,40,1.75,0.671,0.338
+HP:0000729,Autistic behavior,72,40,2.0,0.832,0.564
+HP:0000729,Autistic behavior,72,40,2.25,0.931,0.725
+HP:0000729,Autistic behavior,72,40,2.5,0.966,0.835
+HP:0000729,Autistic behavior,72,40,3.0,0.997,0.951
+HP:0000729,Autistic behavior,72,40,4.0,0.999,0.996
+HP:0001572,Macrodontia,212,170,1.0,0.052,0.007
+HP:0001572,Macrodontia,212,170,1.1,0.073,0.013
+HP:0001572,Macrodontia,212,170,1.2,0.203,0.048
+HP:0001572,Macrodontia,212,170,1.3,0.36,0.114
+HP:0001572,Macrodontia,212,170,1.4,0.533,0.232
+HP:0001572,Macrodontia,212,170,1.5,0.698,0.375
+HP:0001572,Macrodontia,212,170,1.6,0.813,0.538
+HP:0001572,Macrodontia,212,170,1.75,0.922,0.744
+HP:0001572,Macrodontia,212,170,2.0,0.984,0.925
+HP:0001572,Macrodontia,212,170,2.25,0.996,0.986
+HP:0001572,Macrodontia,212,170,2.5,1.0,1.0
+HP:0001572,Macrodontia,212,170,3.0,1.0,1.0
+HP:0001572,Macrodontia,212,170,4.0,1.0,1.0
+HP:0001629,Ventricular septal defect,142,12,1.0,0.063,0.008
+HP:0001629,Ventricular septal defect,142,12,1.1,0.052,0.005
+HP:0001629,Ventricular septal defect,142,12,1.2,0.08,0.006
+HP:0001629,Ventricular septal defect,142,12,1.3,0.11,0.015
+HP:0001629,Ventricular septal defect,142,12,1.4,0.13,0.019
+HP:0001629,Ventricular septal defect,142,12,1.5,0.186,0.042
+HP:0001629,Ventricular septal defect,142,12,1.6,0.224,0.053
+HP:0001629,Ventricular septal defect,142,12,1.75,0.281,0.066
+HP:0001629,Ventricular septal defect,142,12,2.0,0.427,0.129
+HP:0001629,Ventricular septal defect,142,12,2.25,0.47,0.163
+HP:0001629,Ventricular septal defect,142,12,2.5,0.628,0.246
+HP:0001629,Ventricular septal defect,142,12,3.0,0.771,0.417
+HP:0001629,Ventricular septal defect,142,12,4.0,0.918,0.665
+HP:0000448,Prominent nose,41,17,1.0,0.078,0.006
+HP:0000448,Prominent nose,41,17,1.1,0.064,0.009
+HP:0000448,Prominent nose,41,17,1.2,0.095,0.011
+HP:0000448,Prominent nose,41,17,1.3,0.13,0.032
+HP:0000448,Prominent nose,41,17,1.4,0.159,0.036
+HP:0000448,Prominent nose,41,17,1.5,0.188,0.037
+HP:0000448,Prominent nose,41,17,1.6,0.23,0.059
+HP:0000448,Prominent nose,41,17,1.75,0.318,0.105
+HP:0000448,Prominent nose,41,17,2.0,0.44,0.143
+HP:0000448,Prominent nose,41,17,2.25,0.563,0.219
+HP:0000448,Prominent nose,41,17,2.5,0.599,0.264
+HP:0000448,Prominent nose,41,17,3.0,0.759,0.417
+HP:0000448,Prominent nose,41,17,4.0,0.908,0.62
+HP:0000252,Microcephaly,113,30,1.0,0.062,0.007
+HP:0000252,Microcephaly,113,30,1.1,0.06,0.003
+HP:0000252,Microcephaly,113,30,1.2,0.127,0.018
+HP:0000252,Microcephaly,113,30,1.3,0.201,0.044
+HP:0000252,Microcephaly,113,30,1.4,0.274,0.075
+HP:0000252,Microcephaly,113,30,1.5,0.383,0.138
+HP:0000252,Microcephaly,113,30,1.6,0.482,0.18
+HP:0000252,Microcephaly,113,30,1.75,0.572,0.25
+HP:0000252,Microcephaly,113,30,2.0,0.749,0.382
+HP:0000252,Microcephaly,113,30,2.25,0.857,0.548
+HP:0000252,Microcephaly,113,30,2.5,0.912,0.686
+HP:0000252,Microcephaly,113,30,3.0,0.975,0.839
+HP:0000252,Microcephaly,113,30,4.0,0.999,0.968
+HP:0000405,Conductive hearing impairment,92,23,1.0,0.066,0.008
+HP:0000405,Conductive hearing impairment,92,23,1.1,0.075,0.007
+HP:0000405,Conductive hearing impairment,92,23,1.2,0.081,0.014
+HP:0000405,Conductive hearing impairment,92,23,1.3,0.124,0.02
+HP:0000405,Conductive hearing impairment,92,23,1.4,0.137,0.03
+HP:0000405,Conductive hearing impairment,92,23,1.5,0.208,0.053
+HP:0000405,Conductive hearing impairment,92,23,1.6,0.268,0.096
+HP:0000405,Conductive hearing impairment,92,23,1.75,0.353,0.104
+HP:0000405,Conductive hearing impairment,92,23,2.0,0.445,0.176
+HP:0000405,Conductive hearing impairment,92,23,2.25,0.602,0.259
+HP:0000405,Conductive hearing impairment,92,23,2.5,0.71,0.371
+HP:0000405,Conductive hearing impairment,92,23,3.0,0.831,0.516
+HP:0000405,Conductive hearing impairment,92,23,4.0,0.947,0.763
+HP:0000294,Low anterior hairline,88,55,1.0,0.066,0.009
+HP:0000294,Low anterior hairline,88,55,1.1,0.087,0.012
+HP:0000294,Low anterior hairline,88,55,1.2,0.123,0.026
+HP:0000294,Low anterior hairline,88,55,1.3,0.256,0.075
+HP:0000294,Low anterior hairline,88,55,1.4,0.365,0.092
+HP:0000294,Low anterior hairline,88,55,1.5,0.459,0.173
+HP:0000294,Low anterior hairline,88,55,1.6,0.601,0.289
+HP:0000294,Low anterior hairline,88,55,1.75,0.742,0.454
+HP:0000294,Low anterior hairline,88,55,2.0,0.887,0.66
+HP:0000294,Low anterior hairline,88,55,2.25,0.957,0.836
+HP:0000294,Low anterior hairline,88,55,2.5,0.983,0.904
+HP:0000294,Low anterior hairline,88,55,3.0,0.999,0.976
+HP:0000294,Low anterior hairline,88,55,4.0,1.0,0.998
+HP:0000028,Cryptorchidism,82,35,1.0,0.052,0.006
+HP:0000028,Cryptorchidism,82,35,1.1,0.086,0.011
+HP:0000028,Cryptorchidism,82,35,1.2,0.151,0.023
+HP:0000028,Cryptorchidism,82,35,1.3,0.214,0.053
+HP:0000028,Cryptorchidism,82,35,1.4,0.318,0.095
+HP:0000028,Cryptorchidism,82,35,1.5,0.453,0.162
+HP:0000028,Cryptorchidism,82,35,1.6,0.545,0.234
+HP:0000028,Cryptorchidism,82,35,1.75,0.682,0.355
+HP:0000028,Cryptorchidism,82,35,2.0,0.833,0.54
+HP:0000028,Cryptorchidism,82,35,2.25,0.934,0.701
+HP:0000028,Cryptorchidism,82,35,2.5,0.977,0.849
+HP:0000028,Cryptorchidism,82,35,3.0,0.997,0.959
+HP:0000028,Cryptorchidism,82,35,4.0,1.0,0.996
+HP:0000463,Anteverted nares,88,63,1.0,0.042,0.007
+HP:0000463,Anteverted nares,88,63,1.1,0.083,0.014
+HP:0000463,Anteverted nares,88,63,1.2,0.126,0.025
+HP:0000463,Anteverted nares,88,63,1.3,0.237,0.054
+HP:0000463,Anteverted nares,88,63,1.4,0.324,0.089
+HP:0000463,Anteverted nares,88,63,1.5,0.437,0.187
+HP:0000463,Anteverted nares,88,63,1.6,0.536,0.256
+HP:0000463,Anteverted nares,88,63,1.75,0.701,0.375
+HP:0000463,Anteverted nares,88,63,2.0,0.856,0.599
+HP:0000463,Anteverted nares,88,63,2.25,0.957,0.788
+HP:0000463,Anteverted nares,88,63,2.5,0.986,0.894
+HP:0000463,Anteverted nares,88,63,3.0,0.998,0.974
+HP:0000463,Anteverted nares,88,63,4.0,1.0,0.998
+HP:0000303,Mandibular prognathia,47,13,1.0,0.063,0.005
+HP:0000303,Mandibular prognathia,47,13,1.1,0.069,0.007
+HP:0000303,Mandibular prognathia,47,13,1.2,0.093,0.017
+HP:0000303,Mandibular prognathia,47,13,1.3,0.146,0.021
+HP:0000303,Mandibular prognathia,47,13,1.4,0.202,0.038
+HP:0000303,Mandibular prognathia,47,13,1.5,0.242,0.052
+HP:0000303,Mandibular prognathia,47,13,1.6,0.323,0.085
+HP:0000303,Mandibular prognathia,47,13,1.75,0.409,0.112
+HP:0000303,Mandibular prognathia,47,13,2.0,0.539,0.211
+HP:0000303,Mandibular prognathia,47,13,2.25,0.689,0.334
+HP:0000303,Mandibular prognathia,47,13,2.5,0.754,0.409
+HP:0000303,Mandibular prognathia,47,13,3.0,0.888,0.576
+HP:0000303,Mandibular prognathia,47,13,4.0,0.971,0.796
+HP:0000369,Low-set ears,41,21,1.0,0.068,0.008
+HP:0000369,Low-set ears,41,21,1.1,0.069,0.01
+HP:0000369,Low-set ears,41,21,1.2,0.072,0.012
+HP:0000369,Low-set ears,41,21,1.3,0.106,0.024
+HP:0000369,Low-set ears,41,21,1.4,0.154,0.032
+HP:0000369,Low-set ears,41,21,1.5,0.205,0.045
+HP:0000369,Low-set ears,41,21,1.6,0.227,0.057
+HP:0000369,Low-set ears,41,21,1.75,0.299,0.091
+HP:0000369,Low-set ears,41,21,2.0,0.408,0.139
+HP:0000369,Low-set ears,41,21,2.25,0.481,0.191
+HP:0000369,Low-set ears,41,21,2.5,0.618,0.276
+HP:0000369,Low-set ears,41,21,3.0,0.756,0.416
+HP:0000369,Low-set ears,41,21,4.0,0.892,0.636
+HP:0000574,Thick eyebrow,131,106,1.0,0.065,0.01
+HP:0000574,Thick eyebrow,131,106,1.1,0.084,0.014
+HP:0000574,Thick eyebrow,131,106,1.2,0.128,0.031
+HP:0000574,Thick eyebrow,131,106,1.3,0.278,0.077
+HP:0000574,Thick eyebrow,131,106,1.4,0.379,0.144
+HP:0000574,Thick eyebrow,131,106,1.5,0.516,0.214
+HP:0000574,Thick eyebrow,131,106,1.6,0.679,0.361
+HP:0000574,Thick eyebrow,131,106,1.75,0.804,0.505
+HP:0000574,Thick eyebrow,131,106,2.0,0.948,0.772
+HP:0000574,Thick eyebrow,131,106,2.25,0.982,0.911
+HP:0000574,Thick eyebrow,131,106,2.5,0.996,0.969
+HP:0000574,Thick eyebrow,131,106,3.0,1.0,0.999
+HP:0000574,Thick eyebrow,131,106,4.0,1.0,1.0

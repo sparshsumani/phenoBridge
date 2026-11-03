@@ -1,0 +1,160 @@
+{
+ "labels": {
+  "HP:0001249": "Intellectual disability",
+  "HP:0000729": "Autistic behavior",
+  "HP:0007018": "Attention deficit hyperactivity disorder",
+  "HP:0001263": "Global developmental delay",
+  "HP:0001572": "Macrodontia",
+  "HP:0000325": "Triangular face",
+  "HP:0000574": "Thick eyebrow",
+  "HP:0000343": "Long philtrum",
+  "HP:0001155": "Abnormality of the hand",
+  "HP:0004322": "Short stature",
+  "HP:0001511": "Intrauterine growth retardation",
+  "HP:0002353": "EEG abnormality",
+  "HP:0002750": "Delayed skeletal maturation",
+  "HP:0001270": "Motor delay",
+  "HP:0000750": "Delayed speech and language development",
+  "HP:0002360": "Sleep disturbance",
+  "HP:0001252": "Hypotonia",
+  "HP:0002373": "Febrile seizure (within the age range of 3 months to 6 years)",
+  "HP:0007359": "Focal-onset seizure",
+  "HP:0002197": "Generalized-onset seizure",
+  "HP:0002121": "Generalized non-motor (absence) seizure",
+  "HP:0006695": "Atrioventricular canal defect",
+  "HP:0001655": "Patent foramen ovale",
+  "HP:0001629": "Ventricular septal defect",
+  "HP:0001631": "Atrial septal defect",
+  "HP:0001642": "Pulmonic stenosis",
+  "HP:0001647": "Bicuspid aortic valve",
+  "HP:0000407": "Sensorineural hearing impairment",
+  "HP:0000405": "Conductive hearing impairment",
+  "HP:0000410": "Mixed hearing impairment",
+  "HP:0000403": "Recurrent otitis media",
+  "HP:0011968": "Feeding difficulties",
+  "HP:0000028": "Cryptorchidism",
+  "HP:0000023": "Inguinal hernia",
+  "HP:0001537": "Umbilical hernia",
+  "HP:0000252": "Microcephaly",
+  "HP:0000294": "Low anterior hairline",
+  "HP:0000308": "Microretrognathia",
+  "HP:0000303": "Mandibular prognathia",
+  "HP:0002263": "Exaggerated cupid's bow",
+  "HP:0000486": "Strabismus",
+  "HP:0000664": "Synophrys",
+  "HP:0000316": "Hypertelorism",
+  "HP:0000463": "Anteverted nares",
+  "HP:0000414": "Bulbous nose",
+  "HP:0000448": "Prominent nose",
+  "HP:0000411": "Protruding ear",
+  "HP:0000369": "Low-set ears"
+ },
+ "hpo": [
+  "HP:0001249",
+  "HP:0000729",
+  "HP:0007018",
+  "HP:0001263",
+  "HP:0001572",
+  "HP:0000325",
+  "HP:0000574",
+  "HP:0000343",
+  "HP:0001155",
+  "HP:0004322",
+  "HP:0001511",
+  "HP:0002353",
+  "HP:0002750",
+  "HP:0001270",
+  "HP:0000750",
+  "HP:0002360",
+  "HP:0001252",
+  "HP:0002373",
+  "HP:0007359",
+  "HP:0002197",
+  "HP:0002121",
+  "HP:0006695",
+  "HP:0001655",
+  "HP:0001629",
+  "HP:0001631",
+  "HP:0001642",
+  "HP:0001647",
+  "HP:0000407",
+  "HP:0000405",
+  "HP:0000410",
+  "HP:0000403",
+  "HP:0011968",
+  "HP:0000028",
+  "HP:0000023",
+  "HP:0001537",
+  "HP:0000252",
+  "HP:0000294",
+  "HP:0000308",
+  "HP:0000303",
+  "HP:0002263",
+  "HP:0000486",
+  "HP:0000664",
+  "HP:0000316",
+  "HP:0000463",
+  "HP:0000414",
+  "HP:0000448",
+  "HP:0000411",
+  "HP:0000369"
+ ],
+ "ct_segments": [
+  [
+   2436,
+   2455
+  ],
+  [
+   2489,
+   2547
+  ],
+  [
+   2577,
+   2631
+  ]
+ ],
+ "segments": [
+  [
+   159,
+   285
+  ],
+  [
+   1579,
+   1610
+  ],
+  [
+   2436,
+   2455
+  ],
+  [
+   2489,
+   2547
+  ],
+  [
+   2577,
+   2631
+  ]
+ ],
+ "deg_region": [
+  2369,
+  2663
+ ],
+ "ank": [
+  [
+   167,
+   196
+  ],
+  [
+   200,
+   229
+  ],
+  [
+   233,
+   262
+  ],
+  [
+   266,
+   292
+  ]
+ ]
+}

@@ -1,0 +1,281 @@
+{
+ "n": 333,
+ "n_sources": 41,
+ "recurrent_alleles": {
+  "c1381_1384del_ANKRD11_NM_013275v6": 4,
+  "c1903_1907del_ANKRD11_NM_013275v6": 12,
+  "c2197CtoT_ANKRD11_NM_013275v6": 3,
+  "c2398_2401del_ANKRD11_NM_013275v6": 6,
+  "c2408_2412del_ANKRD11_NM_013275v6": 5,
+  "c3224_3227del_ANKRD11_NM_013275v6": 3
+ },
+ "labelled_families": [
+  {
+   "family": "KBG10",
+   "members": [
+    "KBG10A",
+    "KBG10B"
+   ],
+   "alleles": [
+    "c2329_2332del_ANKRD11_NM_013275v6",
+    "c6968_6975del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": false
+  },
+  {
+   "family": "KBG31",
+   "members": [
+    "KBG31A",
+    "KBG31B"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "KBG8",
+   "members": [
+    "KBG8A",
+    "KBG8B"
+   ],
+   "alleles": [
+    "c6628GtoT_ANKRD11_NM_013275v6",
+    "c7753CtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": false
+  },
+  {
+   "family": "Khalifa, 2013_P1",
+   "members": [
+    "Khalifa, 2013_P1A",
+    "Khalifa, 2013_P1B"
+   ],
+   "alleles": [
+    "ANKRD11_SV_16q24_3_89388113_89541926_x1"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam1",
+   "members": [
+    "Murray, 2017_P1 (1.1)",
+    "Murray, 2017_P2 (1.2)",
+    "Murray, 2017_P3 (1.3)"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam11",
+   "members": [
+    "Murray, 2017_P13 (11.1)"
+   ],
+   "alleles": [
+    "c7216CtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam13",
+   "members": [
+    "Murray, 2017_P16 (13.1)"
+   ],
+   "alleles": [
+    "c6472GtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam2",
+   "members": [
+    "Murray, 2017_P4 (2.1)"
+   ],
+   "alleles": [
+    "c505GtoT_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam3",
+   "members": [
+    "Murray, 2017_P5 (3.1)",
+    "Murray, 2017_P6 (3.2)",
+    "Murray, 2017_P7 (3.3)"
+   ],
+   "alleles": [
+    "c4406GtoA_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam4",
+   "members": [
+    "Murray, 2017_P8 (4.1)"
+   ],
+   "alleles": [
+    "c1903_1907del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam5",
+   "members": [
+    "Murray, 2017_P9 (5.1.)"
+   ],
+   "alleles": [
+    "c1173CtoG_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam7",
+   "members": [
+    "Murray, 2017_P10 (7.1.)"
+   ],
+   "alleles": [
+    "c7471AtoC_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam8",
+   "members": [
+    "Murray, 2017_P11 (8.1.)"
+   ],
+   "alleles": [
+    "c6409_6410del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Murray2017_fam9",
+   "members": [
+    "Murray, 2017_P12 (9.1)"
+   ],
+   "alleles": [
+    "c3224_3227del_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  },
+  {
+   "family": "Sirmaci2011_F1",
+   "members": [
+    "Sirmaci2011_P1-F1 (previously published Tekin, 2004)",
+    "Sirmaci2011_P2-F1 (previously published Tekin, 2004)",
+    "Sirmaci2011_P3-F1 (previously published Tekin, 2004)"
+   ],
+   "alleles": [
+    "c7570_1GtoC_ANKRD11_NM_013275v6"
+   ],
+   "consistent": true
+  }
+ ],
+ "n_family_clusters_multi": 22,
+ "n_in_multi_family_clusters": 58,
+ "n_keep_one_per_family": 297,
+ "n_keep_one_per_family_or_dup": 281,
+ "n_likely_dup_pairs": 20,
+ "n_possible_dup_pairs": 13,
+ "expected_false_likely": 14.025464673449669,
+ "expected_false_possible": 12.08332677630026,
+ "n_keep_excl_likely_dups": 319,
+ "calibration": {
+  "null_rate_likely_criterion": 0.08014551241971239,
+  "null_pairs_5": 17593,
+  "null_rate_possible_criterion": 0.10693209536548902,
+  "null_pairs_10": 12709
+ }
+}
+                           a                  b                             allele sex_a sex_b  shared  disc  likely_dup  possible_dup
+671            Bianchi, 2018   Gnazzo, 2020_P11  c2408_2412del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+3453        Gnazzo, 2020_P10  Low, 2016_P14 (2)  c2398_2401del_ANKRD11_NM_013275v6     M     M       7     0        True         False
+3546        Gnazzo, 2020_P10     Parenti2021_P4  c2398_2401del_ANKRD11_NM_013275v6     M     F      13     0       False          True
+10898        Gnazzo, 2020_P4   Low, 2016_P4 (5)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+10899        Gnazzo, 2020_P4   Low, 2016_P5 (6)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+10900        Gnazzo, 2020_P4   Low, 2016_P6 (7)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+10966        Gnazzo, 2020_P4    Parenti2021_P18  c1903_1907del_ANKRD11_NM_013275v6     F     M      12     0       False          True
+11270        Gnazzo, 2020_P5     Parenti2021_P3      c1977CtoG_ANKRD11_NM_013275v6     M     F      14     1       False          True
+11566        Gnazzo, 2020_P6     Parenti2021_P3      c1977CtoG_ANKRD11_NM_013275v6     M     F      14     1       False          True
+13154     Goldenberg2016_P11              KBG37  c1903_1907del_ANKRD11_NM_013275v6     F     F       6     0        True         False
+22830      Goldenberg2016_P9    Parenti2021_P14  c1903_1907del_ANKRD11_NM_013275v6     F     F       6     0        True         False
+30163                 KBG31B  Low, 2016_P1 (19)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+30175                 KBG31B   Low, 2016_P4 (5)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+30176                 KBG31B   Low, 2016_P5 (6)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+30177                 KBG31B   Low, 2016_P6 (7)  c1903_1907del_ANKRD11_NM_013275v6     F     F       7     0        True         False
+31486                  KBG37  Low, 2016_P1 (19)  c1903_1907del_ANKRD11_NM_013275v6     F     F      10     1       False          True
+31498                  KBG37   Low, 2016_P4 (5)  c1903_1907del_ANKRD11_NM_013275v6     F     F      10     0        True          True
+31499                  KBG37   Low, 2016_P5 (6)  c1903_1907del_ANKRD11_NM_013275v6     F     F      10     0        True          True
+31500                  KBG37   Low, 2016_P6 (7)  c1903_1907del_ANKRD11_NM_013275v6     F     F      10     0        True          True
+31501                  KBG37   Low, 2016_P7 (8)  c1903_1907del_ANKRD11_NM_013275v6     F     M      10     0       False          True
+35908                  KBG56    Parenti2021_P13  c1381_1384del_ANKRD11_NM_013275v6     M     M       5     0        True         False
+44497     Low, 2016_P10 (18)     Parenti2021_P5  c2408_2412del_ANKRD11_NM_013275v6     M     F      10     1       False          True
+44782     Low, 2016_P12 (13)    Parenti2021_P20  c2408_2412del_ANKRD11_NM_013275v6     F     M      10     1       False          True
+44788     Low, 2016_P12 (13)     Parenti2021_P5  c2408_2412del_ANKRD11_NM_013275v6     F     F       9     0        True         False
+47606       Low, 2016_P6 (7)     Parenti2021_P9  c1903_1907del_ANKRD11_NM_013275v6     F     M      10     1       False          True
+47716       Low, 2016_P7 (8)    Parenti2021_P18  c1903_1907del_ANKRD11_NM_013275v6     M     M       7     0        True         False
+47729       Low, 2016_P7 (8)     Parenti2021_P9  c1903_1907del_ANKRD11_NM_013275v6     M     M      10     1       False          True
+47968       Low, 2016_P9 (1)     Parenti2021_P5  c2408_2412del_ANKRD11_NM_013275v6     F     F       9     0        True         False
+49382  Murray, 2017_P2 (1.2)        Walz2015_PB  c1903_1907del_ANKRD11_NM_013275v6     M     M       5     0        True         False
+51829       Ockeloen2015_P16     Parenti2021_P9  c1903_1907del_ANKRD11_NM_013275v6     M     M       6     0        True         False
+                                             individualId                                alleleKey                                        family_cluster
+4                                           Crippa2015_P1  ANKRD11_SV_16q24_3_89350931_89439639_x3                                         Crippa2015_P1
+5                                           Crippa2015_P2  ANKRD11_SV_16q24_3_89350931_89439639_x3                                         Crippa2015_P1
+6                                           Crippa2015_P3  ANKRD11_SV_16q24_3_89350931_89439639_x3                                         Crippa2015_P1
+35                                        Gnazzo, 2020_P5            c1977CtoG_ANKRD11_NM_013275v6                                       Gnazzo, 2020_P5
+36                                        Gnazzo, 2020_P6            c1977CtoG_ANKRD11_NM_013275v6                                       Gnazzo, 2020_P5
+37                                        Gnazzo, 2020_P7        c2175_2178del_ANKRD11_NM_013275v6                                       Gnazzo, 2020_P7
+38                                        Gnazzo, 2020_P8        c2175_2178del_ANKRD11_NM_013275v6                                       Gnazzo, 2020_P7
+40                                      Goldenberg2016_P1  ANKRD11_SV_16q24_3_89249149_89376186_x1                                     Goldenberg2016_P1
+51                                      Goldenberg2016_P2  ANKRD11_SV_16q24_3_89249149_89376186_x1                                     Goldenberg2016_P1
+62                                      Goldenberg2016_P3  ANKRD11_SV_16q24_3_89249149_89376186_x1                                     Goldenberg2016_P1
+72                                      Goldenberg2016_P4  ANKRD11_SV_16q24_3_89249149_89376186_x1                                     Goldenberg2016_P1
+50                                     Goldenberg2016_P19  ANKRD11_SV_16q24_3_89328477_89477051_x1                                    Goldenberg2016_P19
+52                                     Goldenberg2016_P20  ANKRD11_SV_16q24_3_89328477_89477051_x1                                    Goldenberg2016_P19
+84                                                 KBG10B        c2329_2332del_ANKRD11_NM_013275v6                                                KBG10B
+142                                                 KBG64        c2329_2332del_ANKRD11_NM_013275v6                                                KBG10B
+92                                                  KBG18             c4384dup_ANKRD11_NM_013275v6                                                 KBG18
+101                                                 KBG26             c4384dup_ANKRD11_NM_013275v6                                                 KBG18
+94                                                   KBG2        c3590_3594del_ANKRD11_NM_013275v6                                                  KBG2
+105                                                  KBG3        c3590_3594del_ANKRD11_NM_013275v6                                                  KBG2
+103                                                 KBG28             c6792dup_ANKRD11_NM_013275v6                                                 KBG28
+104                                                 KBG29             c6792dup_ANKRD11_NM_013275v6                                                 KBG28
+111                                                 KBG34             c6792dup_ANKRD11_NM_013275v6                                                 KBG28
+128                                                  KBG5             c6792dup_ANKRD11_NM_013275v6                                                 KBG28
+107                                                KBG31A        c1903_1907del_ANKRD11_NM_013275v6                                                KBG31A
+108                                                KBG31B        c1903_1907del_ANKRD11_NM_013275v6                                                KBG31A
+123                                                 KBG45            c5790CtoA_ANKRD11_NM_013275v6                                                 KBG45
+139                                                  KBG6            c5790CtoA_ANKRD11_NM_013275v6                                                 KBG45
+127                                                 KBG49            c7834GtoT_ANKRD11_NM_013275v6                                                 KBG49
+145                                                  KBG7            c7834GtoT_ANKRD11_NM_013275v6                                                 KBG49
+149                                     Khalifa, 2013_P1A  ANKRD11_SV_16q24_3_89388113_89541926_x1                                     Khalifa, 2013_P1A
+150                                     Khalifa, 2013_P1B  ANKRD11_SV_16q24_3_89388113_89541926_x1                                     Khalifa, 2013_P1A
+151                                          Kim, 2015_P1        c2395_2398del_ANKRD11_NM_013275v6                                          Kim, 2015_P1
+152                                          Kim, 2015_P2        c2395_2398del_ANKRD11_NM_013275v6                                          Kim, 2015_P1
+153                                          Kim, 2015_P3        c2395_2398del_ANKRD11_NM_013275v6                                          Kim, 2015_P1
+181                                     Low, 2016_31 (29)        c2182_2183del_ANKRD11_NM_013275v6                                     Low, 2016_31 (29)
+182                                     Low, 2016_32 (30)        c2182_2183del_ANKRD11_NM_013275v6                                     Low, 2016_31 (29)
+183                                     Low, 2016_33 (31)        c2182_2183del_ANKRD11_NM_013275v6                                     Low, 2016_31 (29)
+222                                 Murray, 2017_P1 (1.1)        c1903_1907del_ANKRD11_NM_013275v6                                 Murray, 2017_P1 (1.1)
+223                                 Murray, 2017_P2 (1.2)        c1903_1907del_ANKRD11_NM_013275v6                                 Murray, 2017_P1 (1.1)
+224                                 Murray, 2017_P3 (1.3)        c1903_1907del_ANKRD11_NM_013275v6                                 Murray, 2017_P1 (1.1)
+226                                 Murray, 2017_P5 (3.1)            c4406GtoA_ANKRD11_NM_013275v6                                 Murray, 2017_P5 (3.1)
+227                                 Murray, 2017_P6 (3.2)            c4406GtoA_ANKRD11_NM_013275v6                                 Murray, 2017_P5 (3.1)
+228                                 Murray, 2017_P7 (3.3)            c4406GtoA_ANKRD11_NM_013275v6                                 Murray, 2017_P5 (3.1)
+242                                       Ockeloen2015_P1             c7481dup_ANKRD11_NM_013275v6                                       Ockeloen2015_P1
+253                                       Ockeloen2015_P2             c7481dup_ANKRD11_NM_013275v6                                       Ockeloen2015_P1
+255                                       Ockeloen2015_P3             c7481dup_ANKRD11_NM_013275v6                                       Ockeloen2015_P1
+256                                       Ockeloen2015_P4             c7481dup_ANKRD11_NM_013275v6                                       Ockeloen2015_P1
+257                                       Ockeloen2015_P5             c7481dup_ANKRD11_NM_013275v6                                       Ockeloen2015_P1
+244                                      Ockeloen2015_P11            c3832AtoT_ANKRD11_NM_013275v6                                      Ockeloen2015_P11
+245                                      Ockeloen2015_P12            c3832AtoT_ANKRD11_NM_013275v6                                      Ockeloen2015_P11
+246                                      Ockeloen2015_P13            c3832AtoT_ANKRD11_NM_013275v6                                      Ockeloen2015_P11
+251                                      Ockeloen2015_P18            c1318CtoT_ANKRD11_NM_013275v6                                      Ockeloen2015_P18
+252                                      Ockeloen2015_P19            c1318CtoT_ANKRD11_NM_013275v6                                      Ockeloen2015_P18
+292                                        Sayed, 2020_P1            c5488GtoT_ANKRD11_NM_013275v6                                        Sayed, 2020_P1
+293                                        Sayed, 2020_P2            c5488GtoT_ANKRD11_NM_013275v6                                        Sayed, 2020_P1
+306  Sirmaci2011_P1-F1 (previously published Tekin, 2004)          c7570_1GtoC_ANKRD11_NM_013275v6  Sirmaci2011_P1-F1 (previously published Tekin, 2004)
+308  Sirmaci2011_P2-F1 (previously published Tekin, 2004)          c7570_1GtoC_ANKRD11_NM_013275v6  Sirmaci2011_P1-F1 (previously published Tekin, 2004)
+310  Sirmaci2011_P3-F1 (previously published Tekin, 2004)          c7570_1GtoC_ANKRD11_NM_013275v6  Sirmaci2011_P1-F1 (previously published Tekin, 2004)

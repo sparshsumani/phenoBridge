@@ -1,0 +1,31 @@
+a,b,same_allele,same_src,sex_ok,shared,disc,likely_dup,possible_dup,sex_a,src_a,sex_b,src_b,allele
+"Bianchi, 2018","Gnazzo, 2020_P11",True,False,True,7,0,True,False,F,Bianchi2018,F,Gnazzo2020,c2408_2412del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P10","Low, 2016_P14 (2)",True,False,True,7,0,True,False,M,Gnazzo2020,M,Low2016,c2398_2401del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P10",Parenti2021_P4,True,False,False,13,0,False,True,M,Gnazzo2020,F,Parenti2021,c2398_2401del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P4","Low, 2016_P4 (5)",True,False,True,7,0,True,False,F,Gnazzo2020,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P4","Low, 2016_P5 (6)",True,False,True,7,0,True,False,F,Gnazzo2020,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P4","Low, 2016_P6 (7)",True,False,True,7,0,True,False,F,Gnazzo2020,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P4",Parenti2021_P18,True,False,False,12,0,False,True,F,Gnazzo2020,M,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P5",Parenti2021_P3,True,False,False,14,1,False,True,M,Gnazzo2020,F,Parenti2021,c1977CtoG_ANKRD11_NM_013275v6
+"Gnazzo, 2020_P6",Parenti2021_P3,True,False,False,14,1,False,True,M,Gnazzo2020,F,Parenti2021,c1977CtoG_ANKRD11_NM_013275v6
+Goldenberg2016_P11,KBG37,True,False,True,6,0,True,False,F,Goldenberg2016,F,MC2023,c1903_1907del_ANKRD11_NM_013275v6
+Goldenberg2016_P9,Parenti2021_P14,True,False,True,6,0,True,False,F,Goldenberg2016,F,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6
+KBG31B,"Low, 2016_P1 (19)",True,False,True,7,0,True,False,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG31B,"Low, 2016_P4 (5)",True,False,True,7,0,True,False,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG31B,"Low, 2016_P5 (6)",True,False,True,7,0,True,False,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG31B,"Low, 2016_P6 (7)",True,False,True,7,0,True,False,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG37,"Low, 2016_P1 (19)",True,False,True,10,1,False,True,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG37,"Low, 2016_P4 (5)",True,False,True,10,0,True,True,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG37,"Low, 2016_P5 (6)",True,False,True,10,0,True,True,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG37,"Low, 2016_P6 (7)",True,False,True,10,0,True,True,F,MC2023,F,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG37,"Low, 2016_P7 (8)",True,False,False,10,0,False,True,F,MC2023,M,Low2016,c1903_1907del_ANKRD11_NM_013275v6
+KBG56,Parenti2021_P13,True,False,True,5,0,True,False,M,MC2023,M,Parenti2021,c1381_1384del_ANKRD11_NM_013275v6
+"Low, 2016_P10 (18)",Parenti2021_P5,True,False,False,10,1,False,True,M,Low2016,F,Parenti2021,c2408_2412del_ANKRD11_NM_013275v6
+"Low, 2016_P12 (13)",Parenti2021_P20,True,False,False,10,1,False,True,F,Low2016,M,Parenti2021,c2408_2412del_ANKRD11_NM_013275v6
+"Low, 2016_P12 (13)",Parenti2021_P5,True,False,True,9,0,True,False,F,Low2016,F,Parenti2021,c2408_2412del_ANKRD11_NM_013275v6
+"Low, 2016_P6 (7)",Parenti2021_P9,True,False,False,10,1,False,True,F,Low2016,M,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6
+"Low, 2016_P7 (8)",Parenti2021_P18,True,False,True,7,0,True,False,M,Low2016,M,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6
+"Low, 2016_P7 (8)",Parenti2021_P9,True,False,True,10,1,False,True,M,Low2016,M,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6
+"Low, 2016_P9 (1)",Parenti2021_P5,True,False,True,9,0,True,False,F,Low2016,F,Parenti2021,c2408_2412del_ANKRD11_NM_013275v6
+"Murray, 2017_P2 (1.2)",Walz2015_PB,True,False,True,5,0,True,False,M,Murray2017,M,Walz2015,c1903_1907del_ANKRD11_NM_013275v6
+Ockeloen2015_P16,Parenti2021_P9,True,False,True,6,0,True,False,M,Ockeloen2015,M,Parenti2021,c1903_1907del_ANKRD11_NM_013275v6

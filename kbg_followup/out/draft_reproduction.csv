@@ -1,0 +1,5 @@
+trunc_flag,encoding,n_terms,n_p05,min_q,hits
+regex_trunc,A (NA=0),31,1,0.565144171929061,Attention deficit hyperactivity disorder OR=0.53 p=0.023
+regex_trunc,B (explicit),30,0,0.765469074341527,
+is_trunc,A (NA=0),31,1,0.4761187463730237,Attention deficit hyperactivity disorder OR=0.51 p=0.015
+is_trunc,B (explicit),30,0,0.770279792847459,

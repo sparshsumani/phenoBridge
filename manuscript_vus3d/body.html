@@ -1,0 +1,197 @@
+<body>
+
+<h1 class="title">Neighbouring classified variants on AlphaFold structures add little to AlphaMissense for resolving missense variants of uncertain significance: a pre-registered temporal benchmark</h1>
+<div class="authors">Sparsh Sumani<sup>1</sup> &nbsp;&nbsp;&nbsp; Yuzhang Fu<sup>2</sup></div>
+<div class="affil" style="text-align:center;font-size:8.6pt;margin:-6pt 0 10pt;"><sup>1</sup>[Affiliation] &nbsp;&nbsp; <sup>2</sup>[Affiliation] &nbsp;&nbsp; Correspondence: [email]</div>
+
+<div class="abstract">
+<p><b>Background.</b> Pathogenic missense variants cluster in protein structures, and ACMG/AMP criterion PM1 rewards variants in mutational hotspots. Several tools now score a variant by the classified variants around it, in sequence or on an AlphaFold model. It is not known whether this evidence adds to modern predictors such as AlphaMissense when it is used to classify variants that are genuinely unresolved, or whether three-dimensional neighbourhoods beat simple sequence windows.</p>
+<p><b>Methods.</b> In a plan committed before data assembly, we built a leakage-free temporal benchmark from ClinVar. Labels came from the January 2023 release (66,765 classified missense variants in 3,183 proteins). The test set was 55,975 variants in 3,153 genes that were uncertain, conflicting or absent in 2023 and classified pathogenic or benign by November 2026. For each test variant we summed the labels of other residues with three kernels: network propagation (random walk with restart, RWR) on the AlphaFold contact graph, a Gaussian kernel on 3D distance, and an exponential sequence window. We added these to logistic models containing AlphaMissense and a gene prior. The primary metric was gene-stratified AUROC, i.e. concordance over pathogenic&ndash;benign pairs within the same gene, with gene-cluster bootstrap inference. A positive finding required a Holm-significant gain of at least 0.01. Evidence strength was calibrated against ClinGen likelihood-ratio thresholds.</p>
+<p><b>Results.</b> AlphaMissense alone reached a gene-stratified AUROC of 0.963. Network propagation added 0.0022 (95% CI 0.0002&ndash;0.0044; Holm <i>p</i> = 0.078), a fifth of the pre-set minimum. 3D distance added 0.0021 and the sequence window 0.0033. Three-dimensional neighbourhoods were equivalent to sequence windows within &plusmn;0.005 and, if anything, slightly worse. No bin of the added evidence reached the ClinGen Supporting likelihood ratio of 2.41 (maximum 1.94 on test). These results held across ten sensitivity analyses and stratifications. The one exception was the 21 genes whose expert panels define PM1 hotspots (+0.015), where curation is partly circular. Pooled AUROC, the usual benchmark metric, rewarded a gene prior that does not change any within-gene ranking (+0.019). In an exploratory analysis of variants that AlphaMissense calls ambiguous, neighbour evidence approached but did not reach Supporting strength.</p>
+<p><b>Conclusions.</b> Once AlphaMissense is used, automated hotspot evidence from neighbouring classified variants is largely redundant, and AlphaFold geometry adds nothing over sequence position. Calibrated PP3 plus an automated PM1 risks double-counting. Benchmarks of variant-effect predictors should report within-gene metrics on temporally held-out variants.</p>
+</div>
+<div class="kw"><b>Keywords:</b> variant of uncertain significance; ClinVar; AlphaFold; AlphaMissense; mutational hotspot; ACMG/AMP PM1; PP3; calibration; temporal validation; network propagation.</div>
+
+<div class="cols">
+
+<h2>1&nbsp;&nbsp;Introduction</h2>
+<p>Most missense variants seen in clinical sequencing are classified as variants of uncertain significance (VUS) under the ACMG/AMP framework {{richards}}. Their resolution is slow, and it is one of the central problems of clinical genomics {{fowler}}. Computational predictors contribute through criteria PP3 and BP4. Since ClinGen calibrated predictor scores to likelihood-ratio evidence strengths {{pejaver}}, and later extended the calibration to AlphaMissense {{bergquist}}, a strong prediction can supply up to Strong evidence. AlphaMissense {{alphamissense}} combines protein language modelling with AlphaFold structure and population constraint. It is among the most accurate unsupervised predictors and is now widely used for PP3.</p>
+<p>A second source of evidence is the position of a variant relative to variants that are already classified. Criterion PM1 credits a variant in "a mutational hot spot and/or critical and well-established functional domain" {{richards}}. Pathogenic variants cluster in 3D far more often than one-dimensional analyses reveal {{sivley18}}. This has led to tools that score a variant by its classified neighbours: DeMAG's "partners score" sums ClinVar labels within 11&nbsp;&Aring; on AlphaFold models {{demag}}; PathProx and VUStruct measure 3D proximity to pathogenic and benign variants {{vustruct}}; MutScore {{mutscore}} and HCSeeker {{hcseeker}} use sequence-window label densities; and Bayesian penetrance-density models do so for cardiac channels {{kroncke}}. Data-driven hotspot rules have been mapped to evidence strength for single diseases {{walsh}}, and a genome-wide study found significant pathogenic 3D neighbourhoods in most proteins with enough labels {{nason}}.</p>
+<p>Three questions about this evidence remain open. The first is whether it adds to AlphaMissense. AlphaMissense already sees structure and conservation, so neighbouring labels may duplicate it; ClinGen therefore caps PP3 plus PM1 at Strong {{pejaver}}. The second is evaluation. Most label-based tools were tested with random or cross-validation splits and pooled AUROC. That design allows leakage of nearby labels and rewards learning which genes are dangerous rather than which variants are {{grimm}}{{arnoult}}. The third is whether structure matters at all, i.e. whether a 3D neighbourhood carries more information than a sequence window of the same size.</p>
+<p>We answer these questions with a pre-registered benchmark designed to remove each problem. Labels come only from a past ClinVar release. Test variants are the ones that were later resolved. The baseline includes AlphaMissense and a gene prior. The primary metric compares variants only within genes. Evidence is calibrated against ClinGen thresholds. We built the benchmark around network propagation on AlphaFold contact graphs, the method of the PhenoBridge pipeline, and expected a positive result. The result was negative, and we report it as found.</p>
+
+<h2>2&nbsp;&nbsp;Methods</h2>
+<h3>2.1&nbsp;&nbsp;Pre-registration</h3>
+<p>The analysis plan (questions, data rules, kernels, models, hypotheses, metric and decision rule) was committed to the project repository before the dataset was assembled. Amendment 1 followed a literature review and was also made before any data were seen. It changed the primary metric from pooled to gene-stratified AUROC {{arnoult}}, added an equivalence margin for 3D versus sequence, fixed the calibration thresholds {{pejaver}} and added two stratifications. Amendment 2 was made after the data were built and before any model was fit. It added a strict temporal sensitivity analysis. Deviations are listed in Section&nbsp;2.8.</p>
+
+<h3>2.2&nbsp;&nbsp;Data</h3>
+<p>We used two ClinVar {{clinvar}} <span class="mono">variant_summary</span> releases: January 2023 and 1 November 2026. Germline missense SNVs on GRCh38 with at least one review star were mapped to MANE Select transcripts {{mane}} with Ensembl VEP {{vep}} and to UniProt and AlphaFold numbering; the reference amino acid matched at all 124,398 mapped residues. Only proteins with a single-fragment AlphaFold v6 model {{afdb}} were used.</p>
+<ul class="tight">
+<li><b>TRAIN</b> variants were classified pathogenic/likely pathogenic (P) or benign/likely benign (B) in January 2023.</li>
+<li><b>TEST</b> variants were VUS, conflicting or absent in January 2023 and P or B, with at least one star, in November 2026. Thirteen variants that flipped between P and B were excluded.</li>
+</ul>
+<p class="noind">AlphaMissense scores {{alphamissense}} for the exact substitution covered 98.5&ndash;98.9% of variants. A residue took a TRAIN label if every TRAIN variant at it agreed; 120 of 59,613 labelled residues were mixed and were not used as label sources. The analysed TRAIN set had 66,765 variants (29,702 P, 37,063 B). The primary TEST set was the 55,975 variants (22,425 P, 33,550 B) in 3,153 genes with at least five other labelled residues (median 31). Of these, 82.9% were absent from ClinVar in 2023, 11.4% were VUS and 5.6% conflicting; 85% were last evaluated after the 2023 cutoff.</p>
+
+<h3>2.3&nbsp;&nbsp;Neighbour-label features</h3>
+<p>For a query residue <span class="v">q</span> and a kernel <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>), normalised so that &Sigma;<sub><span class="v">j</span></sub> <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>) = 1 over all residues, the pathogenic and benign label masses are</p>
+<div class="eq"><span class="v">m</span><sub>P</sub>(<span class="v">q</span>) = &Sigma;<sub><span class="v">j</span>&isin;P, <span class="v">j</span>&ne;<span class="v">q</span></sub> <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>), &nbsp;&nbsp; <span class="v">m</span><sub>B</sub>(<span class="v">q</span>) = &Sigma;<sub><span class="v">j</span>&isin;B, <span class="v">j</span>&ne;<span class="v">q</span></sub> <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>).<span class="num">(1)</span></div>
+<p class="noind">Labels at the query's own residue are excluded, because same-residue evidence is covered by PS1/PM5 rather than PM1. Models use log(<span class="v">m</span> + 10<sup>&minus;4</sup>). The three kernels were:</p>
+<ul class="tight">
+<li><b>Network (RWR).</b> The exact stationary distribution of a random walk with restart seeded at <span class="v">q</span> on the 8&nbsp;&Aring; C&alpha; contact graph {{kohler}}: <b><span class="v">p</span></b><sub><span class="v">q</span></sub> = <span class="v">&alpha;</span>(<span class="v">I</span> &minus; (1&minus;<span class="v">&alpha;</span>)<span class="v">AD</span><sup>&minus;1</sup>)<sup>&minus;1</sup><b><span class="v">e</span></b><sub><span class="v">q</span></sub>, with <span class="v">&alpha;</span> &isin; {0.15, 0.3, 0.5}. One sparse LU factorisation per protein gives all queries through a transposed solve.</li>
+<li><b>3D distance.</b> <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>) &prop; exp(&minus;<span class="v">d</span><sub><span class="v">qj</span></sub><sup>2</sup>/2<span class="v">&sigma;</span><sup>2</sup>) over C&alpha;&ndash;C&alpha; distances, <span class="v">&sigma;</span> &isin; {4, 6, 8, 12}&nbsp;&Aring;.</li>
+<li><b>Sequence window.</b> <span class="v">w</span><sub><span class="v">q</span></sub>(<span class="v">j</span>) &prop; exp(&minus;|<span class="v">q</span> &minus; <span class="v">j</span>|/<span class="v">&lambda;</span>), <span class="v">&lambda;</span> &isin; {2, 5, 10, 20} residues.</li>
+</ul>
+<p class="noind">For TRAIN variants the features leave out the variant's own residue, so the model never sees a variant's label among its own predictors.</p>
+
+<h3>2.4&nbsp;&nbsp;Models</h3>
+<p>All models were logistic regressions fitted once on TRAIN and evaluated once on TEST.</p>
+<ul class="tight">
+<li><b>M0:</b> logit of the AlphaMissense score.</li>
+<li><b>M1</b> (baseline): M0 plus a gene prior, the logit of (<span class="v">n</span><sub>P</sub> + 1)/(<span class="v">n</span><sub>P</sub> + <span class="v">n</span><sub>B</sub> + 2) over the gene's other labelled residues.</li>
+<li><b>M2-RWR, M2-3D, M2-1D:</b> M1 plus the two log label masses of one kernel.</li>
+</ul>
+<p class="noind">Each kernel parameter was chosen by five-fold cross-validation on TRAIN, with folds grouped by gene. The selected values (<span class="v">&alpha;</span> = 0.3, <span class="v">&sigma;</span> = 6&nbsp;&Aring;, <span class="v">&lambda;</span> = 5) coincided with the pre-specified defaults. Cross-validated TRAIN AUROC spanned only 0.9783&ndash;0.9792 across the eleven kernel settings, against 0.9763 for M1.</p>
+
+<h3>2.5&nbsp;&nbsp;Metric and inference</h3>
+<p>The primary metric was gene-stratified AUROC: the proportion of concordant pairs among all pathogenic&ndash;benign test pairs <i>within the same gene</i>, pooled over genes, with ties counted as one half. Equivalently, it is &Sigma;<sub><span class="v">g</span></sub><span class="v">U</span><sub><span class="v">g</span></sub>/&Sigma;<sub><span class="v">g</span></sub><span class="v">n</span><sub>P,<span class="v">g</span></sub><span class="v">n</span><sub>B,<span class="v">g</span></sub> for gene-level Mann&ndash;Whitney statistics <span class="v">U</span><sub><span class="v">g</span></sub>. A score that only ranks genes cannot improve it. Uncertainty came from a paired bootstrap over genes (2,000 resamples), with resampled genes kept as distinct strata. Because each <span class="v">U</span><sub><span class="v">g</span></sub> is fixed, a resample is a count-weighted sum over genes.</p>
+<p>The hypotheses were:</p>
+<ul class="tight">
+<li><b>H1:</b> M2-RWR &gt; M1.</li>
+<li><b>H2:</b> M2-RWR &ne; M2-3D.</li>
+<li><b>H3:</b> the 3D model chosen on TRAIN (RWR) &gt; M2-1D, with equivalence declared if the 90% CI lay within &plusmn;0.005.</li>
+</ul>
+<p class="noind">Two-sided bootstrap <i>p</i>-values were Holm-corrected across H1&ndash;H3. A positive finding required H1 to be significant after correction <i>and</i> a gain of at least 0.01. Pooled AUROC, AUPRC, Brier score and the mean of per-gene AUROCs (genes with at least three P and three B) were secondary.</p>
+
+<h3>2.6&nbsp;&nbsp;Calibration as hotspot evidence</h3>
+<p>PP3 and PM1 together are capped at Strong {{pejaver}}, so hotspot evidence must be measured <i>conditional on</i> the predictor. We therefore calibrated the <i>propagation component</i>: the M2-RWR log-odds minus the M1 log-odds. On TRAIN, the component was computed out of fold (gene-grouped five-fold). In bins of the component we estimated the likelihood ratio LR = Pr(bin | P)/Pr(bin | B) on TRAIN and checked it on TEST. Thresholds followed the ClinGen point system {{tavtigian}}{{pejaver}}, with prior 0.0441: Supporting 2.406, Moderate 5.790 and Strong 33.53, with reciprocals for benign evidence. A bin was to be assigned a strength only if the one-sided 95% bootstrap bound of its TRAIN LR cleared the threshold.</p>
+
+<h3>2.7&nbsp;&nbsp;Sensitivity analyses and stratifications</h3>
+<p>We repeated H1&ndash;H3 under the following variants of the design:</p>
+<ul class="tight">
+<li>test variants with &ge;2 stars in 2026;</li>
+<li>variants that were VUS in 2023 (excluding absent and conflicting);</li>
+<li>genes with &ge;20 labelled residues;</li>
+<li>variants last evaluated after the 2023 cutoff;</li>
+<li>fixed default kernel parameters;</li>
+<li>inclusion of same-residue labels.</li>
+</ul>
+<p class="noind">We also stratified by last evaluation before versus after September 2024 (AlphaMissense calibration for PP3 appeared in 2024 {{bergquist}}) and by whether the gene has a ClinGen variant curation expert panel (VCEP) rule defining PM1 hotspots (21 genes, including <i>PTEN</i>, <i>TP53</i>, RASopathy genes, <i>MYH7</i>, <i>MYBPC3</i>, <i>CDH1</i> and <i>RUNX1</i> {{pten}}{{tp53}}{{rasopathy}}).</p>
+
+<h3>2.8&nbsp;&nbsp;Deviations and corrections</h3>
+<p>Four points differ from the plan or needed correction:</p>
+<ul class="tight">
+<li><b>Same-residue sensitivity analysis.</b> The first implementation gave each TRAIN variant its own label inside its features. This was a leakage error that lowered TEST performance to 0.864. In the corrected version, a TRAIN variant uses its residue's label only when other TRAIN variants supply it. Only corrected results are reported; the primary features were unaffected.</li>
+<li><b>Pooled bootstrap.</b> Pooled-AUROC contrasts used 400 rather than 2,000 bootstrap resamples.</li>
+<li><b>Gene-weighted AUROC.</b> The gene-weighted pooled AUROC listed in the original plan was superseded by the stratified metric.</li>
+<li><b>Calibration bounds.</b> In the primary calibration, no bin's point estimate reached a threshold, so bootstrap bounds were not needed.</li>
+</ul>
+<p class="noind">The analysis of AlphaMissense-ambiguous variants (Section&nbsp;3.5) was designed after the results were seen and is exploratory.</p>
+
+<h2>3&nbsp;&nbsp;Results</h2>
+<h3>3.1&nbsp;&nbsp;AlphaMissense already resolves most reclassified variants</h3>
+<p>Within genes, AlphaMissense ranked the variant later classified pathogenic above the one later classified benign 96.3% of the time (Table&nbsp;1). The mean per-gene AUROC over 721 genes with at least three of each class was 0.956. The gene prior raised pooled AUROC from 0.952 to 0.971 and lowered Brier score from 0.084 to 0.061. It changed gene-stratified AUROC by &minus;0.0002, a change that comes only from leaving each variant's own residue out of the prior (Fig.&nbsp;1). A model that learns gene base rates thus looks substantially better on the pooled metric without ranking a single within-gene pair differently, as recently argued for ClinVar benchmarks in general {{arnoult}}.</p>
+
+<figure>
+<img src="fig/fig1_metric.svg" alt="Figure 1" style="width:82%;margin:0 auto;">
+<figcaption><b>Figure 1.</b> Pooled and gene-stratified AUROC of the five models on the 55,975 test variants. The gene prior improves the pooled metric by 0.019 but leaves within-gene ranking unchanged; neighbour labels add 0.003&ndash;0.005 pooled and 0.002&ndash;0.003 stratified.</figcaption>
+</figure>
+
+<div class="tbl">
+<table>
+<caption><b>Table 1.</b> Primary analysis (55,975 test variants, 3,153 genes). Kernel parameters were tuned on TRAIN: RWR <span class="v">&alpha;</span> = 0.3, 3D <span class="v">&sigma;</span> = 6&nbsp;&Aring;, 1D <span class="v">&lambda;</span> = 5. Contrasts are in gene-stratified AUROC, with 95% CIs from 2,000 gene-cluster bootstrap resamples.</caption>
+<thead><tr><th>Model</th><th>Strat. AUROC</th><th>Pooled AUROC</th><th>AUPRC</th><th>Brier</th></tr></thead>
+<tbody>
+<tr><td>M0 AlphaMissense</td><td>0.9629</td><td>0.9518</td><td>0.925</td><td>0.084</td></tr>
+<tr><td>M1 + gene prior</td><td>0.9627</td><td>0.9712</td><td>0.959</td><td>0.061</td></tr>
+<tr><td>M2-1D sequence</td><td><b>0.9660</b></td><td>0.9749</td><td>0.965</td><td>0.056</td></tr>
+<tr><td>M2-3D distance</td><td>0.9648</td><td>0.9756</td><td>0.966</td><td>0.054</td></tr>
+<tr><td>M2-RWR network</td><td>0.9649</td><td><b>0.9759</b></td><td>0.966</td><td>0.054</td></tr>
+<tr class="mid"><td><b>Contrast</b></td><td><b>&Delta;</b></td><td><b>95% CI</b></td><td><b><i>p</i></b></td><td><b>Holm</b></td></tr>
+<tr><td>H1 RWR &minus; M1</td><td>+0.0022</td><td>0.0002, 0.0044</td><td>0.026</td><td>0.078</td></tr>
+<tr><td>H2 RWR &minus; 3D</td><td>+0.0001</td><td>&minus;0.0005, 0.0007</td><td>0.62</td><td>0.62</td></tr>
+<tr><td>H3 RWR &minus; 1D</td><td>&minus;0.0011</td><td>&minus;0.0023, 0.0002</td><td>0.092</td><td>0.18</td></tr>
+<tr><td>3D &minus; M1</td><td>+0.0021</td><td>0.0001, 0.0042</td><td>0.043</td><td>&ndash;</td></tr>
+<tr><td>1D &minus; M1</td><td>+0.0033</td><td>0.0017, 0.0052</td><td>&lt;0.001</td><td>&ndash;</td></tr>
+</tbody></table>
+<div class="tnote">H3: 90% CI &minus;0.0021 to &minus;0.00003, within the &plusmn;0.005 equivalence margin. Mean per-gene AUROC (721 genes) was 0.954&ndash;0.956 for all five models.</div>
+</div>
+
+<h3>3.2&nbsp;&nbsp;Neighbour labels add little, and structure adds nothing over sequence</h3>
+<p>Network propagation of TRAIN labels raised gene-stratified AUROC by 0.0022 (95% CI 0.0002&ndash;0.0044; Table&nbsp;1). This was nominally significant (<i>p</i> = 0.026) but not after Holm correction (<i>p</i> = 0.078), and it was a fifth of the pre-set minimum effect. <b>H1 is therefore not supported.</b></p>
+<p>The network kernel was indistinguishable from the Gaussian 3D kernel (H2: +0.0001, <i>p</i> = 0.62). Neither 3D kernel beat the sequence window: H3 was &minus;0.0011, and its 90% CI lay inside the &plusmn;0.005 equivalence margin. The sequence window alone gave the largest gain (+0.0033, 95% CI 0.0017&ndash;0.0052). On TRAIN cross-validation all eleven kernel settings fell within 0.001 of each other. In this setting, whatever information neighbouring labels carry beyond AlphaMissense is already present in sequence position, and AlphaFold geometry does not add to it.</p>
+<p>Gains did not grow with label density. Pooled AUROC gains were +0.005, +0.005, +0.006 and +0.004 in genes with 5&ndash;9, 10&ndash;19, 20&ndash;49 and &ge;50 labelled residues.</p>
+
+</div>
+
+<figure class="wide">
+<img src="fig/fig2_forest.svg" alt="Figure 2">
+<figcaption><b>Figure 2.</b> Gain in gene-stratified AUROC over the AlphaMissense + gene prior baseline (M1) for the three neighbour-label kernels, in the primary analysis and in each sensitivity analysis or stratification. Bars are 95% gene-cluster bootstrap CIs; arrows mark intervals truncated at 0.03 (the VCEP-PM1 upper limits are 0.054, 0.052 and 0.038). The dashed line is the pre-registered minimum meaningful gain.</figcaption>
+</figure>
+
+<figure class="wide">
+<img src="fig/fig3_calibration.svg" alt="Figure 3">
+<figcaption><b>Figure 3.</b> Likelihood ratios (pathogenic vs benign) by bins of the propagation component, i.e. the log-odds that network label propagation adds to AlphaMissense + gene prior. Open circles: TRAIN, out of fold; filled circles: TEST. Dashed and dotted lines: ClinGen Supporting and Moderate thresholds (prior 0.0441) and their benign reciprocals. (a) All test variants (pre-registered). (b) Variants with AlphaMissense 0.34&ndash;0.564 (exploratory); bars are 5th&ndash;95th percentile gene-bootstrap intervals of the TRAIN LR.</figcaption>
+</figure>
+
+<div class="cols">
+
+<h3>3.3&nbsp;&nbsp;Robustness</h3>
+<p>The picture was the same in every sensitivity analysis (Fig.&nbsp;2). Outside the VCEP-PM1 stratum described below, the H1 gain stayed below 0.005:</p>
+<ul class="tight">
+<li>&ge;2 stars: +0.0045, Holm <i>p</i> = 0.045;</li>
+<li>2023 VUS only: +0.0046;</li>
+<li>strict temporal: +0.0023;</li>
+<li>same-residue labels included: +0.0037.</li>
+</ul>
+<p class="noind">The sequence window was never worse than the 3D kernels. AlphaMissense's own performance was 0.956 among variants last evaluated before September 2024, when PP3 based on AlphaMissense was less likely to have entered classifications, and 0.968 afterwards. The propagation gain was no larger in the earlier stratum (+0.0021 vs +0.0034).</p>
+<p>The one exception was the 21 genes with VCEP-defined PM1 hotspots (1,004 test variants). There network propagation added 0.015 (95% CI 0.004&ndash;0.054), and the network kernel beat the sequence window (+0.0043, 95% CI 0.0007&ndash;0.0155). This is the only place the pre-set effect size was reached. It is also where the outcome is least independent of the predictor: expert panels in these genes award PM1 for proximity to established pathogenic residues, so part of each 2026 classification was made from the same kind of evidence the score uses {{grimm}}. In the other 3,132 genes the gain was +0.0019.</p>
+
+<h3>3.4&nbsp;&nbsp;Calibration: no ClinGen evidence strength</h3>
+<p>The propagation component was well calibrated, with TRAIN and TEST likelihood ratios agreeing bin by bin, but it was weak (Fig.&nbsp;3a). The highest likelihood ratio was 1.77 on TRAIN and 1.94 on TEST, in the bin where the component added 0.5&ndash;1 log-odds. That is below the Supporting threshold of 2.41. The lowest was 0.55 on TEST, which is not below the benign Supporting threshold of 0.416. <b>No bin qualified for any evidence strength in either direction.</b> Used on top of a calibrated AlphaMissense PP3, automated neighbour-label evidence would therefore not justify even PM1_Supporting in this benchmark.</p>
+
+<h3>3.5&nbsp;&nbsp;Exploratory: where AlphaMissense is ambiguous</h3>
+<p>Variants that stay VUS are often those for which predictors are indeterminate. We therefore examined, post hoc, the 3,620 test variants (1,165 genes) scored "ambiguous" by AlphaMissense (0.34&ndash;0.564 {{alphamissense}}). Here AlphaMissense ranked within-gene pairs at only 0.598. Neighbour labels added 0.067 (network; 95% CI &minus;0.016 to 0.137), 0.062 (3D; &minus;0.024 to 0.135) and 0.087 (sequence; 0.006 to 0.161). Sequence again matched or exceeded structure.</p>
+<p>In calibration (Fig.&nbsp;3b), one bin approached Supporting on both TRAIN (LR 2.78) and TEST (2.75). Its bootstrap 5th percentile of 2.37 fell just short of 2.406. In the benign direction, a bin with LR 0.38 on TRAIN and 0.26 on TEST had a 95th percentile of 0.44, just short of 0.416. Neighbour evidence may therefore have a narrow, clinically relevant role where AlphaMissense is uninformative. That role is not specific to structure, and this result needs confirmation in independent data.</p>
+
+<h2>4&nbsp;&nbsp;Discussion</h2>
+<p>We asked whether the classified variants surrounding a newly observed missense variant, on its AlphaFold structure, help predict how it will eventually be classified. The answer depends on the baseline. Against AlphaMissense plus a gene prior, evaluated within genes on variants resolved after the labels were frozen, the gain is about 0.002&ndash;0.004 in AUROC. It does not reach any ClinGen evidence strength. It is carried as well by a sequence window as by 3D distance or network propagation.</p>
+<p><b>Relation to prior work.</b> Earlier label-based tools reported large contributions from neighbouring labels. DeMAG's partners score was its most important feature {{demag}}, and MutScore improved on REVEL in a temporal test {{mutscore}}. Those comparisons were against predictors without structural input and used pooled metrics. Our results do not contradict them. They show that the increment largely disappears once the comparator is AlphaMissense and the metric cannot reward gene base rates, in line with the small increments over AlphaMissense reported for structural penetrance priors in <i>RYR2</i> {{dauda}}. The 3D clustering of pathogenic variants is real {{sivley18}}{{nason}}. Most of the information it carries about an individual new variant appears to be captured by a predictor that already models structure, and by sequence position.</p>
+<p><b>Why does 3D not beat sequence?</b> We suggest three reasons, none tested here. First, most labelled residues near a query in 3D are also near it in sequence, within the same secondary-structure element or domain. Second, the extra long-range contacts that 3D adds are where AlphaFold's monomer models are least informative about interfaces. Third, curators reason from sequence-defined domains and hotspots, so labels themselves may cluster more in sequence. The one exception, the VCEP-PM1 genes, is where curators' hotspot rules most directly shape the labels, which suggests that curation rather than biology drives much of the neighbour signal there.</p>
+<p><b>Clinical implications.</b> ClinGen recommends capping PP3 plus PM1 at Strong because predictors already capture some hotspot information {{pejaver}}. Our results quantify that overlap: conditional on AlphaMissense, automated hotspot evidence from classified neighbours is near-redundant across 3,153 genes. Laboratories that apply calibrated PP3 from AlphaMissense should be cautious about adding an automated PM1 from label density, whether in sequence or in 3D, outside panels that have calibrated a gene-specific rule. Neighbour evidence may help when AlphaMissense is indeterminate, but our data do not yet support assigning it a strength.</p>
+<p><b>Benchmark design.</b> Two features of our design changed conclusions. Pooled AUROC credited the gene prior with a 0.019 improvement that does not change any within-gene decision; gene-stratified metrics should be standard {{arnoult}}. The temporal design avoids the leakage of nearby labels that random splits allow {{grimm}}. Applying it also showed how much of a "test" set is unresolved variants: only 11% of the test variants had been VUS in 2023, and most had no 2023 record at all.</p>
+<p><b>Limitations.</b></p>
+<ul class="tight">
+<li>Test classifications are made by curators and may themselves use AlphaMissense (favouring the baseline) or hotspot arguments (favouring the neighbour scores). Our stratifications by date and by VCEP status bound but do not remove these effects.</li>
+<li>The test set is dominated by benign variants and by variants newly submitted after 2023, which may be easier than long-standing VUS. The 2023-VUS subset (6,404 variants) gave the same conclusion with wider intervals.</li>
+<li>We used monomer AlphaFold models and C&alpha; geometry; complexes, ligands and side-chain environments were not modelled.</li>
+<li>Our kernels are simple. A supervised model of neighbourhoods might do better, but would have to clear the same baseline and metric.</li>
+<li>Results are for germline missense SNVs in ClinVar and need not transfer to somatic hotspots.</li>
+</ul>
+
+<h2>5&nbsp;&nbsp;Conclusions</h2>
+<p>In a pre-registered temporal benchmark of 55,975 resolved missense variants, the classified neighbours of a variant on its AlphaFold structure added little to AlphaMissense, reached no ClinGen evidence strength, and carried no information beyond what a sequence window provides. Network propagation on contact graphs was no better than simple 3D distance. Automated PM1-like evidence should be calibrated conditional on the predictor already in use, and variant-effect benchmarks should be evaluated within genes on temporally held-out variants.</p>
+
+<h2>Data and code availability</h2>
+<p class="noind">All code, the pre-registration and its amendments, and all result tables are available at <span class="mono">github.com/sparshsumani/phenoBridge</span>:</p>
+<ul class="tight">
+<li><span class="mono">vus3d/PLAN.md</span>: the pre-registered plan and its amendments;</li>
+<li><span class="mono">vus3d/v01&ndash;v09</span>: data assembly scripts;</li>
+<li><span class="mono">vus3d/run_vus3d.py</span>: the pre-registered analysis;</li>
+<li><span class="mono">vus3d/explore_vus3d.py</span>: the exploratory analysis;</li>
+<li><span class="mono">vus3d/out/</span>: all result tables;</li>
+<li><span class="mono">manuscript_vus3d/</span>: figures and this manuscript.</li>
+</ul>
+<p class="noind">Input data are public: ClinVar releases 2023-01 and 2026-11-01, AlphaMissense, AlphaFold DB v6, and MANE Select.</p>
+
+<h2>Author contributions</h2>
+<p class="noind">[To be completed by the authors.]</p>
+
+<h2>Competing interests</h2>
+<p class="noind">[To be completed by the authors.]</p>
+
+<h2>References</h2>
+{{REFERENCES}}
+
+</div>
+</body>
+</html>

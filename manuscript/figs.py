@@ -94,7 +94,7 @@ def fig1():
     ax[2].minorticks_off()
     ax[2].set_ylim(-.02, 1.04)
     ax[2].set_xlabel("Design effect, mean over a gene's tests")
-    ax[2].set_ylabel("Type I error of naive test")
+    ax[2].set_ylabel("Null rejection rate, individual-level test")
     ax[2].legend(frameon=False, fontsize=6.5, loc="upper left", handlelength=1, handletextpad=.3)
     panel(ax[2], "c")
     fig.savefig(FIG / "fig1_recurrence.svg", bbox_inches="tight")

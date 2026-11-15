@@ -1,0 +1,26 @@
+{
+ "genes": 44,
+ "carriers": 1675,
+ "pmids_total": 212,
+ "carriers_per_gene_median_iqr": [
+  28.5,
+  21.0,
+  42.0
+ ],
+ "variants_per_gene_median_iqr": [
+  15.0,
+  8.0,
+  20.0
+ ],
+ "pmids_per_gene_median_iqr": [
+  3.0,
+  1.0,
+  6.0
+ ],
+ "largest_pub_share_median_iqr": [
+  0.6394230769230769,
+  0.490625,
+  1.0
+ ],
+ "genes_largest_pub_ge_half": 33
+}

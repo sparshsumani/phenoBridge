@@ -45,8 +45,8 @@
 <body>
 
 <h1 class="title">Neighbouring classified variants on AlphaFold structures add little to AlphaMissense for resolving missense variants of uncertain significance: a pre-registered temporal benchmark</h1>
-<div class="authors">Sparsh Sumani<sup>1</sup> &nbsp;&nbsp;&nbsp; Yuzhang Fu<sup>2</sup></div>
-<div class="affil" style="text-align:center;font-size:8.6pt;margin:-6pt 0 10pt;"><sup>1</sup>[Affiliation] &nbsp;&nbsp; <sup>2</sup>[Affiliation] &nbsp;&nbsp; Correspondence: [email]</div>
+<div class="authors">Sparsh Sumani<sup>1,2</sup> &nbsp;&nbsp;&nbsp; Ashok Kumar Bhatia<sup>3</sup></div>
+<div class="affil" style="text-align:center;font-size:8.6pt;margin:-6pt 0 10pt;"><sup>1</sup>University of New South Wales &nbsp;&nbsp; <sup>2</sup>Purdue University &nbsp;&nbsp; <sup>3</sup>Independent Researcher<br>Correspondence: [email]</div>
 
 <div class="abstract">
 <p><b>Background.</b> Pathogenic missense variants cluster in protein structures, and ACMG/AMP criterion PM1 rewards variants in mutational hotspots. Several tools now score a variant by the classified variants around it, in sequence or on an AlphaFold model. It is not known whether this evidence adds to modern predictors such as AlphaMissense when it is used to classify variants that are genuinely unresolved, or whether three-dimensional neighbourhoods beat simple sequence windows.</p>
@@ -214,6 +214,9 @@
 
 <h2>5&nbsp;&nbsp;Conclusions</h2>
 <p>In a pre-registered temporal benchmark of 55,975 resolved missense variants, the classified neighbours of a variant on its AlphaFold structure added little to AlphaMissense, reached no ClinGen evidence strength, and carried no information beyond what a sequence window provides. Network propagation on contact graphs was no better than simple 3D distance. Automated PM1-like evidence should be calibrated conditional on the predictor already in use, and variant-effect benchmarks should be evaluated within genes on temporally held-out variants.</p>
+
+<h2>Acknowledgements</h2>
+<p class="noind">This work grew out of PhenoBridge, a project first presented at the HackRare rare-disease hackathon at Harvard University.</p>
 
 <h2>Data and code availability</h2>
 <p class="noind">All code, the pre-registration and its amendments, and all result tables are available at <span class="mono">github.com/sparshsumani/phenoBridge</span>:</p>
